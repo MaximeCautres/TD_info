@@ -1,0 +1,62 @@
+<HEAD>
+<TITLE>Module implementations</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node3.12.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node3.10.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2>Module implementations</H2>
+<P>
+
+<PRE>
+<i>implementation</i>:
+      <i>{</i><i>impl-phrase</i> <font color="blue"><code>;;</code></font><i>}</i>
+
+<i>impl-phrase</i>:
+      <i>expr</i>
+   |  <i>value-definition</i>
+   |  <i>type-definition</i>
+   |  <i>exception-definition</i>
+   |  <i>directive</i>
+
+<i>value-definition</i>:
+      <font color="blue"><code>let</code></font> <i>[</i><font color="blue"><code>rec</code></font><i>]</i> <i>let-binding</i> <i>{</i><font color="blue"><code>and</code></font> <i>let-binding</i><i>}</i></PRE>
+<P>
+A module implementation consists in a sequence of implementation
+phrases, terminated by double semicolons. An implementation phrase is
+either an expression, a value definition, a type or exception
+definition, or a directive. At run-time, implementation phrases are
+evaluated sequentially, in the order in which they appear in the
+module implementation.<P>
+Implementation phrases consisting in an expression are
+evaluated for their side-effects.<P>
+Value definitions bind global value variables in the same way as a
+<font color="blue"><code>let</code></font>...<font color="blue"><code>in</code></font>... expression binds local variables. The
+expressions are evaluated, and their values are matched against the
+left-hand sides of the <font color="blue"><code>=</code></font> sides, as explained in
+section <A HREF="node3.8.html#s:localdef">3.8</A>. If the matching succeeds, the bindings of
+identifiers to values performed during matching are interpreted as
+bindings to the global value variables whose local name is the
+identifier, and whose module name is the name of the module.
+If the matching fails, the exception <tt>Match_failure</tt> is
+raised. The scope of these bindings is the phrases that follow the
+value definition in the module implementation.<P>
+Type and exception definitions introduce type constructors, variant
+constructors and record labels as described in sections
+<A HREF="node3.9.html#s:typdef">3.9</A> and <A HREF="node3.9.html#s:excdef">3.9</A>.
+The scope of these definitions is the phrases that follow the value
+definition in the module implementation. The evaluation of an
+implementation phrase consisting in a type or exception definition
+produces no effect at run-time.<P>
+Directives modify the behavior of the compiler on the subsequent
+phrases of the module implementation, as described in
+section <A HREF="node3.10.html#s:directives">3.10</A>. The evaluation of an implementation phrase
+consisting in a directive produces no effect at run-time. Directives
+apply only to the module currently being compiled; in particular, they
+have no effect on other modules that refer to globals exported by the
+module being compiled.
+<HR>
+<A HREF="node3.12.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node3.10.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

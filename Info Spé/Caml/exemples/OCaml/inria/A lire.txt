@@ -1,0 +1,1 @@
+Exécuter dans chaque dossier le fichier "load.oml"

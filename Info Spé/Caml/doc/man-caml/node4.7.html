@@ -1,0 +1,33 @@
+<HEAD>
+<TITLE>String access</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node4.8.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node4.6.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2>String access</H2>
+<P>
+Extra syntactic constructs are provided to access and modify
+characters in strings:
+
+<PRE>
+<i>expr</i>:
+      ...
+   |  <i>expr</i> <font color="blue"><code>.[</code></font> <i>expr</i> <font color="blue"><code>]</code></font>
+   |  <i>expr</i> <font color="blue"><code>.[</code></font> <i>expr</i> <font color="blue"><code>]</code></font> <font color="blue"><code>&lt;-</code></font> <i>expr</i></PRE>
+<P>
+The expression <i>expr</i><SUB>1</SUB> <font color="blue"><code>.[</code></font> <i>expr</i><SUB>2</SUB> <font color="blue"><code>]</code></font> is equivalent to the
+application <font color="blue"><code>nth_char</code></font> <i>expr</i><SUB>1</SUB> <i>expr</i><SUB>2</SUB>. In the initial environment,
+the identifier <font color="blue"><code>nth_char</code></font> resolves to a built-in function that
+returns the character number <i>expr</i><SUB>2</SUB> in the string denoted by
+<i>expr</i><SUB>1</SUB>. The first element has number 0; the last element has number
+n-1, where n is the length of the string. The exception
+<tt>Invalid_argument</tt> is raised if the access is out of bounds.<P>
+The expression <i>expr</i><SUB>1</SUB> <font color="blue"><code>.[</code></font> <i>expr</i><SUB>2</SUB> <font color="blue"><code>]</code></font> <font color="blue"><code>&lt;-</code></font> <i>expr</i><SUB>3</SUB> is equivalent to
+<font color="blue"><code>set_nth_char</code></font> <i>expr</i><SUB>1</SUB> <i>expr</i><SUB>2</SUB> <i>expr</i><SUB>3</SUB>. In the initial environment,
+the identifier <font color="blue"><code>set_nth_char</code></font> resolves to a built-in function that
+modifies in-place the string denoted by <i>expr</i><SUB>1</SUB>, replacing character
+number <i>expr</i><SUB>2</SUB> by the value of <i>expr</i><SUB>3</SUB>. The exception
+<tt>Invalid_argument</tt> is raised if the access is out of bounds. The
+built-in function returns <font color="blue"><code>()</code></font>.<P>

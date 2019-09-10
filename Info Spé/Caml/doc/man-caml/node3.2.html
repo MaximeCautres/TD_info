@@ -1,0 +1,158 @@
+<HEAD>
+<TITLE>Lexical conventions</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node3.3.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node3.1.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2>Lexical conventions</H2>
+<P>
+<H4>Blanks</H4>
+<P>
+The following characters are considered as blanks: space, newline,
+horizontal tabulation, carriage return, line feed and form feed. Blanks are
+ignored, but they separate adjacent identifiers, literals and
+keywords that would otherwise be confused as one single identifier,
+literal or keyword.<P>
+<H4>Comments</H4>
+<P>
+Comments are introduced by the two characters  <tt>(*</tt>, with no
+intervening blanks, and terminated by the characters <tt>*)</tt>, with
+no intervening blanks. Comments are treated as blank characters.
+Comments do not occur inside string or character literals. Nested
+comments are correctly handled.<P>
+<H4>Identifiers</H4>
+<P>
+
+<PRE>
+<i>ident</i>:
+      <i>letter</i> <i>{</i><i>letter</i> | <font color="blue"><code>0</code></font>...<font color="blue"><code>9</code></font> | <font color="blue"><code>_</code></font><i>}</i>
+
+<i>letter</i>:
+      <font color="blue"><code>A</code></font>...<font color="blue"><code>Z</code></font> | <font color="blue"><code>a</code></font>...<font color="blue"><code>z</code></font></PRE>
+<P>
+Identifiers are sequences of letters, digits and <tt>_</tt> (the underscore
+character), starting with a letter. Letters contain at least the 52
+lowercase and uppercase letters from the ASCII set. Implementations
+can recognize as letters other characters from the extended ASCII set.
+Identifiers cannot contain two adjacent underscore characters
+(<tt>__</tt>). Implementation may limit the number of characters of an
+identifier, but this limit must be above 256 characters. All
+characters in an identifier are meaningful.<P>
+<H4>Integer literals</H4>
+<P>
+
+<PRE>
+<i>integer-literal</i>:
+      <i>[</i><font color="blue"><code>-</code></font><i>]</i> <i>{</i><font color="blue"><code>0</code></font>...<font color="blue"><code>9</code></font><i>}+</i>
+   |  <i>[</i><font color="blue"><code>-</code></font><i>]</i> <i>(</i><font color="blue"><code>0x</code></font> | <font color="blue"><code>0X</code></font><i>)</i> <i>{</i><font color="blue"><code>0</code></font>...<font color="blue"><code>9</code></font> | <font color="blue"><code>A</code></font>...<font color="blue"><code>F</code></font> | <font color="blue"><code>a</code></font>...<font color="blue"><code>f</code></font><i>}+</i>
+   |  <i>[</i><font color="blue"><code>-</code></font><i>]</i> <i>(</i><font color="blue"><code>0o</code></font> | <font color="blue"><code>0O</code></font><i>)</i> <i>{</i><font color="blue"><code>0</code></font>...<font color="blue"><code>7</code></font><i>}+</i>
+   |  <i>[</i><font color="blue"><code>-</code></font><i>]</i> <i>(</i><font color="blue"><code>0b</code></font> | <font color="blue"><code>0B</code></font><i>)</i> <i>{</i><font color="blue"><code>0</code></font>...<font color="blue"><code>1</code></font><i>}+</i></PRE>
+<P>
+An integer literal is a sequence of one or more digits, optionally
+preceded by a minus sign. By default, integer literals are in decimal
+(radix 10). The following prefixes select a different radix:
+<table border>
+<tr><th>Prefix</th><th>Radix</th></tr>
+<tr><td><tt>0x</tt>, <tt>0X</tt></td><td>hexadecimal (radix 16)</td></tr>
+<tr><td><tt>0o</tt>, <tt>0O</tt></td><td>octal (radix 8)</td></tr>
+<tr><td><tt>0b</tt>, <tt>0B</tt></td><td>binary (radix 2)</td></tr>
+</table>
+(The initial <tt>0</tt> is the digit zero; the <tt>O</tt> for octal is the letter O.)<P>
+<H4>Floating-point literals</H4>
+<P>
+
+<PRE>
+<i>float-literal</i>:
+      <i>[</i><font color="blue"><code>-</code></font><i>]</i> <i>{</i><font color="blue"><code>0</code></font>...<font color="blue"><code>9</code></font><i>}+</i> <i>[</i><font color="blue"><code>.</code></font> <i>{</i><font color="blue"><code>0</code></font>...<font color="blue"><code>9</code></font><i>}</i><i>]</i> <i>[</i><i>(</i><font color="blue"><code>e</code></font> | <font color="blue"><code>E</code></font><i>)</i> <i>[</i><font color="blue"><code>+</code></font> | <font color="blue"><code>-</code></font><i>]</i> <i>{</i><font color="blue"><code>0</code></font>...<font color="blue"><code>9</code></font><i>}+</i><i>]</i></PRE>
+<P>
+Floating-point decimals consist in an integer part, a decimal part and
+an exponent part. The integer part is a sequence of one or more
+digits, optionally preceded by a minus sign. The decimal part is a
+decimal point followed by zero, one or more digits.
+The exponent part is the character <tt>e</tt> or <tt>E</tt> followed by an
+optional <tt>+</tt> or <tt>-</tt> sign, followed by one or more digits.
+The decimal part or the exponent part can be omitted, but not both to
+avoid ambiguity with integer literals.<P>
+<H4>Character literals</H4>
+
+<A name="s:characterliteral"></A><P>
+
+<PRE>
+<i>char-literal</i>:
+      <font color="blue"><code>`</code></font> <i>regular-char</i> <font color="blue"><code>`</code></font>
+   |  <font color="blue"><code>`</code></font> <font color="blue"><code>\</code></font> <i>(</i><font color="blue"><code>\</code></font> | <font color="blue"><code>`</code></font> | <font color="blue"><code>n</code></font> | <font color="blue"><code>t</code></font> | <font color="blue"><code>b</code></font> | <font color="blue"><code>r</code></font><i>)</i> <font color="blue"><code>`</code></font>
+   |  <font color="blue"><code>`</code></font> <font color="blue"><code>\</code></font> <i>(</i><font color="blue"><code>0</code></font>...<font color="blue"><code>9</code></font><i>)</i> <i>(</i><font color="blue"><code>0</code></font>...<font color="blue"><code>9</code></font><i>)</i> <i>(</i><font color="blue"><code>0</code></font>...<font color="blue"><code>9</code></font><i>)</i> <font color="blue"><code>`</code></font></PRE>
+<P>
+Character literals are delimited by <tt>`</tt> (backquote) characters.
+The two backquotes enclose either one character different from
+<tt>`</tt> and <tt>\</tt>, or one of the escape sequences below:
+<table border>
+<tr><th>Sequence</th><th>Character denoted</th></tr>
+<tr><td><tt>\\</tt></td><td>backslash (<tt>\</tt>)</td></tr>
+<tr><td><tt>\`</tt></td><td>backquote (<tt>`</tt>)</td></tr>
+<tr><td><tt>\n</tt></td><td>newline (LF)</td></tr>
+<tr><td><tt>\r</tt></td><td>return (CR)</td></tr>
+<tr><td><tt>\t</tt></td><td>horizontal tabulation (TAB)</td></tr>
+<tr><td><tt>\b</tt></td><td>backspace (BS)</td></tr>
+<tr><td><tt>\</tt><i>ddd</i></td><td>the character with ASCII code <i>ddd</i> in decimal</td></tr>
+</table><P>
+<H4>String literals</H4>
+
+<A name="s:stringliteral"></A><P>
+
+<PRE>
+<i>string-literal</i>:
+      <font color="blue"><code>"</code></font> <i>{</i><i>string-character</i><i>}</i> <font color="blue"><code>"</code></font>
+
+<i>string-character</i>:
+      <i>regular-char</i>
+   |  <font color="blue"><code>\</code></font> <i>(</i><font color="blue"><code>\</code></font> | <font color="blue"><code>"</code></font> | <font color="blue"><code>n</code></font> | <font color="blue"><code>t</code></font> | <font color="blue"><code>b</code></font> | <font color="blue"><code>r</code></font><i>)</i>
+   |  <font color="blue"><code>\</code></font> <i>(</i><font color="blue"><code>0</code></font>...<font color="blue"><code>9</code></font><i>)</i> <i>(</i><font color="blue"><code>0</code></font>...<font color="blue"><code>9</code></font><i>)</i> <i>(</i><font color="blue"><code>0</code></font>...<font color="blue"><code>9</code></font><i>)</i></PRE>
+<P>
+String literals are delimited by <tt>"</tt> (double quote) characters.
+The two double quotes enclose a sequence of either characters
+different from <tt>"</tt> and <tt>\</tt>, or escape sequences from the
+table below:
+<table border>
+<tr><th>Sequence</th><th>Character denoted</th></tr>
+<tr><td><tt>\\</tt></td><td>backslash (<tt>\</tt>)</td></tr>
+<tr><td><tt>\"</tt></td><td>double quote (<tt>"</tt>)</td></tr>
+<tr><td><tt>\n</tt></td><td>newline (LF)</td></tr>
+<tr><td><tt>\r</tt></td><td>return (CR)</td></tr>
+<tr><td><tt>\t</tt></td><td>horizontal tabulation (TAB)</td></tr>
+<tr><td><tt>\b</tt></td><td>backspace (BS)</td></tr>
+<tr><td><tt>\</tt><i>ddd</i></td><td>the character with ASCII code <i>ddd</i> in decimal</td></tr>
+</table><P>
+Implementations must support string literals up to 2^{16}-1 characters in
+length (65535 characters).<P>
+<H4>Keywords</H4>
+<P>
+The identifiers below are reserved as keywords, and cannot be employed
+otherwise:
+<pre>
+        and    as     begin       do      done      downto 
+        else   end    exception   for     fun       function 
+        if     in     let         match   mutable   not 
+        of     or     prefix      rec     then      to 
+        try    type   value       where   while     with
+</pre>
+The following character sequences are also keywords:
+<pre>
+        #    !    !=   &amp;    (    )    *    *.   +    +. 
+        ,    -    -.   -&gt;   .    .(   /    /.   :    :: 
+        :=   ;    ;;   &lt;    &lt;.   &lt;-   &lt;=   &lt;=.  &lt;&gt;   &lt;&gt;. 
+        =    =.   ==   &gt;    &gt;.   &gt;=   &gt;=.  @    [    [| 
+        ]    ^    _    __   {    |    |]   }    '
+</pre><P>
+<H4>Ambiguities</H4>
+<P>
+Lexical ambiguities are resolved according to the ``longest match''
+rule: when a character sequence can be decomposed into two tokens in
+several different ways, the decomposition retained is the one with the
+longest first token.<P>
+<HR>
+<A HREF="node3.3.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node3.1.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

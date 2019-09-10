@@ -1,0 +1,64 @@
+<HEAD>
+<TITLE><tt>pair</tt>: operations on pairs </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node14.15.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.13.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>pair</tt>: operations on pairs </H2>
+<P>
+<A name="s:pair"></A>
+
+<pre>
+value fst : 'a * 'b -&gt; 'a
+</pre>
+<dl><dd>
+ Return the first component of a pair. 
+</dl>
+<pre>
+value snd : 'a * 'b -&gt; 'b
+</pre>
+<dl><dd>
+ Return the second component of a pair. 
+</dl>
+<pre>
+value split : ('a * 'b) list -&gt; 'a list * 'b list
+</pre>
+<dl><dd>
+ Transform a list of pairs into a pair of lists:
+           <tt>split [(a1,b1); ...; (an,bn)]</tt> is <tt>([a1; ...; an], [b1; ...; bn])</tt>
+        
+</dl>
+<pre>
+value combine : 'a list * 'b list -&gt; ('a * 'b) list
+</pre>
+<dl><dd>
+ Transform a pair of lists into a list of pairs:
+           <tt>combine ([a1; ...; an], [b1; ...; bn])</tt> is
+              <tt>[(a1,b1); ...; (an,bn)]</tt>.
+           Raise <tt>Invalid_argument "combine"</tt> if the two lists
+           have different lengths. 
+</dl>
+<pre>
+value map_combine : ('a * 'b -&gt; 'c) -&gt; 'a list * 'b list -&gt; 'c list
+</pre>
+<dl><dd>
+ <tt>map_combine f ([a1; ...; an], [b1; ...; bn])</tt> is
+           <tt>[f (a1, b1); ...; f (an, bn)]</tt>.
+	   Raise <tt>invalid_argument "map_combine"</tt>
+	   if the two lists have different lengths. 
+</dl>
+<pre>
+value do_list_combine : ('a * 'b -&gt; unit) -&gt; 'a list * 'b list -&gt; unit
+</pre>
+<dl><dd>
+ <tt>do_list_combine f ([a1; ...; an], [b1; ...; bn])</tt> calls in turn
+           <tt>f (a1, b1); ...; f (an, bn)</tt>, discarding the results.
+	   Raise <tt>Invalid_argument "do_list_combine"</tt> if the two lists have
+	   different lengths. 
+</dl>
+<HR>
+<A HREF="node14.15.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.13.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

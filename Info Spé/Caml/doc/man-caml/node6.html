@@ -1,0 +1,512 @@
+<HEAD>
+<TITLE>The toplevel system (camllight)</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node7.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node5.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H1>The toplevel system (camllight)</H1>
+ <A name="c:camllight"></A><P>
+This chapter describes the toplevel system for Caml Light, that
+permits interactive use of the Caml Light system, through a
+read-eval-print loop. In this mode, the system repeatedly reads Caml
+Light phrases from the input, then typechecks, compile and evaluate
+them, then prints the inferred type and result value, if any. The
+system prints a <tt>#</tt> (sharp) prompt before reading each phrase.
+A phrase can span several lines. Phrases are delimited by <tt>;;</tt>
+(the final double-semicolon).<P>
+From the standpoint of the module system, all phrases entered at
+toplevel are treated as the implementation of a module named <tt>top</tt>.
+Hence, all toplevel definitions are entered in the module <tt>top</tt>.<P>
+<dl><dt><b>Unix:</b><dd>
+The toplevel system is started by the command <tt>camllight</tt>. Phrases are
+read on standard input, results are printed on standard output, errors
+on standard error. End-of-file on standard input terminates
+<tt>camllight</tt> (see also the <tt>quit</tt> system function below).<P>
+The toplevel system does not perform line editing, but it can
+easily be used in conjunction with an external line editor such as
+<tt>fep</tt>; just run <tt>fep -emacs camllight</tt> or <tt>fep -vi camllight</tt>.
+Another option is to use <tt>camllight</tt> under Gnu Emacs, which gives the
+full editing power of Emacs (see the directory <tt>contrib/camlmode</tt> in
+the distribution).<P>
+At any point, the parsing, compilation or evaluation of the current
+phrase can be interrupted by pressing <tt>ctrl-C</tt> (or, more precisely,
+by sending the <tt>intr</tt> signal to the <tt>camllight</tt> process). This goes
+back to the <tt>#</tt> prompt.
+</dl><P>
+<dl><dt><b>Mac:</b><dd>
+The toplevel system is presented as the standalone Macintosh
+application <tt>Caml Light</tt>. This application does not require the
+Macintosh Programmer's Workshop to run.<P>
+Once launched from the Finder, the application opens two windows,
+``Caml Light Input'' and ``Caml Light Output''. Phrases are entered in
+the ``Caml Light Input'' window. The ``Caml Light Output'' window
+displays a copy of the input phrases as they are processed by the Caml
+Light toplevel, interspersed with the toplevel responses. The 
+``Return'' key sends the contents of the Input window to the Caml Light
+toplevel. The ``Enter'' key inserts a newline without sending the
+contents of the Input window. (This can be configured with the
+``Preferences'' menu item.)<P>
+The contents of the input window can be edited at all times, with the
+standard Macintosh interface. An history of previously entered phrases
+is maintained, and can be accessed with the ``Previous entry''
+(command-P) and ``Next entry'' (command-N) menu items.<P>
+To quit the <tt>Caml Light</tt> application, either select ``Quit'' from
+the ``Files'' menu, or use the <tt>quit</tt> function described below.<P>
+At any point, the parsing, compilation or evaluation of the current
+phrase can be interrupted by pressing ``command-period'', or by selecting the
+item ``Interrupt Caml Light'' in the ``Caml Light'' menu. This goes
+back to the <tt>#</tt> prompt.<P>
+</dl><P>
+<dl><dt><b>PC:</b><dd> 
+The toplevel system is presented as a Windows application named
+<tt>Camlwin.exe</tt>. It should be launched from the Windows file manager or
+program manager.<P>
+The ``Terminal'' windows is split in two panes. Phrases are entered
+and edited in the bottom pane. The top pane displays a copy of the
+input phrases as they are processed by the Caml Light toplevel,
+interspersed with the toplevel responses. The ``Return'' key sends the
+contents of the bottom pane to the Caml Light toplevel. The ``Enter''
+key inserts a newline without sending the contents of the Input
+window. (This can be configured with the ``Preferences'' menu item.)<P>
+The contents of the input window can be edited at all times, with the
+standard Windows interface. An history of previously entered phrases
+is maintained and displayed in a separate window.<P>
+To quit the <tt>Camlwin</tt> application, either select ``Quit'' from
+the ``File'' menu, or use the <tt>quit</tt> function described below.<P>
+At any point, the parsing, compilation or evaluation of the current
+phrase can be interrupted by selecting the ``Interrupt Caml Light''
+menu item. This goes back to the <tt>#</tt> prompt.<P>
+A text-only version of the toplevel system is available under the name
+<tt>caml.exe</tt>. It runs under MSDOS as well as under Windows in a DOS window.
+No editing facilities are provided.
+</dl><P>
+<H2>Options</H2>
+ <A name="s:toplevel-options"></A><P>
+The following command-line options are recognized by the <tt>caml</tt> or
+<tt>camllight</tt> commands.<P>
+<p><dl><P>
+<dt><tt>-g</tt><dd>
+Start the toplevel system in debugging mode. This mode gives access to
+values and types that are local to a module, that is, not exported by
+the interface of the module. When debugging mode is off, these local
+objects are not accessible (attempts to access them produce an
+``Unbound identifier'' error). When debugging mode is on, these objects
+become visible, just like the objects that are exported in the module
+interface. In particular, values of abstract types are printed using
+their concrete representations, and the functions local to a module
+can be ``traced'' (see the <tt>trace</tt> function in section <A HREF="node6.html#s:control">6.2</A>).
+This applies only to the modules that have been compiled in debugging mode
+(either by the batch compiler with the <tt>-g</tt> option, or by the toplevel
+system in debugging mode), that is, those modules that have an associated
+<tt>.zix</tt> file.<P>
+<dt><tt>-I</tt> <i>directory</i><dd>
+Add the given directory to the list of directories searched for
+compiled interface files (<tt>.zi</tt>) and compiled object code files
+(<tt>.zo</tt>). By default, the current directory is searched first, then the
+standard library directory. Directories added with <tt>-I</tt> are searched
+after the current directory, but before the standard library
+directory. When several directories are added with several <tt>-I</tt>
+options on the command line, these directories are searched from right
+to left (the rightmost directory is searched first, the leftmost is
+searched last). Directories can also be added to the search path once
+the toplevel is running with the <tt>#directory</tt> directive; see
+chapter <A HREF="node4.html#c:extensions">4</A>.<P>
+<dt><tt>-lang</tt> <i>language-code</i><dd>
+Translate the toplevel messages to the specified language.
+The <i>language-code</i> is <tt>fr</tt> for French, <tt>es</tt> for Spanish, <tt>de</tt> for
+German, ... (See the file <tt>camlmsgs.txt</tt> in the Caml Light
+standard library directory for a list of available languages.)
+When an unknown language is specified, or no translation is available
+for a message, American English is used by default.<P>
+<dt><tt>-O</tt> <i>module-set</i><dd>
+Specify which set of standard modules is to be implicitly ``opened''
+when the toplevel starts. There are three module sets currently available:
+<p><dl>
+<dt>cautious<dd> provides the standard operations on integers,
+floating-point numbers, characters, strings, arrays, ..., as well
+as exception handling, basic input/output, ... Operations from the
+<tt>cautious</tt> set perform range and bound checking on string and vector
+operations, as well as various sanity checks on their arguments. 
+<dt>fast<dd> provides the same operations as the <tt>cautious</tt> set, but
+without sanity checks on their arguments. Programs compiled with
+<tt>-O fast</tt> are therefore slightly faster, but unsafe.
+<dt>none<dd> suppresses all automatic opening of modules. Compilation
+starts in an almost empty environment. This option is not of general
+use.
+</dl>
+The default compilation mode is <tt>-O cautious</tt>. See
+chapter <A HREF="node14.html#c:stdlib">14</A> for a complete listing of the modules in the
+<tt>cautious</tt> and <tt>fast</tt> sets.<P>
+</dl><P>
+<dl><dt><b>Unix:</b><dd> The following environment variables are also consulted:
+<p><dl>
+<dt><tt>LANG</tt><dd> When set, control which language is used to print the
+compiler messages (see the <tt>-lang</tt> command-line option).<P>
+<dt><tt>LC_CTYPE</tt><dd> If set to <tt>iso_8859_1</tt>, accented characters (from the
+ISO Latin-1 character set) in string and character literals are
+printed as is; otherwise, they are printed as decimal escape sequences
+(<tt>\</tt><i>ddd</i>).
+</dl>
+</dl><P>
+<H2>Toplevel control functions</H2>
+
+<A name="s:control"></A><P>
+The standard library module <tt>toplevel</tt>, opened by default when the
+toplevel system is launched, provides a number of functions that
+control the toplevel behavior, load files in memory, and trace program
+execution.<P>
+<P>
+
+
+<A name="s:toplevel"></A>
+
+<pre>
+value quit : unit -&gt; unit
+</pre>
+<dl><dd>
+ Exit the toplevel loop and terminate the <tt>camllight</tt> command. 
+</dl>
+<pre>
+value include : string -&gt; unit
+</pre>
+<dl><dd>
+ Read, compile and execute source phrases from the given file.
+           The <tt>.ml</tt> extension is automatically added to the file name,
+           if not present.
+           This is textual inclusion: phrases are processed just as if
+           they were typed on standard input. In particular, global
+           identifiers defined by these phrases are entered in the
+           module named <tt>top</tt>, not in a new module. 
+</dl>
+<pre>
+value load : string -&gt; unit
+</pre>
+<dl><dd>
+ Load in memory the source code for a module
+           implementation. Read, compile and execute source phrases
+           from the given file. The <tt>.ml</tt> extension is automatically
+           added if not present.  The <tt>load</tt> function behaves much
+           like <tt>include</tt>, except that a new module is created, with
+           name the base name of the source file name. Global
+           identifiers defined in the source file are entered in this
+           module, instead of the <tt>top</tt> module as in the case of
+           <tt>include</tt>. For instance, assuming file <tt>foo.ml</tt> contains
+           the single phrase
+<pre>
+           let bar = 1;;
+</pre><P>
+           executing <tt>load "foo"</tt> defines the identifier <tt>foo__bar</tt>
+           with value <tt>1</tt>.  Caveat: the loaded module is not
+           automatically opened: the identifier <tt>bar</tt> does not
+           automatically complete to <tt>foo__bar</tt>. To achieve this, you
+           must execute the directive <tt>#open "foo"</tt> afterwards. 
+</dl>
+<pre>
+value compile : string -&gt; unit
+</pre>
+<dl><dd>
+ Compile the source code for a module implementation or
+           interface (<tt>.ml</tt> or <tt>.mli</tt> file). Compilation proceeds as
+           with the batch compiler, and produces the same results as
+           <tt>camlc -c</tt>.  If the toplevel system is in debugging mode
+           (option <tt>-g</tt> or function <tt>debug_mode</tt> below), the
+           compilation is also performed in debugging mode, as when
+           giving the <tt>-g</tt> option to the batch compiler. The result of
+           the compilation is left in files (<tt>.zo</tt>, <tt>.zi</tt>,
+           <tt>.zix</tt>). The compiled code is not loaded in memory. Use
+           <tt>load_object</tt> to load a <tt>.zo</tt> file produced by <tt>compile</tt>. 
+</dl>
+<pre>
+value load_object : string -&gt; unit
+</pre>
+<dl><dd>
+ Load in memory the compiled bytecode contained in the given
+           file.  The <tt>.zo</tt> extension is automatically added to the
+           file name, if not present. The bytecode file has been
+           produced either by the standalone compiler <tt>camlc</tt> or by
+           the <tt>compile</tt> function. Global identifiers defined in the
+           file being loaded are entered in their own module, not in
+           the <tt>top</tt> module, just as with the <tt>load</tt> function. 
+</dl>
+<pre>
+value trace : string -&gt; unit
+</pre>
+<dl><dd>
+ After the execution of <tt>trace "foo"</tt>, all calls to the
+           global function named <tt>foo</tt> will be ``traced''. That is,
+           the argument and the result are displayed for each call, as
+           well as the exceptions escaping out of <tt>foo</tt>, either raised
+           by <tt>foo</tt> itself, or raised by one of the functions called
+           from <tt>foo</tt>. If <tt>foo</tt> is a curried function, each argument
+           is printed as it is passed to the function. 
+           Only functions implemented in ML can be traced; system primitives
+           such as <tt>string_length</tt> or user-supplied C functions cannot. 
+</dl>
+<pre>
+value untrace : string -&gt; unit
+</pre>
+<dl><dd>
+ Executing <tt>untrace "foo"</tt> stops all tracing over the global
+           function named <tt>foo</tt>. 
+</dl>
+<pre>
+value verbose_mode: bool -&gt; unit
+</pre>
+<dl><dd>
+ <tt>verbose_mode true</tt> causes the <tt>compile</tt> function to print
+           the inferred types and other information. <tt>verbose_mode false</tt>
+           reverts to the default silent behavior. 
+</dl>
+<pre>
+value install_printer : string -&gt; unit
+</pre>
+<dl><dd>
+ <tt>install_printer "printername"</tt> registers the function named
+           <tt>printername</tt> as a printer for objects whose types match
+           its argument type. That is, the toplevel loop will call
+           <tt>printername</tt> when it has such an object to print.
+           The printing function <tt>printername</tt> must use the <tt>format</tt> library
+           module to produce its output, otherwise the output of
+           <tt>printername</tt> will not be correctly located in the values
+           printed by the toplevel loop. 
+</dl>
+<pre>
+value remove_printer : string -&gt; unit
+</pre>
+<dl><dd>
+ <tt>remove_printer "printername"</tt> removes the function named
+           <tt>printername</tt> from the table of toplevel printers. 
+</dl>
+<pre>
+value set_print_depth : int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>set_print_depth n</tt> limits the printing of values to a maximal
+           depth of <tt>n</tt>. The parts of values whose depth exceeds <tt>n</tt>
+           are printed as <tt>...</tt> (ellipsis). 
+</dl>
+<pre>
+value set_print_length : int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>set_print_length n</tt> limits the number of value nodes
+           printed to at most <tt>n</tt>. Remaining parts of values
+           are printed as <tt>...</tt> (ellipsis). 
+</dl>
+<pre>
+value debug_mode: bool -&gt; unit
+</pre>
+<dl><dd>
+ Set whether extended module interfaces must be used
+           <tt>debug_mode true</tt> or not <tt>debug_mode false</tt>. Extended
+           module interfaces are <tt>.zix</tt> files that describe the actual
+           implementation of a module, including private types and
+           variables. They are generated when compiling with <tt>camlc -g</tt>,
+           or with the <tt>compile</tt> function above when <tt>debug_mode</tt> is
+           <tt>true</tt>. When <tt>debug_mode</tt> is <tt>true</tt>, toplevel phrases can refer
+           to private types and variables of modules, and private functions
+           can be traced with <tt>trace</tt>. Setting <tt>debug_mode true</tt> is equivalent
+           to starting the toplevel with the <tt>-g</tt> option. 
+</dl>
+<pre>
+value cd : string -&gt; unit
+</pre>
+<dl><dd>
+ Change the current working directory. 
+</dl>
+<pre>
+value directory : string -&gt; unit
+</pre>
+<dl><dd>
+ Add the given directory to the search path for files.
+           Same behavior as the <tt>-I</tt> option or the <tt>#directory</tt> directive. 
+</dl>
+<P>
+<H2>The toplevel and the module system</H2>
+ <A name="s:toplevel-modules"></A><P>
+Toplevel phrases can refer to identifiers defined in modules other
+than the <tt>top</tt> module with the same mechanisms as for separately
+compiled modules: either by using qualified identifiers
+(<tt>modulename__localname</tt>), or by using unqualified identifiers that
+are automatically completed by searching the list of opened modules.
+(See section <A HREF="node3.3.html#s:names">3.3</A>.) The modules opened at startup are given
+in the documentation for the standard library. Other modules can be
+opened with the <tt>#open</tt> directive.<P>
+However, before referencing a global variable from a module other than
+the <tt>top</tt> module, a definition of that global variable must have been
+entered in memory. At start-up, the toplevel system contains the
+definitions for all the identifiers in the standard library. The
+definitions for user modules can be entered with the <tt>load</tt> or
+<tt>load_object</tt> functions described above. Referencing a global variable
+for which no definition has been provided by <tt>load</tt> or <tt>load_object</tt>
+results in the error ``<tt>Identifier foo__bar is referenced before
+being defined</tt>''. Since this is a tricky point, let us consider some
+examples.<P>
+<p><ol>
+<li> The library function <tt>sub_string</tt> is defined in module
+<tt>string</tt>. This module is part of the standard library, and is one of
+the modules automatically opened at start-up. Hence, both phrases
+<pre>
+        sub_string "qwerty" 1 3;;
+        string__sub_string "qwerty" 1 3;;
+</pre>
+are correct, without having to use <tt>#open</tt>, <tt>load</tt>, or
+<tt>load_object</tt>.<P>
+<li> The library function <tt>printf</tt> is defined in module
+<tt>printf</tt>. This module is part of the standard library, but it is not
+automatically opened at start-up. Hence, the phrase
+<pre>
+        printf__printf "%s %s" "hello" "world";;
+</pre>
+is correctly executed, while
+<pre>
+        printf "%s %s" "hello" "world";;
+</pre>
+causes the error ``<tt>Variable printf is unbound</tt>'', since none of
+the currently opened modules define a global with local name <tt>printf</tt>.
+However,
+<pre>
+        #open "printf";;
+        printf "%s %s" "hello" "world";;
+</pre>
+executes correctly.<P>
+<li> Assume the file <tt>foo.ml</tt> resides in the current directory, and
+contains the single phrase
+<pre>
+        let x = 1;;
+</pre>
+When the toplevel starts, references to <tt>x</tt> will cause the error ``<tt>
+Variable x is unbound</tt>''. References to <tt>foo__x</tt> will cause the error
+``<tt>Cannot find file foo.zi</tt>'', since the typechecker is attempting
+to load the compiled interface for module <tt>foo</tt> in order to find the
+type of <tt>x</tt>. To load in memory the module <tt>foo</tt>, just do:
+<pre>
+        load "foo";;
+</pre>
+Then, references to <tt>foo__x</tt> typecheck and evaluate correctly. Since
+<tt>load</tt> does not open the module it loads, references to <tt>x</tt> will still
+fail with the error ``<tt>Variable x is unbound</tt>''. You will have to
+do
+<pre>
+        #open "foo";;
+</pre>
+explicitly, for <tt>x</tt> to complete automatically into <tt>foo__x</tt>.<P>
+<li> Finally, assume the file <tt>foo.ml</tt> above
+has been previously compiled with the <tt>camlc -c</tt> command. The current
+directory therefore contains a compiled interface <tt>foo.zi</tt>, claiming
+that <tt>foo__x</tt> is a global variable with type <tt>int</tt>, and a compiled
+bytecode file <tt>foo.zo</tt>, defining <tt>foo__x</tt> to have the value <tt>1</tt>. 
+When the toplevel starts, references to <tt>foo__x</tt> will cause the error 
+``<tt>foo__x is referenced before being defined</tt>''. In contrast with
+case 3 above, the typechecker has succeeded in finding the compiled
+interface for module <tt>foo</tt>. But execution cannot proceed, because no
+definition for <tt>foo__x</tt> has been entered in memory. To do so, execute:
+<pre>
+        load_object "foo";;
+</pre>
+This loads the file <tt>foo.zo</tt> in memory, therefore defining <tt>foo__x</tt>.
+Then, references to <tt>foo__x</tt> evaluate correctly. As in case 3 above,
+references to <tt>x</tt> still fail, because <tt>load_object</tt> does not open the
+module it loads. Again, you will have to do
+<pre>
+        #open "foo";;
+</pre>
+explicitly, for <tt>x</tt> to complete automatically into <tt>foo__x</tt>.<P>
+</ol><P>
+<H2>Common errors</H2>
+<P>
+This section describes and explains the most frequently encountered
+error messages.<P>
+<p><dl><P>
+<dt>Cannot find file <i>filename</i><dd>
+The named file could not be found in the current directory, nor in the
+directories of the search path.<P>
+If <i>filename</i> has the format <i>mod</i><tt>.zi</tt>, this
+means the current phrase references identifiers from module <i>mod</i>,
+but you have not yet compiled an interface for module <i>mod</i>. Fix:
+either <tt>load</tt> the file <i>mod</i><tt>.ml</tt>, which will also create
+in memory the compiled interface for module <i>mod</i>; or use <tt>camlc</tt> to
+compile <i>mod</i><tt>.mli</tt> or <i>mod</i><tt>.ml</tt>, creating the compiled
+interface <i>mod</i><tt>.zi</tt>, before you start the toplevel.<P>
+If <i>filename</i> has the format <i>mod</i><tt>.zo</tt>, this
+means you are trying to load with <tt>load_object</tt> a bytecode object file
+that does not exist yet. Fix: compile <i>mod</i><tt>.ml</tt> with <tt>camlc</tt>
+before you start the toplevel. Or, use <tt>load</tt> instead of <tt>load_object</tt>
+to load the source code instead of a compiled object file.<P>
+If <i>filename</i> has the format <i>mod</i><tt>.ml</tt>, this means <tt>load</tt> or
+<tt>include</tt> could not find the specified source file. Fix: check the
+spelling of the file name, or write it if it does not exist.<P>
+<dt><i>mod</i><tt>__</tt><i>name</i> is referenced before being defined<dd>
+You have neglected to load in memory an implementation for a module,
+with <tt>load</tt> or <tt>load_object</tt>. This is explained in full detail in
+section <A HREF="node6.html#s:toplevel-modules">6.3</A> above.<P>
+<dt>Corrupted compiled interface file <i>filename</i><dd>
+See section <A HREF="node5.html#s:comp-errors">5.4</A>.<P>
+<dt>Expression of type <i>t</i><sub>1</sub> cannot be used with type <i>t</i><sub>2</sub><dd>
+See section <A HREF="node5.html#s:comp-errors">5.4</A>.<P>
+<dt>The type inferred for the value <i>name</i>,
+	that is, <i>t</i>,
+	contains type variables that cannot be generalized<dd>
+See section <A HREF="node5.html#s:comp-errors">5.4</A>.<P>
+</dl><P>
+<H2>Building custom toplevel systems: <tt>camlmktop</tt></H2>
+<P>
+The <tt>camlmktop</tt> command builds Caml Light toplevels that contain user
+code preloaded at start-up. <P>
+<dl><dt><b>Mac:</b><dd> This command is not available in the Macintosh version.
+</dl><P>
+The <tt>camlmktop</tt> command takes as argument a set of <tt>.zo</tt> files, and
+links them with the object files that implement the Caml Light
+toplevel. The typical use is:
+<pre>
+        camlmktop -o mytoplevel foo.zo bar.zo gee.zo
+</pre>
+This creates the bytecode file <tt>mytoplevel</tt>, containing the Caml Light
+toplevel system, plus the code from the three <tt>.zo</tt> files. To run this
+toplevel, give it as argument to the <tt>camllight</tt> command:
+<pre>
+        camllight mytoplevel
+</pre>
+This starts a regular toplevel loop, except that the code from
+<tt>foo.zo</tt>, <tt>bar.zo</tt> and <tt>gee.zo</tt> is already loaded in memory, just as
+if you had typed:
+<pre>
+        load_object "foo";;
+        load_object "bar";;
+        load_object "gee";;
+</pre>
+on entrance to the toplevel. The modules <tt>foo</tt>, <tt>bar</tt> and <tt>gee</tt> are
+not opened, though; you still have to do
+<pre>
+        #open "foo";;
+</pre>
+yourself, if this is what you wish.<P>
+<H2>Options</H2>
+<P>
+The following command-line options are recognized by <tt>camlmktop</tt>.<P>
+<p><dl><P>
+<dt><tt>-ccopt</tt> <i>option</i><dd>
+Pass the given option to the C compiler and linker, when linking in
+``custom runtime'' mode. See the corresponding option for
+<tt>camlc</tt>, in chapter <A HREF="node5.html#c:camlc">5</A>.<P>
+<dt><tt>-custom</tt><dd>
+Link in ``custom runtime'' mode. See the corresponding option for
+<tt>camlc</tt>, in chapter <A HREF="node5.html#c:camlc">5</A>.<P>
+<dt><tt>-g</tt><dd>
+Add debugging information to the toplevel file produced, which can
+then be debugged with <tt>camldebug</tt> (chapter <A HREF="node10.html#c:debugger">10</A>).<P>
+<dt><tt>-I</tt> <i>directory</i><dd>
+Add the given directory to the list of directories searched for
+compiled object code files (<tt>.zo</tt>).<P>
+<dt><tt>-o</tt> <i>exec-file</i><dd>
+Specify the name of the toplevel file produced by the linker.<P>
+<dl><dt><b>Unix:</b><dd> The default is <tt>camltop.out</tt>. </dl><P>
+<dl><dt><b>PC:</b><dd> The default is <tt>camltop.exe</tt>. The name must have <tt>.exe</tt>
+extension. </dl><P>
+</dl>
+<HR>
+<A HREF="node7.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node5.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

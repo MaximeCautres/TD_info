@@ -1,0 +1,108 @@
+<HEAD>
+<TITLE><tt>printf</tt>: formatting printing functions </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node15.14.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.12.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>printf</tt>: formatting printing functions </H2>
+<P>
+<A name="s:printf"></A>
+
+<pre>
+type ('a, 'b, 'c) format
+</pre>
+<dl><dd>
+ The type of format strings. <tt>'a</tt> is the type of the parameters
+           of the string, <tt>'c</tt> is the result type for the <tt>printf</tt>-style
+           function, and <tt>'b</tt> is the type of the first argument given to
+           <tt>%a</tt> and <tt>%t</tt> printing functions. 
+</dl>
+<pre>
+value fprintf: out_channel -&gt; ('a, out_channel, unit) format -&gt; 'a
+</pre>
+<dl><dd>
+ <tt>fprintf outchan format arg1 ... argN</tt> formats the arguments
+           <tt>arg1</tt> to <tt>argN</tt> according to the format string <tt>format</tt>,
+           and outputs the resulting string on the channel <tt>outchan</tt>.
+           The format is a character string which contains two types of
+           objects:  plain  characters, which are simply copied to the
+           output channel, and conversion specifications, each of which
+           causes  conversion and printing of one argument.
+           Conversion specifications consist in the <tt>%</tt> character, followed
+           by optional flags and field widths, followed by one conversion
+           character. The conversion characters and their meanings are:
+<br>          <tt>d</tt> or <tt>i</tt>: convert an integer argument to signed decimal
+<br>          <tt>u</tt>: convert an integer argument to unsigned decimal
+<br>          <tt>x</tt>: convert an integer argument to unsigned hexadecimal,
+                using lowercase letters.
+<br>          <tt>X</tt>: convert an integer argument to unsigned hexadecimal,
+                using uppercase letters.
+<br>          <tt>s</tt>: insert a string argument
+<br>          <tt>c</tt>: insert a character argument
+<br>          <tt>f</tt>: convert a floating-point argument to decimal notation,
+                in the style <tt>dddd.ddd</tt>
+<br>          <tt>e</tt> or <tt>E</tt>: convert a floating-point argument to decimal notation,
+                in the style <tt>d.ddd e+-dd</tt> (mantissa and exponent)
+<br>          <tt>g</tt> or <tt>G</tt>: convert a floating-point argument to decimal notation,
+                in style <tt>f</tt> or <tt>e</tt>, <tt>E</tt> (whichever is more compact)
+<br>          <tt>b</tt>: convert a boolean argument to the string <tt>true</tt> or <tt>false</tt>
+<br>          <tt>a</tt>: user-defined printer. Takes two arguments and apply the first
+                one to <tt>outchan</tt> (the current output channel) and to the second
+                argument. The first argument must therefore have type
+                <tt>out_channel -&gt; 'b -&gt; unit</tt> and the second <tt>'b</tt>.
+                The output produced by the function is therefore inserted
+                in the output of <tt>fprintf</tt> at the current point.
+<br>          <tt>t</tt>: same as <tt>%a</tt>, but takes only one argument (with type
+                <tt>out_channel -&gt; unit</tt>) and apply it to <tt>outchan</tt>.
+<br>          Refer to the C library <tt>printf</tt> function for the meaning of
+           flags and field width specifiers.
+           If too few arguments are provided, printing stops just
+           before converting the first missing argument. 
+</dl>
+<pre>
+value printf: ('a, out_channel, unit) format -&gt; 'a
+</pre>
+<dl><dd>
+ Same as <tt>fprintf</tt>, but output on <tt>std_out</tt>. 
+</dl>
+<pre>
+value eprintf: ('a, out_channel, unit) format -&gt; 'a
+</pre>
+<dl><dd>
+ Same as <tt>fprintf</tt>, but output on <tt>std_err</tt>. 
+</dl>
+<pre>
+value sprintf: ('a, unit, string) format -&gt; 'a
+</pre>
+<dl><dd>
+ Same as <tt>fprintf</tt>, except that the result of the formatting
+           is returned as a string instead of being written on a channel. 
+</dl>
+<pre>
+value fprint: out_channel -&gt; string -&gt; unit
+</pre>
+<dl><dd>
+ Print the given string on the given output channel, without
+           any formatting. This is the same function as <tt>output_string</tt>
+           of module <tt>io</tt>. 
+</dl>
+<pre>
+value print: string -&gt; unit
+</pre>
+<dl><dd>
+ Print the given string on <tt>std_out</tt>, without any formatting.
+	   This is the same function as <tt>print_string</tt> of module <tt>io</tt>. 
+</dl>
+<pre>
+value eprint: string -&gt; unit
+</pre>
+<dl><dd>
+ Print the given string on <tt>std_err</tt>, without any formatting.
+	   This is the same function as <tt>prerr_string</tt> of module <tt>io</tt>. 
+</dl>
+<HR>
+<A HREF="node15.14.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.12.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

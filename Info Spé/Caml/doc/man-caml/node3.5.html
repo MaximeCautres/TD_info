@@ -1,0 +1,67 @@
+<HEAD>
+<TITLE>Type expressions</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node3.6.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node3.4.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2>Type expressions</H2>
+<P>
+
+<PRE>
+<i>typexpr</i>:
+      <font color="blue"><code>'</code></font> <i>ident</i>
+   |  <font color="blue"><code>(</code></font> <i>typexpr</i> <font color="blue"><code>)</code></font>
+   |  <i>typexpr</i> <font color="blue"><code>-&gt;</code></font> <i>typexpr</i>
+   |  <i>typexpr</i> <i>{</i><font color="blue"><code>*</code></font> <i>typexpr</i><i>}+</i>
+   |  <i>typeconstr</i>
+   |  <i>typexpr</i> <i>typeconstr</i>
+   |  <font color="blue"><code>(</code></font> <i>typexpr</i> <i>{</i><font color="blue"><code>,</code></font> <i>typexpr</i><i>}</i> <font color="blue"><code>)</code></font> <i>typeconstr</i></PRE>
+<P>
+The table below shows the relative precedences and associativity of
+operators and non-closed type constructions. The constructions with
+higher precedences come first.
+<table border>
+<tr><th>Operator</th><th>Associativity</th></tr>
+<tr><td>Type constructor application</td><td>--</td></tr>
+<tr><td><tt>*</tt></td><td>--</td></tr>
+<tr><td><tt>-&gt;</tt></td><td>right</td></tr>
+</table><P>
+Type expressions denote types in definitions of data types as well as
+in type constraints over patterns and expressions.<P>
+<H4>Type variables</H4>
+<P>
+The type expression <font color="blue"><code>'</code></font> <i>ident</i> stands for the type variable named
+<i>ident</i>. In data type definitions, type variables are names for the
+data type parameters. In type constraints, they represent unspecified
+types that can be instantiated by any type to satisfy the type
+constraint.<P>
+<H4>Parenthesized types</H4>
+<P>
+The type expression <font color="blue"><code>(</code></font> <i>typexpr</i> <font color="blue"><code>)</code></font> denotes the same type as
+<i>typexpr</i>.<P>
+<H4>Function types</H4>
+<P>
+The type expression <i>typexpr</i><SUB>1</SUB> <font color="blue"><code>-&gt;</code></font> <i>typexpr</i><SUB>2</SUB> denotes the type of
+functions mapping arguments of type <i>typexpr</i><SUB>1</SUB> to results of type
+<i>typexpr</i><SUB>2</SUB>.<P>
+<H4>Tuple types</H4>
+<P>
+The type expression <i>typexpr</i><SUB>1</SUB> <font color="blue"><code>*</code></font>...<font color="blue"><code>*</code></font> <i>typexpr</i><SUB>n</SUB>
+denotes the type of tuples whose elements belong to types <i>typexpr</i><SUB>1</SUB>,...<i>typexpr</i><SUB>n</SUB> respectively.<P>
+<H4>Constructed types</H4>
+<P>
+Type constructors with no parameter, as in <i>typeconstr</i>, are type
+expressions.<P>
+The type expression <i>typexpr</i> <i>typeconstr</i>, where <i>typeconstr</i> is a type
+constructor with one parameter, denotes the application of the unary type
+constructor <i>typeconstr</i> to the type <i>typexpr</i>.<P>
+The type expression <i>(</i><i>typexpr</i><SUB>1</SUB>,...,<i>typexpr</i><SUB>n</SUB><i>)</i> <i>typeconstr</i>, where
+<i>typeconstr</i> is a type constructor with n parameters, denotes the
+application of the n-ary type constructor <i>typeconstr</i> to the types
+<i>typexpr</i><SUB>1</SUB> through <i>typexpr</i><SUB>n</SUB>.<P>
+<HR>
+<A HREF="node3.6.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node3.4.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

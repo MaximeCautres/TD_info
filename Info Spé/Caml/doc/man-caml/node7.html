@@ -1,0 +1,135 @@
+<HEAD>
+<TITLE>The runtime system (camlrun)</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node8.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node6.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H1>The runtime system (camlrun)</H1>
+ <A name="c:runtime"></A><P>
+The <tt>camlrun</tt> command executes bytecode files produced by the
+linking phase of the <tt>camlc</tt> command.<P>
+<dl><dt><b>Mac:</b><dd> This command is a MPW tool, not a standalone Macintosh
+application.
+</dl><P>
+<H2>Overview</H2>
+<P>
+The <tt>camlrun</tt> command comprises three main parts: the bytecode
+interpreter, that actually executes bytecode files; the memory
+allocator and garbage collector; and a set of C functions that
+implement primitive operations such as input/output.<P>
+The usage for <tt>camlrun</tt> is:
+<pre>
+        camlrun <i>options</i> <i>bytecode-executable</i> <i>arg</i><sub>1</sub> ... <i>arg</i><sub>n</sub>
+</pre>
+The first non-option argument is taken to be the name of the file
+containing the executable bytecode. (That file is searched in the
+executable path as well as in the current directory.) The remaining
+arguments are passed to the Caml Light program, in the string array
+<tt>sys__command_line</tt>. Element 0 of this array is the name of the
+bytecode executable file; elements 1 to <i>n</i> are the remaining
+arguments <i>arg</i><sub>1</sub> to <i>arg</i><sub>n</sub>.<P>
+As mentioned in chapter <A HREF="node5.html#c:camlc">5</A>, in most cases, the bytecode
+executable files produced by the <tt>camlc</tt> command are self-executable,
+and manage to launch the <tt>camlrun</tt> command on themselves
+automatically. That is, assuming <tt>caml.out</tt> is a bytecode executable
+file,
+<pre>
+        caml.out <i>arg</i><sub>1</sub> ... <i>arg</i><sub>n</sub>
+</pre>
+works exactly as
+<pre>
+        camlrun caml.out <i>arg</i><sub>1</sub> ... <i>arg</i><sub>n</sub>
+</pre>
+Notice that it is not possible to pass options to <tt>camlrun</tt> when
+invoking <tt>caml.out</tt> directly.<P>
+<H2>Options</H2>
+<P>
+The following command-line option is recognized by <tt>camlrun</tt>.<P>
+<p><dl><P>
+<dt><tt>-V</tt><dd>
+Print out the <tt>camlrun</tt> version number.  Exit immediately without
+executing any byte-code file.<P>
+</dl><P>
+
+The following environment variable are also consulted:<P>
+<p><dl>
+<dt><tt>CAMLRUNPARAM</tt><dd> Set the garbage collection parameters.
+  This variable must be a sequence of parameter specifications.
+  A parameter specification is an option letter followed by an <tt>=</tt>
+  sign and a decimal number.  There are four options,
+  corresponding to the four fields of the <tt>control</tt> record
+  documented in section <A HREF="node15.6.html#s:gc">15.6</A>:
+  <p><dl>
+  <dt>s<dd> (<tt>minor_heap_size</tt>)  Size of the minor heap.
+  <dt>i<dd> (<tt>major_heap_increment</tt>)  Minimum size increment for the
+  major heap.
+  <dt>o<dd> (<tt>space_overhead</tt>)  The major GC speed setting.
+  <dt>v<dd> (<tt>verbose</tt>)  Whether to print GC messages or not.  0 is
+  false; 1 is true; other values may give unexpected results.
+  </dl>
+  For example, under <tt>csh</tt> the command
+<pre>
+        setenv CAMLRUNPARAM 's=250000 v=1'
+</pre>
+  tells a subsequent <tt>camlrun</tt> to set its initial minor heap size to
+  about 1 megabyte (on a 32-bit machine) and to print its GC messages.<P>
+<dt><tt>PATH</tt><dd> List of directories searched to find the bytecode
+executable file.
+</dl><P>
+<H2>Common errors</H2>
+<P>
+This section describes and explains the most frequently encountered
+error messages.<P>
+<p><dl><P>
+<dt><i>filename</i><tt>: no such file or directory</tt><dd>
+If <i>filename</i> is the name of a self-executable bytecode file, this
+means that either that file does not exist, or that it failed to run
+the <tt>camlrun</tt> bytecode interpreter on itself. The second possibility
+indicates that Caml Light has not been properly installed on your
+system.<P>
+<dt><tt>Cannot exec camlrun</tt><dd>
+(When launching a self-executable bytecode file.) The <tt>camlrun</tt>
+command could not be found in the executable path. Check that Caml
+Light has been properly installed on your system.<P>
+<dt><tt>Cannot find the bytecode file</tt><dd>
+The file that <tt>camlrun</tt> is trying to execute (e.g. the file given as
+first non-option argument to <tt>camlrun</tt>) either does not exist, or is
+not a valid executable bytecode file.<P>
+<dt><tt>Truncated bytecode file</tt><dd>
+The file that <tt>camlrun</tt> is trying to execute is not a valid executable
+bytecode file. Probably it has been truncated or mangled since
+created. Erase and rebuild it.<P>
+<dt><tt>Uncaught exception</tt><dd>
+The program being executed contains a ``stray'' exception. That is,
+it raises an exception at some point, and this exception is never
+caught. This causes immediate termination of the program. If you wish
+to know which exception thus escapes, use the <tt>printexc__f</tt> function
+from the standard library (and don't forget to link your program with
+the <tt>-g</tt> option).<P>
+<dt><tt>Out of memory</tt><dd>
+The program being executed requires more memory than available. Either
+the program builds too large data structures; or the program contains
+too many nested function calls, and the stack overflows.
+In some cases, your program is perfectly correct, it just requires
+more memory than your machine provides. (This happens quite frequently
+on small microcomputers, but is unlikely on Unix machines.) In other
+cases, the ``out of memory'' message reveals an error in your program:
+non-terminating recursive function, allocation of an excessively large
+array or string, attempts to build an infinite list or other data
+structure, ...<P>
+To help you diagnose this error, run your program with the <tt>-v</tt> option
+to <tt>camlrun</tt>. If it displays lots of ``<tt>Growing stack</tt>...''
+messages, this is probably a looping recursive function. If it
+displays lots of ``<tt>Growing heap</tt>...'' messages, with the heap size
+growing slowly, this is probably an attempt to construct a data
+structure with too many (infinitely many?) cells. If it displays few 
+``<tt>Growing heap</tt>...'' messages, but with a huge increment in the
+heap size, this is probably an attempt to build an excessively large
+array or string.<P>
+</dl>
+<HR>
+<A HREF="node8.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node6.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

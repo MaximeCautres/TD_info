@@ -1,0 +1,20 @@
+<HEAD>
+<TITLE>Range patterns</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node4.4.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node4.2.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2>Range patterns</H2>
+<P>
+In patterns, Caml Light recognizes the form
+<font color="blue"><code>`</code></font> <i>c</i> <font color="blue"><code>`</code></font> <font color="blue"><code>..</code></font> <font color="blue"><code>`</code></font> <i>d</i> <font color="blue"><code>`</code></font>
+(two character constants separated by <tt>..</tt>) as a shorthand for
+the pattern
+<blockquote>
+<font color="blue"><code>`</code></font> <i>c</i> <font color="blue"><code>`</code></font> <font color="blue"><code>|</code></font> <font color="blue"><code>`</code></font> <i>c</i><SUB>1</SUB> <font color="blue"><code>`</code></font> <font color="blue"><code>|</code></font> <font color="blue"><code>`</code></font> <i>c</i><SUB>2</SUB> <font color="blue"><code>`</code></font> <font color="blue"><code>|</code></font>...<font color="blue"><code>|</code></font> <font color="blue"><code>`</code></font> <i>c</i><SUB>n</SUB> <font color="blue"><code>`</code></font> <font color="blue"><code>|</code></font> <font color="blue"><code>`</code></font> <i>d</i> <font color="blue"><code>`</code></font>
+</blockquote>
+where c_1, c_2, ..., c_n are the characters that occur between
+c and d in the ASCII character set. For instance, 
+the pattern <tt>`0`..`9`</tt> matches all characters that are digits.<P>

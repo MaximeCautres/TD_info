@@ -1,0 +1,15 @@
+#! /bin/sh
+
+CURRENTDIR=`pwd`
+cd "$(dirname "$0")"
+
+camllex lexer.mll
+camlyacc parser.mly
+camlc -c parser.mli
+camlc -c lexer.ml
+camlc -c parser.ml
+camlc -c calculette.ml
+#camlc -custom -o calculette lexer.zo parser.zo calculette.zo
+camllibr -o libcalculette.zo lexer.zo parser.zo calculette.zo
+
+cd "$CURRENTDIR"

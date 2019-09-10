@@ -1,0 +1,100 @@
+<HEAD>
+<TITLE>Profiling (camlpro)</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node12.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node10.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H1>Profiling (camlpro)</H1>
+ <A name="c:profiler"></A><P>
+This chapter describes how the execution of Caml Light programs can be
+profiled, by recording how many times functions are called, branches
+of conditionals are taken, ... <P>
+<dl><dt><b>Mac:</b><dd> This command is not available. </dl>
+<dl><dt><b>PC:</b><dd> This command is not available. </dl><P>
+<H2>Compiling for profiling</H2>
+<P>
+Before profiling an execution, the program must be compiled in
+profiling mode, using the <tt>-p</tt> option to the batch compiler <tt>camlc</tt>
+(see chapter <A HREF="node5.html#c:camlc">5</A>). When compiling modules separately, the
+<tt>-p</tt> option must be given both when compiling the modules (production
+of <tt>.zo</tt> files) and when linking them together.<P>
+The amount of profiling information can be controlled by adding one or
+several letters after the <tt>-p</tt> option, indicating which parts of the
+program should be profiled:<P>
+<p><dl>
+<dt><tt>a</tt><dd> all options
+<dt><tt>f</tt><dd> function calls : a count point is set at the beginning of
+function bodies
+<dt><tt>i</tt><dd> <b>if ... then ... else ...</b> : count points are set in
+both <b>then</b> branch and <b>else</b> branch
+<dt><tt>l</tt><dd> <b>while, for</b> loops: a count point is set at the beginning of
+the loop body
+<dt><tt>m</tt><dd> <b>match</b> branches: a count point is set at the beginning of the
+body of each branch
+<dt><tt>t</tt><dd> <b>try ... with ...</b> branches: a count point is set at the
+beginning of the body of each branch
+</dl><P>
+For instance, compiling with <tt>-pfilm</tt> profiles function calls, if... then
+... else..., loops and pattern matching.<P>
+The <tt>-p</tt> option without additional letters defaults to <tt>-pfm</tt>,
+meaning that only function calls and pattern matching are profiled.<P>
+<H2>Profiling an execution</H2>
+<P>
+Running a bytecode executable file that has been compiled and linked with
+<tt>-p</tt> records the execution counts for the specified parts of the program
+and saves them in a file called <tt>camlpro.dump</tt> in the current directory.<P>
+More precisely, the dump file <tt>camlpro.dump</tt> is written when the
+<tt>io__exit</tt> function is called. 
+The linker, called with the <tt>-p</tt> option, adds <tt>io__exit 0</tt> as the last
+phrase of the bytecode executable, in case the original program never calls
+<tt>io__exit</tt>. 
+However, if the program terminates with an <tt>uncaught exception</tt>, the dump
+file will not be produced.<P>
+If a compatible dump file already exists in the current directory, then the
+profiling information is accumulated in this dump file. This allows, for
+instance, the profiling of several executions of a program on
+different inputs.<P>
+<H2>Printing profiling information</H2>
+<P>
+The <tt>camlpro</tt> command produces a source listing of the program modules
+where execution counts have been inserted as comments. For instance,
+<pre>
+        camlpro foo.ml
+</pre>
+prints the source code for the <tt>foo</tt> module, with comments indicating
+how many times the functions in this module have been called. Naturally,
+this information is accurate only if the source file has not been modified
+since the profiling execution took place.<P>
+The following options are recognized by <tt>camlpro</tt>:<P>
+<p><dl>
+<dt>compiler options <tt>-stdlib, -I, -include, -O, -open, -i, -lang</tt><dd>
+See chapter <A HREF="node5.html#c:camlc">5</A> for the detailed usage.
+<dt><tt>-f</tt> <i>dumpfile</i><dd> 
+Specifies an alternate dump file of profiling information
+<dt><tt>-F</tt> <i>string</i><dd>
+Specifies an additional string to be output with profiling information.
+By default, { camlpro} will annotate progams with comments of the form
+<tt>(* n *)</tt> where <tt>n</tt> is the counter value for a profiling point. With
+option <tt>-F s</tt>, the annotation will be <tt>(* sn *)</tt>.
+</dl><P>
+An additional argument specifies the output file. For instance
+<pre>
+	camlpro -f ../test/camlpro.dump foo.ml foo_profiled.ml
+</pre> 
+will save the annotated program in file <tt>foo_profiled.ml</tt>. Otherwise,
+the annotated program is written on the standard output.<P>
+<H2>Known bugs</H2>
+
+The following situation (file <tt>x.ml</tt>)
+<pre>
+let a = 1;;
+x__a ;;
+</pre> 
+will break the profiler. More precisely, one should avoid to refer to
+symbols of the current module with the qualified symbol syntax.
+<HR>
+<A HREF="node12.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node10.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

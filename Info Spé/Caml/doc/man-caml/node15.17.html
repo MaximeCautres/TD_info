@@ -1,0 +1,30 @@
+<HEAD>
+<TITLE><tt>sort</tt>: sorting and merging lists </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node15.18.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.16.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>sort</tt>: sorting and merging lists </H2>
+<P>
+<A name="s:sort"></A>
+
+<pre>
+value sort : ('a -&gt; 'a -&gt; bool) -&gt; 'a list -&gt; 'a list
+</pre>
+<dl><dd>
+ Sort a list in increasing order according to an ordering predicate.
+           The predicate should return <tt>true</tt> if its first argument is
+           less than or equal to its second argument. 
+</dl>
+<pre>
+value merge : ('a -&gt; 'a -&gt; bool) -&gt; 'a list -&gt; 'a list -&gt; 'a list
+</pre>
+<dl><dd>
+ Merge two lists according to the given predicate.
+           Assuming the two argument lists are sorted according to the
+           predicate, <tt>merge</tt> returns a sorted list containing the elements
+           from the two lists. The behavior is undefined if the two
+           argument lists were not sorted. 
+</dl>

@@ -1,0 +1,23 @@
+<HEAD>
+<TITLE>Local definitions using <tt>where</tt></TITLE>
+</HEAD>
+<BODY>
+<A HREF="node4.6.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node4.4.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2>Local definitions using <tt>where</tt></H2>
+<P>
+
+A postfix syntax for local definitions is provided:
+
+<PRE>
+<i>expr</i>:
+      ...
+   |  <i>expr</i> <font color="blue"><code>where</code></font> <i>[</i><font color="blue"><code>rec</code></font><i>]</i> <i>let-binding</i>
+
+</PRE>
+<P>
+The expression <i>expr</i> <font color="blue"><code>where</code></font> <i>let-binding</i> behaves exactly as
+<font color="blue"><code>let</code></font> <i>let-binding</i> <font color="blue"><code>in</code></font> <i>expr</i>, and similarly for <tt>where rec</tt> and <tt>let
+rec</tt>.<P>

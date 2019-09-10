@@ -1,0 +1,159 @@
+<HEAD>
+<TITLE><tt>vect</tt>: operations on vectors </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node15.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.17.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>vect</tt>: operations on vectors </H2>
+<P>
+<A name="s:vect"></A>
+
+<pre>
+value vect_length : 'a vect -&gt; int
+</pre>
+<dl><dd>
+ Return the length (number of elements) of the given vector. 
+</dl>
+<pre>
+value vect_item : 'a vect -&gt; int -&gt; 'a
+</pre>
+<dl><dd>
+ <tt>vect_item v n</tt> returns the element number <tt>n</tt> of vector <tt>v</tt>.
+           The first element has number 0.
+           The last element has number <tt>vect_length v - 1</tt>.
+           Raise <tt>Invalid_argument "vect_item"</tt>  if <tt>n</tt> is outside the range
+           0 to <tt>(vect_length v - 1)</tt>.
+           You can also write <tt>v.(n)</tt> instead of <tt>vect_item v n</tt>. 
+</dl>
+<pre>
+value vect_assign : 'a vect -&gt; int -&gt; 'a -&gt; unit
+</pre>
+<dl><dd>
+ <tt>vect_assign v n x</tt> modifies vector <tt>v</tt> in place, replacing
+           element number <tt>n</tt> with <tt>x</tt>.
+           Raise <tt>Invalid_argument "vect_assign"</tt> if <tt>n</tt> is outside the range
+           0 to <tt>vect_length v - 1</tt>.
+           You can also write <tt>v.(n) &lt;- x</tt> instead of <tt>vect_assign v n x</tt>. 
+</dl>
+<pre>
+value make_vect : int -&gt; 'a -&gt; 'a vect
+</pre>
+<dl><dd>
+ <tt>make_vect n x</tt> returns a fresh vector of length <tt>n</tt>,
+           initialized with <tt>x</tt>.
+	   All the elements of this new vector are initially
+           physically equal to <tt>x</tt> (see module <tt>eq</tt>). Consequently, if <tt>x</tt>
+           is mutable, it is shared among all elements of the vector,
+           and modifying <tt>x</tt> through one of the vector entries will modify
+           all other entries at the same time. 
+</dl>
+<pre>
+value make_matrix : int -&gt; int -&gt; 'a -&gt; 'a vect vect
+</pre>
+<dl><dd>
+ <tt>make_matrix dimx dimy e</tt> returns a two-dimensional array
+           (a vector of vectors) with first dimension <tt>dimx</tt> and
+           second dimension <tt>dimy</tt>. All the elements of this new matrix
+	   are initially physically equal to <tt>e</tt>.
+           The element (<tt>x,y</tt>) of a matrix <tt>m</tt> is accessed
+           with the notation <tt>m.(x).(y)</tt>. 
+</dl>
+<pre>
+value init_vect : int -&gt; (int -&gt; 'a) -&gt; 'a vect
+</pre>
+<dl><dd>
+ <tt>init_vect n f</tt> returns a fresh array of length <tt>n</tt>,
+           with element number <tt>i</tt> equal to <tt>f i</tt>. 
+</dl>
+<pre>
+value concat_vect : 'a vect -&gt; 'a vect -&gt; 'a vect
+</pre>
+<dl><dd>
+ <tt>concat_vect v1 v2</tt> returns a fresh vector containing the
+           concatenation of vectors <tt>v1</tt> and <tt>v2</tt>. 
+</dl>
+<pre>
+value sub_vect : 'a vect -&gt; int -&gt; int -&gt; 'a vect
+</pre>
+<dl><dd>
+ <tt>sub_vect v start len</tt> returns a fresh vector of length <tt>len</tt>,
+           containing the elements number <tt>start</tt> to <tt>start + len - 1</tt>
+           of vector <tt>v</tt>.
+           Raise <tt>Invalid_argument "sub_vect"</tt> if <tt>start</tt> and <tt>len</tt> do not
+           designate a valid subvector of <tt>v</tt>; that is, if
+           <tt>start &lt; 0</tt>, or <tt>len &lt; 0</tt>, or <tt>start + len &gt; vect_length v</tt>. 
+</dl>
+<pre>
+value copy_vect : 'a vect -&gt; 'a vect
+</pre>
+<dl><dd>
+ <tt>copy_vect v</tt> returns a copy of <tt>v</tt>, that is, a fresh vector
+           containing the same elements as <tt>v</tt>. 
+</dl>
+<pre>
+value fill_vect : 'a vect -&gt; int -&gt; int -&gt; 'a -&gt; unit
+</pre>
+<dl><dd>
+ <tt>fill_vect v ofs len x</tt> modifies the vector <tt>v</tt> in place,
+           storing <tt>x</tt> in elements number <tt>ofs</tt> to <tt>ofs + len - 1</tt>.
+           Raise <tt>Invalid_argument "fill_vect"</tt> if <tt>ofs</tt> and <tt>len</tt> do not
+           designate a valid subvector of <tt>v</tt>. 
+</dl>
+<pre>
+value blit_vect : 'a vect -&gt; int -&gt; 'a vect -&gt; int -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>blit_vect v1 o1 v2 o2 len</tt> copies <tt>len</tt> elements
+           from vector <tt>v1</tt>, starting at element number <tt>o1</tt>, to vector <tt>v2</tt>,
+           starting at element number <tt>o2</tt>. It works correctly even if
+           <tt>v1</tt> and <tt>v2</tt> are the same vector, and the source and
+           destination chunks overlap.
+           Raise <tt>Invalid_argument "blit_vect"</tt> if <tt>o1</tt> and <tt>len</tt> do not
+           designate a valid subvector of <tt>v1</tt>, or if <tt>o2</tt> and <tt>len</tt> do not
+           designate a valid subvector of <tt>v2</tt>. 
+</dl>
+<pre>
+value list_of_vect : 'a vect -&gt; 'a list
+</pre>
+<dl><dd>
+ <tt>list_of_vect v</tt> returns the list of all the elements of <tt>v</tt>, that is:
+           <tt>[v.(0); v.(1); ...; v.(vect_length v - 1)]</tt>. 
+</dl>
+<pre>
+value vect_of_list : 'a list -&gt; 'a vect
+</pre>
+<dl><dd>
+ <tt>vect_of_list l</tt> returns a fresh vector containing the elements
+           of <tt>l</tt>. 
+</dl>
+<pre>
+value map_vect : ('a -&gt; 'b) -&gt; 'a vect -&gt; 'b vect
+</pre>
+<dl><dd>
+ <tt>map_vect f v</tt> applies function <tt>f</tt> to all the elements of <tt>v</tt>,
+           and builds a vector with the results returned by <tt>f</tt>:
+           <tt>[| f v.(0); f v.(1); ...; f v.(vect_length v - 1) |]</tt>. 
+</dl>
+<pre>
+value map_vect_list : ('a -&gt; 'b) -&gt; 'a vect -&gt; 'b list
+</pre>
+<dl><dd>
+ <tt>map_vect_list f v</tt> applies function <tt>f</tt> to all the elements of <tt>v</tt>,
+           and builds a list with the results returned by <tt>f</tt>:
+           <tt>[ f v.(0); f v.(1); ...; f v.(vect_length v - 1) ]</tt>. 
+</dl>
+<pre>
+value do_vect : ('a -&gt; unit) -&gt; 'a vect -&gt; unit
+</pre>
+<dl><dd>
+ <tt>do_vect f v</tt> applies function <tt>f</tt> in turn to all the elements of <tt>v</tt>,
+	   discarding all the results:
+           <tt>f v.(0); f v.(1); ...; f v.(vect_length v - 1); ()</tt>. 
+</dl>
+
+<HR>
+<A HREF="node15.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.17.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

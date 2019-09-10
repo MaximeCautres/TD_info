@@ -1,0 +1,502 @@
+<HEAD>
+<TITLE>Expressions</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node3.9.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node3.7.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2>Expressions</H2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<P>
+
+<PRE>
+<i>expr</i>:
+      <i>ident</i>
+   |  <i>variable</i>
+   |  <i>constant</i>
+   |  <font color="blue"><code>(</code></font> <i>expr</i> <font color="blue"><code>)</code></font>
+   |  <font color="blue"><code>begin</code></font> <i>expr</i> <font color="blue"><code>end</code></font>
+   |  <font color="blue"><code>(</code></font> <i>expr</i> <font color="blue"><code>:</code></font> <i>typexpr</i> <font color="blue"><code>)</code></font>
+   |  <i>expr</i> <font color="blue"><code>,</code></font> <i>expr</i> <i>{</i><font color="blue"><code>,</code></font> <i>expr</i><i>}</i>
+   |  <i>ncconstr</i> <i>expr</i>
+   |  <i>expr</i> <font color="blue"><code>::</code></font> <i>expr</i>
+   |  <font color="blue"><code>[</code></font> <i>expr</i> <i>{</i><font color="blue"><code>;</code></font> <i>expr</i><i>}</i> <font color="blue"><code>]</code></font>
+   |  <font color="blue"><code>[|</code></font> <i>expr</i> <i>{</i><font color="blue"><code>;</code></font> <i>expr</i><i>}</i> <font color="blue"><code>|]</code></font>
+   |  <font color="blue"><code>{</code></font> <i>label</i> <font color="blue"><code>=</code></font> <i>expr</i> <i>{</i><font color="blue"><code>;</code></font> <i>label</i> <font color="blue"><code>=</code></font> <i>expr</i><i>}</i> <font color="blue"><code>}</code></font>
+   |  <i>expr</i> <i>expr</i>
+   |  <i>prefix-op</i> <i>expr</i>
+   |  <i>expr</i> <i>infix-op</i> <i>expr</i>
+   |  <i>expr</i> <font color="blue"><code>.</code></font> <i>label</i>
+   |  <i>expr</i> <font color="blue"><code>.</code></font> <i>label</i> <font color="blue"><code>&lt;-</code></font> <i>expr</i>
+   |  <i>expr</i> <font color="blue"><code>.(</code></font> <i>expr</i> <font color="blue"><code>)</code></font>
+   |  <i>expr</i> <font color="blue"><code>.(</code></font> <i>expr</i> <font color="blue"><code>)</code></font> <font color="blue"><code>&lt;-</code></font> <i>expr</i>
+   |  <i>expr</i> <font color="blue"><code>&amp;</code></font> <i>expr</i>
+   |  <i>expr</i> <font color="blue"><code>or</code></font> <i>expr</i>
+   |  <font color="blue"><code>if</code></font> <i>expr</i> <font color="blue"><code>then</code></font> <i>expr</i> <i>[</i><font color="blue"><code>else</code></font> <i>expr</i><i>]</i>
+   |  <font color="blue"><code>while</code></font> <i>expr</i> <font color="blue"><code>do</code></font> <i>expr</i> <font color="blue"><code>done</code></font>
+   |  <font color="blue"><code>for</code></font> <i>ident</i> <font color="blue"><code>=</code></font> <i>expr</i> <i>(</i><font color="blue"><code>to</code></font> | <font color="blue"><code>downto</code></font><i>)</i> <i>expr</i> <font color="blue"><code>do</code></font> <i>expr</i> <font color="blue"><code>done</code></font>
+   |  <i>expr</i> <font color="blue"><code>;</code></font> <i>expr</i>
+   |  <font color="blue"><code>match</code></font> <i>expr</i> <font color="blue"><code>with</code></font> <i>simple-matching</i>
+   |  <font color="blue"><code>fun</code></font> <i>multiple-matching</i>
+   |  <font color="blue"><code>function</code></font> <i>simple-matching</i>
+   |  <font color="blue"><code>try</code></font> <i>expr</i> <font color="blue"><code>with</code></font> <i>simple-matching</i>
+   |  <font color="blue"><code>let</code></font> <i>[</i><font color="blue"><code>rec</code></font><i>]</i> <i>let-binding</i> <i>{</i><font color="blue"><code>and</code></font> <i>let-binding</i><i>}</i> <font color="blue"><code>in</code></font> <i>expr</i>
+
+<i>simple-matching</i>:
+      <i>pattern</i> <font color="blue"><code>-&gt;</code></font> <i>expr</i> <i>{</i><font color="blue"><code>|</code></font> <i>pattern</i> <font color="blue"><code>-&gt;</code></font> <i>expr</i><i>}</i>
+
+<i>multiple-matching</i>:
+      <i>pattern-list</i> <font color="blue"><code>-&gt;</code></font> <i>expr</i> <i>{</i><font color="blue"><code>|</code></font> <i>pattern-list</i> <font color="blue"><code>-&gt;</code></font> <i>expr</i><i>}</i>
+
+<i>pattern-list</i>:
+      <i>pattern</i> <i>{</i><i>pattern</i><i>}</i>
+
+<i>let-binding</i>:
+      <i>pattern</i> <font color="blue"><code>=</code></font> <i>expr</i>
+   |  <i>variable</i> <i>pattern-list</i> <font color="blue"><code>=</code></font> <i>expr</i>
+
+<i>prefix-op</i>:
+      <font color="blue"><code>-</code></font> | <font color="blue"><code>-.</code></font> | <font color="blue"><code>!</code></font>
+
+<i>infix-op</i>:
+      <font color="blue"><code>+</code></font> | <font color="blue"><code>-</code></font> | <font color="blue"><code>*</code></font> | <font color="blue"><code>/</code></font> | <font color="blue"><code>mod</code></font> | <font color="blue"><code>+.</code></font> | <font color="blue"><code>-.</code></font> | <font color="blue"><code>*.</code></font> | <font color="blue"><code>/.</code></font> | <font color="blue"><code>**</code></font> | <font color="blue"><code>@</code></font> | <font color="blue"><code>^</code></font> | <font color="blue"><code>!</code></font> | <font color="blue"><code>:=</code></font>
+   |  <font color="blue"><code>=</code></font> | <font color="blue"><code>&lt;&gt;</code></font> | <font color="blue"><code>==</code></font> | <font color="blue"><code>!=</code></font> | <font color="blue"><code>&lt;</code></font> | <font color="blue"><code>&lt;=</code></font> | <font color="blue"><code>&gt;</code></font> | <font color="blue"><code>&gt;=</code></font> | <font color="blue"><code>&lt;.</code></font> | <font color="blue"><code>&lt;=.</code></font> | <font color="blue"><code>&gt;.</code></font> | <font color="blue"><code>&gt;=.</code></font></PRE>
+<P>
+The table below shows the relative precedences and associativity of
+operators and non-closed constructions. The constructions with higher
+precedence come first.
+<table border>
+<tr><th>Construction or operator</th><th>Associativity</th></tr>
+<tr><td><tt>!</tt></td><td>--</td></tr>
+<tr><td><tt>.   .(</tt></td><td>--</td></tr>
+<tr><td>function application</td><td>left</td></tr>
+<tr><td>constructor application</td><td>--</td></tr>
+<tr><td><tt>-   -.</tt> (prefix)</td><td>--</td></tr>
+<tr><td><tt>**</tt></td><td>right</td></tr>
+<tr><td><tt>mod</tt></td><td>left</td></tr>
+<tr><td><tt>*   *.   /   /.</tt></td><td>left</td></tr>
+<tr><td><tt>+   +.   -   -.</tt></td><td>left</td></tr>
+<tr><td><tt>::</tt></td><td>right</td></tr>
+<tr><td><tt>@</tt> <tt>^</tt></td><td>right</td></tr>
+<tr><td>comparisons (<tt>=  ==  &lt; </tt> etc.)</td><td>left</td></tr>
+<tr><td><tt>not</tt></td><td>--</td></tr>
+<tr><td><tt>&amp;</tt></td><td>left</td></tr>
+<tr><td><tt>or</tt></td><td>left</td></tr>
+<tr><td><tt>,</tt></td><td>--</td></tr>
+<tr><td><tt>&lt;-   :=</tt></td><td>right</td></tr>
+<tr><td><tt>if</tt></td><td>--</td></tr>
+<tr><td><tt>;</tt></td><td>right</td></tr>
+<tr><td><tt>let</tt> <tt>match</tt> <tt>fun</tt> <tt>function</tt> <tt>try</tt></td><td>--</td></tr>
+</table><P>
+<H3>Simple expressions</H3>
+<P>
+<H4>Constants</H4>
+<P>
+Expressions consisting in a constant evaluate to this constant.<P>
+<H4>Variables</H4>
+ <A name="expr:var"></A><P>
+Expressions consisting in a variable evaluate to the value bound to
+this variable in the current evaluation environment. The variable can
+be either a qualified identifier or a simple identifier. Qualified
+identifiers always denote global variables. Simple identifiers denote
+either a local variable, if the identifier is locally bound, or a
+global variable, whose full name is obtained by qualifying the simple
+identifier, as described in section <A HREF="node3.3.html#s:names">3.3</A>.<P>
+<H4>Parenthesized expressions</H4>
+
+
+<P>
+The expressions <font color="blue"><code>(</code></font> <i>expr</i> <font color="blue"><code>)</code></font> and <font color="blue"><code>begin</code></font> <i>expr</i> <font color="blue"><code>end</code></font> have the same
+value as <i>expr</i>. Both constructs are semantically equivalent, but it
+is good style to use <font color="blue"><code>begin</code></font>...<font color="blue"><code>end</code></font> inside control structures:
+<pre>
+        if ... then begin ... ; ... end else begin ... ; ... end
+</pre>
+and <font color="blue"><code>(</code></font>...<font color="blue"><code>)</code></font> for the other grouping situations.<P>
+Parenthesized expressions can contain a type constraint, as in <font color="blue"><code>(</code></font> <i>expr</i> <font color="blue"><code>:</code></font> <i>type</i> <font color="blue"><code>)</code></font>. This constraint forces the type of <i>expr</i> to be
+compatible with <i>type</i>.<P>
+<H4>Function abstraction</H4>
+<P>
+The most general form of function abstraction is:
+
+
+<pre>
+fun <i>pattern</i>11 ... <i>pattern</i>1M -&gt; <i>expr</i>1
+  | ...
+  | <i>pattern</i>N1 ... <i>pattern</i>NM -&gt; <i>expr</i>N
+</pre>
+
+This expression evaluates to a functional value with <i>m</i> curried arguments.
+When this function is applied to <i>m</i> values <i>v</i><sub>1</sub> ... <i>v</i><sub>m</sub>,
+the values are matched against each pattern row
+<i>pattern</i><SUB>i</SUB><SUP>1</SUP>...<i>pattern</i><SUB>i</SUB><SUP>m</SUP>
+for <i>i</i> from 1 to <i>n</i>.
+If one of these matchings succeeds, that is if the value <i>v</i><sub>j</sub>
+matches the pattern <i>pattern</i><SUB>i</SUB><SUP>j</SUP> for all <i>j</i> = 1, ..., <i>m</i>,
+then the expression <i>expr</i><SUB>i</SUB> associated to the selected pattern row
+is evaluated, and its value becomes the value of the function
+application. The evaluation of <i>expr</i><SUB>i</SUB> takes place in an
+environment enriched by the bindings performed during the matching.<P>
+If several pattern rows match the arguments, the one that occurs first
+in the function definition is selected. If none of the pattern rows
+matches the argument, the exception <tt>Match_failure</tt> is raised.
+<P>
+If the function above is applied to less than <i>m</i> arguments, a
+functional value is returned, that represents the partial application
+of the function to the arguments provided. This partial application is
+a function that, when applied to the remaining arguments,
+matches all arguments against the pattern rows as described above.
+Matching does not start until all <i>m</i> arguments have been provided
+to the function; hence, partial applications of the function to less
+than <i>m</i> arguments never raise <tt>Match_failure</tt>.<P>
+All pattern rows in the function body must contain the same
+number of patterns. A variable must not be bound more than once in
+one pattern row.<P>
+Functions with only one argument can be defined with the
+<tt>function</tt> keyword instead of <tt>fun</tt>:
+
+
+<pre>
+function <i>pattern</i>1 -&gt; <i>expr</i>1
+       | ...
+       | <i>pattern</i>N -&gt; <i>expr</i>N
+</pre>
+
+The function thus defined behaves exactly as described above. The only
+difference between the two forms of function definition is how a
+parsing ambiguity is resolved. The two forms <i>cconstr</i> <i>pattern</i> (two
+patterns in a row) and <i>ncconstr</i> <i>pattern</i> (one pattern) cannot be
+distinguished syntactically. Function definitions introduced by
+<tt>fun</tt> resolve the ambiguity to the former form; function
+definitions introduced by <tt>function</tt> resolve it to the latter
+form (the former form makes no sense in this case).<P>
+<H4>Function application</H4>
+<P>
+Function application is denoted by juxtaposition of expressions. The
+expression <i>expr</i><SUB>1</SUB> <i>expr</i><SUB>2</SUB>...<i>expr</i><SUB>n</SUB> evaluates the expressions
+<i>expr</i><SUB>1</SUB> to <i>expr</i><SUB>n</SUB>. The expression <i>expr</i><SUB>1</SUB> must evaluate to a
+functional value, which is then applied to the values of 
+<i>expr</i><SUB>2</SUB>,...,<i>expr</i><SUB>n</SUB>. The order in which the expressions <i>expr</i><SUB>1</SUB>,...,<i>expr</i><SUB>n</SUB> are evaluated is not specified.<P>
+<H4>Local definitions</H4>
+ <A name="s:localdef"></A>
+<P>
+The <tt>let</tt> and <tt>let rec</tt> constructs bind variables locally.
+The construct
+<blockquote>
+<font color="blue"><code>let</code></font> <i>pattern</i><SUB>1</SUB> <font color="blue"><code>=</code></font> <i>expr</i><SUB>1</SUB> <font color="blue"><code>and</code></font>...<font color="blue"><code>and</code></font> <i>pattern</i><SUB>n</SUB> <font color="blue"><code>=</code></font> <i>expr</i><SUB>n</SUB> <font color="blue"><code>in</code></font> <i>expr</i>
+</blockquote>
+evaluates <i>expr</i><SUB>1</SUB>...<i>expr</i><SUB>n</SUB> in some unspecified order, then matches
+their values against the patterns <i>pattern</i><SUB>1</SUB>...<i>pattern</i><SUB>n</SUB>. If the
+matchings succeed, <i>expr</i> is evaluated in the environment enriched by
+the bindings performed during matching, and the value of <i>expr</i> is
+returned as the value of the whole <tt>let</tt> expression. If one of the
+matchings fails, the exception <tt>Match_failure</tt> is raised.
+<P>
+An alternate syntax is provided to bind variables to functional
+values: instead of writing
+<blockquote>
+<i>ident</i> <font color="blue"><code>=</code></font> <font color="blue"><code>fun</code></font> <i>pattern</i><SUB>1</SUB>...<i>pattern</i><SUB>m</SUB> <font color="blue"><code>-&gt;</code></font> <i>expr</i>
+</blockquote>
+in a <tt>let</tt> expression, one may instead write
+<blockquote>
+<i>ident</i> <i>pattern</i><SUB>1</SUB>...<i>pattern</i><SUB>m</SUB> <font color="blue"><code>=</code></font> <i>expr</i>
+</blockquote>
+Both forms bind <i>ident</i> to the curried function with <i>m</i> arguments and
+only one case,
+<blockquote>
+<i>pattern</i><SUB>1</SUB>...<i>pattern</i><SUB>m</SUB> <font color="blue"><code>-&gt;</code></font> <i>expr</i>.
+</blockquote><P>
+
+
+Recursive definitions of variables are introduced by <tt>let rec</tt>:
+<blockquote>
+<font color="blue"><code>let</code></font> <font color="blue"><code>rec</code></font> <i>pattern</i><SUB>1</SUB> <font color="blue"><code>=</code></font> <i>expr</i><SUB>1</SUB> <font color="blue"><code>and</code></font>...<font color="blue"><code>and</code></font> <i>pattern</i><SUB>n</SUB> <font color="blue"><code>=</code></font> <i>expr</i><SUB>n</SUB> <font color="blue"><code>in</code></font> <i>expr</i>
+</blockquote>
+The only difference with the <tt>let</tt> construct described above is
+that the bindings of variables to values performed by the
+pattern-matching are considered already performed when the expressions
+<i>expr</i><SUB>1</SUB> to <i>expr</i><SUB>n</SUB> are evaluated. That is, the expressions <i>expr</i><SUB>1</SUB>
+to <i>expr</i><SUB>n</SUB> can reference identifiers that are bound by one of the
+patterns <i>pattern</i><SUB>1</SUB>,...,<i>pattern</i><SUB>n</SUB>, and expect them to have the
+same value as in <i>expr</i>, the body of the <tt>let rec</tt> construct.<P>
+The recursive definition is guaranteed to behave as described above if
+the expressions <i>expr</i><SUB>1</SUB> to <i>expr</i><SUB>n</SUB> are function definitions
+(<font color="blue"><code>fun</code></font>... or <font color="blue"><code>function</code></font>...), and the patterns <i>pattern</i><SUB>1</SUB>...<i>pattern</i><SUB>n</SUB> consist in a single variable, as in:
+<blockquote>
+<font color="blue"><code>let</code></font> <font color="blue"><code>rec</code></font> <i>ident</i><SUB>1</SUB> <font color="blue"><code>=</code></font> <font color="blue"><code>fun</code></font>...<font color="blue"><code>and</code></font>...<font color="blue"><code>and</code></font> <i>ident</i><SUB>n</SUB> <font color="blue"><code>=</code></font> <font color="blue"><code>fun</code></font>...<font color="blue"><code>in</code></font> <i>expr</i>
+</blockquote>
+This defines <i>ident</i><SUB>1</SUB>...<i>ident</i><SUB>n</SUB> as mutually recursive functions
+local to <i>expr</i>. The behavior of other forms of <tt>let rec</tt>
+definitions is implementation-dependent.<P>
+<H3>Control constructs</H3>
+<P>
+<H4>Sequence</H4>
+<P>
+The expression <i>expr</i><SUB>1</SUB> <font color="blue"><code>;</code></font> <i>expr</i><SUB>2</SUB> evaluates <i>expr</i><SUB>1</SUB> first, then
+<i>expr</i><SUB>2</SUB>, and returns the value of <i>expr</i><SUB>2</SUB>.<P>
+<H4>Conditional</H4>
+
+<P>
+The expression <font color="blue"><code>if</code></font> <i>expr</i><SUB>1</SUB> <font color="blue"><code>then</code></font> <i>expr</i><SUB>2</SUB> <font color="blue"><code>else</code></font> <i>expr</i><SUB>3</SUB> evaluates to
+the value of <i>expr</i><SUB>2</SUB> if <i>expr</i><SUB>1</SUB> evaluates to the boolean <font color="blue"><code>true</code></font>,
+and to the value of <i>expr</i><SUB>3</SUB> if <i>expr</i><SUB>1</SUB> evaluates to the boolean
+<font color="blue"><code>false</code></font>.<P>
+The <font color="blue"><code>else</code></font> <i>expr</i><SUB>3</SUB> part can be omitted, in which case it defaults to
+<font color="blue"><code>else</code></font> <font color="blue"><code>()</code></font>.<P>
+<H4>Case expression</H4>
+<P>
+The expression
+
+
+<pre>
+match <i>expr</i> with
+      <i>pattern</i>1 -&gt; <i>expr</i>1
+    | ...
+    | <i>pattern</i>N -&gt; <i>expr</i>N
+</pre>
+
+matches the value of <i>expr</i> against the patterns <i>pattern</i><SUB>1</SUB> to
+<i>pattern</i><SUB>n</SUB>. If the matching against <i>pattern</i><SUB>i</SUB> succeeds, the
+associated expression <i>expr</i><SUB>i</SUB> is evaluated, and its value becomes the
+value of the whole <font color="blue"><code>match</code></font> expression. The evaluation of
+<i>expr</i><SUB>i</SUB> takes place in an environment enriched by the bindings
+performed during matching. If several patterns match the value of
+<i>expr</i>, the one that occurs first in the <font color="blue"><code>match</code></font> expression is
+selected. If none of the patterns match the value of <i>expr</i>, the
+exception <font color="blue"><code>Match_failure</code></font> is raised.
+<P>
+<H4>Boolean operators</H4>
+<P>
+The expression <i>expr</i><SUB>1</SUB> <font color="blue"><code>&amp;</code></font> <i>expr</i><SUB>2</SUB> evaluates to <font color="blue"><code>true</code></font> if both
+<i>expr</i><SUB>1</SUB> and <i>expr</i><SUB>2</SUB> evaluate to <font color="blue"><code>true</code></font>; otherwise, it evaluates to
+<font color="blue"><code>false</code></font>. The first component, <i>expr</i><SUB>1</SUB>, is evaluated first. The
+second component, <i>expr</i><SUB>2</SUB>, is not evaluated if the first component
+evaluates to <font color="blue"><code>false</code></font>. Hence, the expression <i>expr</i><SUB>1</SUB> <font color="blue"><code>&amp;</code></font> <i>expr</i><SUB>2</SUB> behaves 
+exactly as
+<blockquote>
+<font color="blue"><code>if</code></font> <i>expr</i><SUB>1</SUB> <font color="blue"><code>then</code></font> <i>expr</i><SUB>2</SUB> <font color="blue"><code>else</code></font> <font color="blue"><code>false</code></font>.
+</blockquote><P>
+
+The expression <i>expr</i><SUB>1</SUB> <font color="blue"><code>or</code></font> <i>expr</i><SUB>2</SUB> evaluates to <font color="blue"><code>true</code></font> if one of
+<i>expr</i><SUB>1</SUB> and <i>expr</i><SUB>2</SUB> evaluates to <font color="blue"><code>true</code></font>; otherwise, it evaluates to
+<font color="blue"><code>false</code></font>. The first component, <i>expr</i><SUB>1</SUB>, is evaluated first. The
+second component, <i>expr</i><SUB>2</SUB>, is not evaluated if the first component
+evaluates to <font color="blue"><code>true</code></font>. Hence, the expression <i>expr</i><SUB>1</SUB> <font color="blue"><code>or</code></font> <i>expr</i><SUB>2</SUB> behaves 
+exactly as
+<blockquote>
+<font color="blue"><code>if</code></font> <i>expr</i><SUB>1</SUB> <font color="blue"><code>then</code></font> <font color="blue"><code>true</code></font> <font color="blue"><code>else</code></font> <i>expr</i><SUB>2</SUB>.
+</blockquote><P>
+<H4>Loops</H4>
+<P>
+
+The expression <font color="blue"><code>while</code></font> <i>expr</i><SUB>1</SUB> <font color="blue"><code>do</code></font> <i>expr</i><SUB>2</SUB> <font color="blue"><code>done</code></font> repeatedly
+evaluates <i>expr</i><SUB>2</SUB> while <i>expr</i><SUB>1</SUB> evaluates to <font color="blue"><code>true</code></font>. The loop
+condition <i>expr</i><SUB>1</SUB> is evaluated and tested at the beginning of each
+iteration. The whole <font color="blue"><code>while</code></font>...<font color="blue"><code>done</code></font> expression evaluates to
+the unit value <font color="blue"><code>()</code></font>.<P>
+
+The expression <font color="blue"><code>for</code></font> <i>ident</i> <font color="blue"><code>=</code></font> <i>expr</i><SUB>1</SUB> <font color="blue"><code>to</code></font> <i>expr</i><SUB>2</SUB> <font color="blue"><code>do</code></font> <i>expr</i><SUB>3</SUB> <font color="blue"><code>done</code></font>
+first evaluates the expressions <i>expr</i><SUB>1</SUB> and <i>expr</i><SUB>2</SUB> (the boundaries)
+into integer values <i>n</i> and <i>p</i>. Then, the loop body <i>expr</i><SUB>3</SUB> is
+repeatedly evaluated in an environment where the local variable named
+<i>ident</i> is successively bound to the values
+
+
+   <i>n</i>, <i>n</i>+1, \ldots, <i>p</i>-1, <i>p</i>.
+   The loop body is never evaluated if <i>n</i> &gt; <i>p</i>.
+<P>
+The expression <font color="blue"><code>for</code></font> <i>ident</i> <font color="blue"><code>=</code></font> <i>expr</i><SUB>1</SUB> <font color="blue"><code>downto</code></font> <i>expr</i><SUB>2</SUB> <font color="blue"><code>do</code></font> <i>expr</i><SUB>3</SUB> <font color="blue"><code>done</code></font>
+first evaluates the expressions <i>expr</i><SUB>1</SUB> and <i>expr</i><SUB>2</SUB> (the boundaries)
+into integer values <i>n</i> and <i>p</i>. Then, the loop body <i>expr</i><SUB>3</SUB> is
+repeatedly evaluated in an environment where the local variable named
+<i>ident</i> is successively bound to the values
+
+
+   <i>n</i>, <i>n</i>-1, \ldots, <i>p</i>+1, <i>p</i>.
+   The loop body is never evaluated if <i>n</i> &lt; <i>p</i>.
+<P>
+In both cases, the whole <font color="blue"><code>for</code></font> expression evaluates to the unit
+value <font color="blue"><code>()</code></font>.<P>
+<H4>Exception handling</H4>
+
+<P>
+The expression
+
+
+<pre>
+try  <i>expr</i>
+with <i>pattern</i>1 -&gt; <i>expr</i>1
+    | ...
+    | <i>pattern</i>N -&gt; <i>expr</i>N
+</pre>
+
+evaluates the expression <i>expr</i> and returns its value if the
+evaluation of <i>expr</i> does not raise any exception. If the evaluation
+of <i>expr</i> raises an exception, the exception value is matched against
+the patterns <i>pattern</i><SUB>1</SUB> to <i>pattern</i><SUB>n</SUB>. If the matching against
+<i>pattern</i><SUB>i</SUB> succeeds, the associated expression <i>expr</i><SUB>i</SUB> is evaluated,
+and its value becomes the value of the whole <font color="blue"><code>try</code></font> expression. The
+evaluation of <i>expr</i><SUB>i</SUB> takes place in an environment enriched by the
+bindings performed during matching. If several patterns match the value of
+<i>expr</i>, the one that occurs first in the <font color="blue"><code>try</code></font> expression is
+selected. If none of the patterns matches the value of <i>expr</i>, the
+exception value is raised again, thereby transparently ``passing
+through'' the <font color="blue"><code>try</code></font> construct.<P>
+<H3>Operations on data structures</H3>
+<P>
+<H4>Products</H4>
+<P>
+The expression <i>expr</i><SUB>1</SUB> <font color="blue"><code>,</code></font>...<font color="blue"><code>,</code></font> <i>expr</i><SUB>n</SUB> evaluates to the
+<i>n</i>-tuple of the values of expressions <i>expr</i><SUB>1</SUB> to <i>expr</i><SUB>n</SUB>. The
+evaluation order for the subexpressions is not specified.<P>
+<H4>Variants</H4>
+<P>
+The expression <i>ncconstr</i> <i>expr</i> evaluates to the variant value whose
+constructor is <i>ncconstr</i>, and whose argument is the value of <i>expr</i>.<P>
+For lists, some syntactic sugar is provided. The expression
+<i>expr</i><SUB>1</SUB> <font color="blue"><code>::</code></font> <i>expr</i><SUB>2</SUB> stands for the constructor <font color="blue"><code>prefix</code></font> <font color="blue"><code>::</code></font>
+applied to the argument <font color="blue"><code>(</code></font> <i>expr</i><SUB>1</SUB> <font color="blue"><code>,</code></font> <i>expr</i><SUB>2</SUB> <font color="blue"><code>)</code></font>, and therefore
+evaluates to the list whose head is the value of <i>expr</i><SUB>1</SUB> and whose tail
+is the value of <i>expr</i><SUB>2</SUB>. The expression <font color="blue"><code>[</code></font> <i>expr</i><SUB>1</SUB> <font color="blue"><code>;</code></font>...<font color="blue"><code>;</code></font> <i>expr</i><SUB>n</SUB> <font color="blue"><code>]</code></font> is equivalent to <i>expr</i><SUB>1</SUB> <font color="blue"><code>::</code></font>...<font color="blue"><code>::</code></font> <i>expr</i><SUB>n</SUB> <font color="blue"><code>::</code></font> <font color="blue"><code>[]</code></font>, and therefore evaluates to the list whose elements are the
+values of <i>expr</i><SUB>1</SUB> to <i>expr</i><SUB>n</SUB>.<P>
+<H4>Records</H4>
+<P>
+The expression <font color="blue"><code>{</code></font> <i>label</i><SUB>1</SUB> <font color="blue"><code>=</code></font> <i>expr</i><SUB>1</SUB> <font color="blue"><code>;</code></font>...<font color="blue"><code>;</code></font> <i>label</i><SUB>n</SUB> <font color="blue"><code>=</code></font> <i>expr</i><SUB>n</SUB> <font color="blue"><code>}</code></font> evaluates to the record value
+<font color="blue"><code>{</code></font> <i>label</i><SUB>1</SUB> <font color="blue"><code>=</code></font> <i>v</i><SUB>1</SUB> <font color="blue"><code>;</code></font>...<font color="blue"><code>;</code></font> <i>label</i><SUB>n</SUB> <font color="blue"><code>=</code></font> <i>v</i><SUB>n</SUB> <font color="blue"><code>}</code></font>,
+where <i>v</i><SUB>i</SUB> is the value of <i>expr</i><SUB>i</SUB> for <i>i</i> = 1, ..., <i>n</i>.
+The labels <i>label</i><SUB>1</SUB> to <i>label</i><SUB>n</SUB> must all belong to the same record
+types; all labels belonging to this record type must appear exactly
+once in the record expression, though they can appear in any
+order. The order in which <i>expr</i><SUB>1</SUB> to <i>expr</i><SUB>n</SUB> are evaluated is not
+specified.<P>
+The expression <i>expr</i><SUB>1</SUB> <font color="blue"><code>.</code></font> <i>label</i> evaluates <i>expr</i><SUB>1</SUB> to a record
+value, and returns the value associated to <i>label</i> in this record
+value.<P>
+The expression <i>expr</i><SUB>1</SUB> <font color="blue"><code>.</code></font> <i>label</i> <font color="blue"><code>&lt;-</code></font> <i>expr</i><SUB>2</SUB> evaluates <i>expr</i><SUB>1</SUB> to a record
+value, which is then modified in-place by replacing the value
+associated to <i>label</i> in this record by the value of
+<i>expr</i><SUB>2</SUB>. This operation is permitted only if <i>label</i> has been
+declared <font color="blue"><code>mutable</code></font> in the definition of the record type. The whole
+expression <i>expr</i><SUB>1</SUB> <font color="blue"><code>.</code></font> <i>label</i> <font color="blue"><code>&lt;-</code></font> <i>expr</i><SUB>2</SUB> evaluates to the unit value
+<font color="blue"><code>()</code></font>.<P>
+<H4>Arrays</H4>
+<P>
+The expression <font color="blue"><code>[|</code></font> <i>expr</i><SUB>1</SUB> <font color="blue"><code>;</code></font>...<font color="blue"><code>;</code></font> <i>expr</i><SUB>n</SUB> <font color="blue"><code>|]</code></font> evaluates to
+a <i>n</i>-element array, whose elements are initialized with the values of
+<i>expr</i><SUB>1</SUB> to <i>expr</i><SUB>n</SUB> respectively. The order in which these
+expressions are evaluated is unspecified.<P>
+The expression <i>expr</i><SUB>1</SUB> <font color="blue"><code>.(</code></font> <i>expr</i><SUB>2</SUB> <font color="blue"><code>)</code></font> is equivalent to the
+application <font color="blue"><code>vect_item</code></font> <i>expr</i><SUB>1</SUB> <i>expr</i><SUB>2</SUB>. In the initial environment,
+the identifier <font color="blue"><code>vect_item</code></font> resolves to a built-in function that
+returns the value of element number <i>expr</i><SUB>2</SUB> in the array denoted by
+<i>expr</i><SUB>1</SUB>. The first element has number 0; the last element has number
+n-1, where <i>n</i> is the size of the array. The exception
+<tt>Invalid_argument</tt> is raised if the access is out of bounds.<P>
+The expression <i>expr</i><SUB>1</SUB> <font color="blue"><code>.(</code></font> <i>expr</i><SUB>2</SUB> <font color="blue"><code>)</code></font> <font color="blue"><code>&lt;-</code></font> <i>expr</i><SUB>3</SUB> is equivalent to
+<font color="blue"><code>vect_assign</code></font> <i>expr</i><SUB>1</SUB> <i>expr</i><SUB>2</SUB> <i>expr</i><SUB>3</SUB>. In the initial environment,
+the identifier <font color="blue"><code>vect_assign</code></font> resolves to a built-in function that
+modifies in-place the array denoted by <i>expr</i><SUB>1</SUB>, replacing element
+number <i>expr</i><SUB>2</SUB> by the value of <i>expr</i><SUB>3</SUB>. The exception
+<tt>Invalid_argument</tt> is raised if the access is out of bounds. The
+built-in function returns <font color="blue"><code>()</code></font>. Hence, the whole expression <i>expr</i><SUB>1</SUB> <font color="blue"><code>.(</code></font> <i>expr</i><SUB>2</SUB> <font color="blue"><code>)</code></font> <font color="blue"><code>&lt;-</code></font> <i>expr</i><SUB>3</SUB> evaluates to the unit value <font color="blue"><code>()</code></font>.<P>
+This behavior of the two constructs <i>expr</i><SUB>1</SUB> <font color="blue"><code>.(</code></font> <i>expr</i><SUB>2</SUB> <font color="blue"><code>)</code></font> and
+<i>expr</i><SUB>1</SUB> <font color="blue"><code>.(</code></font> <i>expr</i><SUB>2</SUB> <font color="blue"><code>)</code></font> <font color="blue"><code>&lt;-</code></font> <i>expr</i><SUB>3</SUB> may change if the meaning
+of the identifiers <font color="blue"><code>vect_item</code></font> and <font color="blue"><code>vect_assign</code></font> is changed,
+either by redefinition or by modification of the list of opened
+modules. See the discussion below on operators.<P>
+<H3>Operators</H3>
+<P>
+The operators written <font color="blue"><code>infix-op</code></font> in the grammar above can appear
+in infix position (between two expressions). The operators written
+<font color="blue"><code>prefix-op</code></font>
+
+in the grammar above can appear in prefix position (in
+front of an expression).<P>
+The expression <i>prefix-op</i> <i>expr</i> is interpreted as the application
+<i>ident</i> <i>expr</i>, where <i>ident</i> is the identifier associated to the
+operator <i>prefix-op</i> in the table below. Similarly, the expression
+<i>expr</i><SUB>1</SUB> <i>infix-op</i> <i>expr</i><SUB>2</SUB> is interpreted as the application
+<i>ident</i> <i>expr</i><SUB>1</SUB> <i>expr</i><SUB>2</SUB>, where <i>ident</i> is the identifier associated to the
+operator <i>infix-op</i> in the table below. The identifiers written
+<i>ident</i> above are then evaluated following the rules in
+section <A HREF="node3.8.html#expr:var">3.8</A>. In the initial environment, they evaluate to
+built-in functions whose behavior is described in the table. The
+behavior of the constructions <i>prefix-op</i> <i>expr</i> and <i>expr</i><SUB>1</SUB> <i>infix-op</i> <i>expr</i><SUB>2</SUB> may change if the meaning of the identifiers associated to
+<i>prefix-op</i> or <i>infix-op</i> is changed, either by redefinition of the
+identifiers, or by modification of the list of opened modules, through
+the <font color="blue"><code>#open</code></font> and <font color="blue"><code>#close</code></font> directives.<P>
+<table border>
+<tr><th>Operator</th><th>Associated ident</th><th>Behavior in the default environment</th></tr>
+<tr><td><tt>+</tt></td><td><tt>prefix +</tt></td><td>Integer addition.</td></tr>
+<tr><td><tt>-</tt> (infix)</td><td><tt>prefix -</tt></td><td>Integer subtraction.</td></tr>
+<tr><td><tt>-</tt> (prefix)</td><td><tt>minus</tt></td><td>Integer negation.</td></tr>
+<tr><td><tt>*</tt></td><td><tt>prefix *</tt></td><td>Integer multiplication.</td></tr>
+<tr><td><tt>/</tt></td><td><tt>prefix /</tt></td><td>Integer division.
+        Raise <tt>Division_by_zero</tt> if second argument is zero. The result is
+        unspecified if either argument is negative.</td></tr>
+<tr><td><tt>mod</tt></td><td><tt>prefix mod</tt></td><td>Integer modulus. Raise
+        <tt>Division_by_zero</tt> if second argument is zero. The result is
+        unspecified if either argument is negative.</td></tr>
+<tr><td><tt>+.</tt></td><td><tt>prefix +.</tt></td><td>Floating-point addition.</td></tr>
+<tr><td><tt>-.</tt> (infix)</td><td><tt>prefix -.</tt></td><td>Floating-point subtraction.</td></tr>
+<tr><td><tt>-.</tt> (prefix)</td><td><tt>minus_float</tt></td><td>Floating-point negation.</td></tr>
+<tr><td><tt>*.</tt></td><td><tt>prefix *.</tt></td><td>Floating-point multiplication.</td></tr>
+<tr><td><tt>/.</tt></td><td><tt>prefix /.</tt></td><td>Floating-point division.
+        Raise <tt>Division_by_zero</tt> if second argument is zero.</td></tr>
+<tr><td><tt>**</tt></td><td><tt>prefix **</tt></td><td>Floating-point exponentiation.</td></tr>
+<tr><td><tt>@</tt> </td><td><tt>prefix </tt><tt>@</tt></td><td>List concatenation.</td></tr>
+<tr><td><tt>^</tt> </td><td><tt>prefix ^</tt></td><td>String concatenation.</td></tr>
+<tr><td><tt>!</tt> </td><td><tt>prefix !</tt></td><td>Dereferencing (return the current
+        contents of a reference).</td></tr>
+<tr><td><tt>:=</tt></td><td><tt>prefix :=</tt></td><td>Reference assignment (update the
+        reference given as first argument with the value of the second
+        argument).</td></tr>
+<tr><td><tt>=</tt> </td><td><tt>prefix =</tt></td><td>Structural equality test.</td></tr>
+<tr><td><tt>&lt;&gt;</tt> </td><td><tt>prefix &lt;&gt;</tt></td><td>Structural inequality test.</td></tr>
+<tr><td><tt>==</tt> </td><td><tt>prefix ==</tt></td><td>Physical equality test.</td></tr>
+<tr><td><tt>!=</tt> </td><td><tt>prefix !=</tt></td><td>Physical inequality test.</td></tr>
+<tr><td><tt>&lt;</tt> </td><td><tt>prefix &lt;</tt></td><td>Test ``less than'' on integers.</td></tr>
+<tr><td><tt>&lt;=</tt> </td><td><tt>prefix &lt;=</tt></td><td>Test ``less than or equal '' on integers.</td></tr>
+<tr><td><tt>&gt;</tt> </td><td><tt>prefix &gt;</tt></td><td>Test ``greater than'' on integers.</td></tr>
+<tr><td><tt>&gt;=</tt> </td><td><tt>prefix &gt;=</tt></td><td>Test ``greater than or equal''
+        on integers.</td></tr>
+<tr><td><tt>&lt;.</tt> </td><td><tt>prefix &lt;.</tt></td><td>Test ``less than''
+        on floating-point numbers.</td></tr>
+<tr><td><tt>&lt;=.</tt> </td><td><tt>prefix &lt;=.</tt></td><td>Test ``less than or equal ''
+        on floating-point numbers.</td></tr>
+<tr><td><tt>&gt;.</tt> </td><td><tt>prefix &gt;.</tt></td><td>Test ``greater than''
+        on floating-point numbers.</td></tr>
+<tr><td><tt>&gt;=.</tt> </td><td><tt>prefix &gt;=.</tt></td><td>Test ``greater than or equal''
+        on floating-point numbers.</td></tr>
+</table>
+<P>
+The behavior of the <tt>+</tt>, <tt>-</tt>, <tt>*</tt>, <tt>/</tt>, <tt>mod</tt>, <tt>+.</tt>, <tt>-.</tt>, <tt>*.</tt> or
+<tt>/.</tt> operators is unspecified if the result falls outside of the range
+of representable integers or floating-point numbers, respectively. See
+chapter <A HREF="node14.html#c:stdlib">14</A> for a more precise description of the behavior
+of the operators above.<P>
+<HR>
+<A HREF="node3.9.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node3.7.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

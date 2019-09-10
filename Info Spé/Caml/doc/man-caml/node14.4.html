@@ -1,0 +1,40 @@
+<HEAD>
+<TITLE><tt>char</tt>: character operations </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node14.5.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.3.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>char</tt>: character operations </H2>
+<P>
+<A name="s:char"></A>
+
+<pre>
+value int_of_char : char -&gt; int
+</pre>
+<dl><dd>
+ Return the ASCII code of the argument. 
+</dl>
+<pre>
+value char_of_int : int -&gt; char
+</pre>
+<dl><dd>
+ Return the character with the given ASCII code.
+           Raise <tt>Invalid_argument "char_of_int"</tt> if the argument is
+           outside the range 0--255. 
+</dl>
+<pre>
+value string_of_char : char -&gt; string
+</pre>
+<dl><dd>
+ Return a string representing the given character. 
+</dl>
+<pre>
+value char_for_read : char -&gt; string
+</pre>
+<dl><dd>
+ Return a string representing the given character,
+           with special characters escaped following the lexical conventions
+           of Caml Light. 
+</dl>

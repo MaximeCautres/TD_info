@@ -1,0 +1,82 @@
+<HEAD>
+<TITLE>Infix symbols</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node4.10.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node4.8.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2>Infix symbols</H2>
+<P>
+Sequences of ``operator characters'', such as <tt>&lt;=&gt;</tt> or <tt>!!</tt>,
+are read as a single token from the <i>infix-symbol</i> or <i>prefix-symbol</i>
+class:
+
+<PRE>
+<i>infix-symbol</i>:
+      <i>(</i><font color="blue"><code>=</code></font> | <font color="blue"><code>&lt;</code></font> | <font color="blue"><code>&gt;</code></font> | <font color="blue"><code>@</code></font> | <font color="blue"><code>^</code></font> | <font color="blue"><code>|</code></font> | <font color="blue"><code>&amp;</code></font> | <font color="blue"><code>~</code></font> | <font color="blue"><code>+</code></font> | <font color="blue"><code>-</code></font> | <font color="blue"><code>*</code></font> | <font color="blue"><code>/</code></font> | <font color="blue"><code>$</code></font> | <font color="blue"><code>%</code></font><i>)</i> <i>{</i><i>operator-char</i><i>}</i>
+
+<i>prefix-symbol</i>:
+      <i>(</i><font color="blue"><code>!</code></font> | <font color="blue"><code>?</code></font><i>)</i> <i>{</i><i>operator-char</i><i>}</i>
+
+<i>operator-char</i>:
+      <font color="blue"><code>!</code></font> | <font color="blue"><code>$</code></font> | <font color="blue"><code>%</code></font> | <font color="blue"><code>&amp;</code></font> | <font color="blue"><code>*</code></font> | <font color="blue"><code>+</code></font> | <font color="blue"><code>-</code></font> | <font color="blue"><code>.</code></font> | <font color="blue"><code>/</code></font> | <font color="blue"><code>:</code></font> | <font color="blue"><code>;</code></font> | <font color="blue"><code>&lt;</code></font> | <font color="blue"><code>=</code></font> | <font color="blue"><code>&gt;</code></font> | <font color="blue"><code>?</code></font> | <font color="blue"><code>@</code></font> | <font color="blue"><code>^</code></font> | <font color="blue"><code>|</code></font> | <font color="blue"><code>~</code></font>
+
+</PRE>
+<P>
+Tokens from these two classes generalize the built-in infix and prefix
+operators described in chapter <A HREF="node3.html#c:refman">3</A>:
+
+<PRE>
+<i>expr</i>:
+      ...
+   |  <i>prefix-symbol</i> <i>expr</i>
+   |  <i>expr</i> <i>infix-symbol</i> <i>expr</i>
+
+<i>variable</i>:
+      ...
+   |  <font color="blue"><code>prefix</code></font> <i>prefix-symbol</i>
+   |  <font color="blue"><code>prefix</code></font> <i>infix-symbol</i>
+
+</PRE>
+<P>
+No <tt>#infix</tt> directive (section <A HREF="node4.10.html#s:exten-directives">4.10</A>) is needed to
+give infix symbols their infix status. The precedences and
+associativities of infix symbols in expressions are determined by
+their first character(s): symbols beginning with <tt>**</tt> have highest
+precedence (exponentiation), followed by symbols beginning with <tt>*</tt>,
+<tt>/</tt> or <tt>%</tt> (multiplication), then <tt>+</tt> and <tt>-</tt> (addition), then
+<tt>@</tt> and <tt>^</tt> (concatenation), then all others symbols (comparisons).
+The updated precedence table for expressions is shown below. We write
+``<tt>*</tt>...'' to mean ``any infix symbol starting with <tt>*</tt>''.
+<table border>
+<tr><th>Construction or operator</th><th>Associativity</th></tr>
+<tr><td><tt>!</tt>...<tt>   ?</tt>...</td><td>--</td></tr>
+<tr><td><tt>.   .(   .[</tt></td><td>--</td></tr>
+<tr><td>function application</td><td>left</td></tr>
+<tr><td>constructor application</td><td>--</td></tr>
+<tr><td><tt>-   -.</tt> (prefix)</td><td>--</td></tr>
+<tr><td><tt>**</tt>...</td><td>right</td></tr>
+<tr><td><tt>*</tt>...<tt>   /</tt>...<tt>   %</tt>...<tt>   mod</tt></td><td>left</td></tr>
+<tr><td><tt>+</tt>...<tt>   -</tt>...</td><td>left</td></tr>
+<tr><td><tt>::</tt></td><td>right</td></tr>
+<tr><td><tt>@</tt>...<tt>   ^</tt>...</td><td>right</td></tr>
+<tr><td>comparisons (<tt>=  ==  &lt; </tt> etc.), all other infix symbols</td><td>left</td></tr>
+<tr><td><tt>not</tt></td><td>--</td></tr>
+<tr><td><tt>&amp;   &amp;&amp;</tt></td><td>left</td></tr>
+<tr><td><tt>or  ||</tt></td><td>left</td></tr>
+<tr><td><tt>,</tt></td><td>--</td></tr>
+<tr><td><tt>&lt;-   :=</tt></td><td>right</td></tr>
+<tr><td><tt>if</tt></td><td>--</td></tr>
+<tr><td><tt>;</tt></td><td>right</td></tr>
+<tr><td><tt>let  match  fun  function  try</tt></td><td>--</td></tr>
+</table>
+Some infix and prefix symbols are predefined in the default
+environment (see chapters <A HREF="node3.html#c:refman">3</A> and <A HREF="node14.html#c:stdlib">14</A> for a
+description of their behavior). The others are initially unbound and
+must be bound before use, with a <font color="blue"><code>let</code></font> <font color="blue"><code>prefix</code></font> <i>infix-symbol</i> <font color="blue"><code>=</code></font> <i>expr</i> 
+or <font color="blue"><code>let</code></font> <font color="blue"><code>prefix</code></font> <i>prefix-symbol</i> <font color="blue"><code>=</code></font> <i>expr</i> binding.<P>
+<HR>
+<A HREF="node4.10.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node4.8.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

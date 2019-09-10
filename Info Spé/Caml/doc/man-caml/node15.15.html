@@ -1,0 +1,41 @@
+<HEAD>
+<TITLE><tt>random</tt>: pseudo-random number generator </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node15.16.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.14.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>random</tt>: pseudo-random number generator </H2>
+<P>
+<A name="s:random"></A>
+
+<pre>
+value init : int -&gt; unit
+</pre>
+<dl><dd>
+ Initialize the generator, using the argument as a seed.
+     The same seed will always yield the same sequence of numbers. 
+</dl>
+<pre>
+value full_init : int vect -&gt; unit
+</pre>
+<dl><dd>
+ Same as <tt>init</tt> but takes more data as seed.  It is not
+     useful to give more than 55 integers. 
+</dl>
+<pre>
+value int : int -&gt; int
+</pre>
+<dl><dd>
+ <tt>random__int bound</tt> returns a random number between 0 (inclusive)
+     and <tt>bound</tt> (exclusive).  <tt>bound</tt> must be positive and smaller
+     than 2^{30}. 
+</dl>
+<pre>
+value float : float -&gt; float
+</pre>
+<dl><dd>
+ <tt>random__float bound</tt> returns a random number between 0 (inclusive)
+     and <tt>bound</tt> (exclusive). 
+</dl>

@@ -1,0 +1,46 @@
+<HEAD>
+<TITLE><tt>ref</tt>: operations on references </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node14.16.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.14.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>ref</tt>: operations on references </H2>
+<P>
+<A name="s:ref"></A>
+
+<pre>
+type 'a ref = ref of mutable 'a
+</pre>
+<dl><dd>
+ The type of references (mutable indirection cells) containing
+           a value of type <tt>'a</tt>. 
+</dl>
+<pre>
+value prefix ! : 'a ref -&gt; 'a
+</pre>
+<dl><dd>
+ <tt>!r</tt> returns the current contents of reference <tt>r</tt>.
+           Could be defined as <tt>fun (ref x) -&gt; x</tt>. 
+</dl>
+<pre>
+value prefix := : 'a ref -&gt; 'a -&gt; unit
+</pre>
+<dl><dd>
+ <tt>r := a</tt> stores the value of <tt>a</tt> in reference <tt>r</tt>. 
+</dl>
+<pre>
+value incr : int ref -&gt; unit
+</pre>
+<dl><dd>
+ Increment the integer contained in the given reference.
+           Could be defined as <tt>fun r -&gt; r := succ !r</tt>. 
+</dl>
+<pre>
+value decr : int ref -&gt; unit
+</pre>
+<dl><dd>
+ Decrement the integer contained in the given reference.
+           Could be defined as <tt>fun r -&gt; r := pred !r</tt>. 
+</dl>

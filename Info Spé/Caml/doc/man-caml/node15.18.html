@@ -1,0 +1,70 @@
+<HEAD>
+<TITLE><tt>stack</tt>: stacks </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node15.19.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.17.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>stack</tt>: stacks </H2>
+<P>
+<A name="s:stack"></A>
+
+<dl><dd>
+ This module implements stacks (LIFOs), with in-place modification. 
+</dl>
+<pre>
+type 'a t
+</pre>
+<dl><dd>
+ The type of stacks containing elements of type <tt>'a</tt>. 
+</dl>
+<pre>
+exception Empty
+</pre>
+<dl><dd>
+ Raised when <tt>pop</tt> is applied to an empty stack. 
+</dl>
+<pre>
+value new: unit -&gt; 'a t
+</pre>
+<dl><dd>
+ Return a new stack, initially empty. 
+</dl>
+<pre>
+value push: 'a -&gt; 'a t -&gt; unit
+</pre>
+<dl><dd>
+ <tt>push x s</tt> adds the element <tt>x</tt> at the top of stack <tt>s</tt>. 
+</dl>
+<pre>
+value pop: 'a t -&gt; 'a
+</pre>
+<dl><dd>
+ <tt>pop s</tt> removes and returns the topmost element in stack <tt>s</tt>,
+           or raises <tt>Empty</tt> if the stack is empty. 
+</dl>
+<pre>
+value clear : 'a t -&gt; unit
+</pre>
+<dl><dd>
+ Discard all elements from a stack. 
+</dl>
+<pre>
+value length: 'a t -&gt; int
+</pre>
+<dl><dd>
+ Return the number of elements in a stack. 
+</dl>
+<pre>
+value iter: ('a -&gt; unit) -&gt; 'a t -&gt; unit
+</pre>
+<dl><dd>
+ <tt>iter f s</tt> applies <tt>f</tt> in turn to all elements of <tt>s</tt>, from the
+           element at the top of the stack to the element at the
+           bottom of the stack. The stack itself is unchanged. 
+</dl>
+<HR>
+<A HREF="node15.19.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.17.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

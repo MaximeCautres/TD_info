@@ -1,0 +1,1 @@
+Pour que la touche "enter" ou le bouton "send" agisse, il convient dans cet exemple que le panneau d'entrée (panneau de gauche ou panneau supérieur suivant l'orientation verticale ou horizontale de la cloison entre les deux panneaux) soit sélectionné et que le point d'insertion y soit placé après le dernier ";;"

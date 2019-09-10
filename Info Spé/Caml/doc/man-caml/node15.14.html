@@ -1,0 +1,77 @@
+<HEAD>
+<TITLE><tt>queue</tt>: queues </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node15.15.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.13.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>queue</tt>: queues </H2>
+<P>
+<A name="s:queue"></A>
+
+<dl><dd>
+ This module implements queues (FIFOs), with in-place modification. 
+</dl>
+<pre>
+type 'a t
+</pre>
+<dl><dd>
+ The type of queues containing elements of type <tt>'a</tt>. 
+</dl>
+<pre>
+exception Empty
+</pre>
+<dl><dd>
+ Raised when <tt>take</tt> is applied to an empty queue. 
+</dl>
+<pre>
+value new: unit -&gt; 'a t
+</pre>
+<dl><dd>
+ Return a new queue, initially empty. 
+</dl>
+<pre>
+value add: 'a -&gt; 'a t -&gt; unit
+</pre>
+<dl><dd>
+ <tt>add x q</tt> adds the element <tt>x</tt> at the end of the queue <tt>q</tt>. 
+</dl>
+<pre>
+value take: 'a t -&gt; 'a
+</pre>
+<dl><dd>
+ <tt>take q</tt> removes and returns the first element in queue <tt>q</tt>,
+           or raises <tt>Empty</tt> if the queue is empty. 
+</dl>
+<pre>
+value peek: 'a t -&gt; 'a
+</pre>
+<dl><dd>
+ <tt>peek q</tt> returns the first element in queue <tt>q</tt>, without removing
+           it from the queue, or raises <tt>Empty</tt> if the queue is empty. 
+</dl>
+<pre>
+value clear : 'a t -&gt; unit
+</pre>
+<dl><dd>
+ Discard all elements from a queue. 
+</dl>
+<pre>
+value length: 'a t -&gt; int
+</pre>
+<dl><dd>
+ Return the number of elements in a queue. 
+</dl>
+<pre>
+value iter: ('a -&gt; unit) -&gt; 'a t -&gt; unit
+</pre>
+<dl><dd>
+ <tt>iter f q</tt> applies <tt>f</tt> in turn to all elements of <tt>q</tt>, from the
+           least recently entered to the most recently entered.
+           The queue itself is unchanged. 
+</dl>
+<HR>
+<A HREF="node15.15.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.13.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

@@ -1,0 +1,39 @@
+<HEAD>
+<TITLE><tt>bool</tt>: boolean operations </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node14.3.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.1.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>bool</tt>: boolean operations </H2>
+<P>
+<A name="s:bool"></A>
+
+<pre>
+value prefix &amp;  : bool -&gt; bool -&gt; bool
+value prefix &amp;&amp; : bool -&gt; bool -&gt; bool
+value prefix or : bool -&gt; bool -&gt; bool
+value prefix || : bool -&gt; bool -&gt; bool
+</pre>
+<dl><dd>
+ The boolean and is written <tt>e1 &amp; e2</tt> or <tt>e1 &amp;&amp; e2</tt>.
+           The boolean or  is written <tt>e1 or e2</tt> or <tt>e1 || e2</tt>.
+           Both constructs are sequential, left-to-right:
+           <tt>e2</tt> is evaluated only if needed. Actually,
+           <tt>e1 &amp; e2</tt>  is equivalent to  <tt>if e1 then e2 else false</tt>,
+           and
+           <tt>e1 or e2</tt> is equivalent to  <tt>if e1 then true else e2</tt>.<P>
+</dl>
+<pre>
+value prefix not : bool -&gt; bool
+</pre>
+<dl><dd>
+ The boolean negation. 
+</dl>
+<pre>
+value string_of_bool : bool -&gt; string
+</pre>
+<dl><dd>
+ Return a string representing the given boolean. 
+</dl>

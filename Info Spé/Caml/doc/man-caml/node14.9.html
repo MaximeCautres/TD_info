@@ -1,0 +1,21 @@
+<HEAD>
+<TITLE><tt>fstring</tt>: string operations, without sanity checks </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node14.10.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.8.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>fstring</tt>: string operations, without sanity checks </H2>
+<P>
+<A name="s:fstring"></A>
+
+<dl><dd>
+ This module implements the same functions as the <tt>string</tt> module,
+   but does not perform bound checks on the arguments of the functions.
+   The functions are therefore faster than those in the <tt>string</tt> module,
+   but calling these functions with incorrect parameters (that is,
+   parameters that would cause the <tt>Invalid_argument</tt> exception to be raised
+   by the corresponding functions in the <tt>string</tt> module) can crash the
+   program. 
+</dl>

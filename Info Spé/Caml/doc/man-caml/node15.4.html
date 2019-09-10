@@ -1,0 +1,65 @@
+<HEAD>
+<TITLE><tt>filename</tt>: operations on file names </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node15.5.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.3.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>filename</tt>: operations on file names </H2>
+<P>
+<A name="s:filename"></A>
+
+<pre>
+value current_dir_name : string
+</pre>
+<dl><dd>
+ The conventional name for the current directory
+           (e.g. <tt>.</tt> in Unix). 
+</dl>
+<pre>
+value concat : string -&gt; string -&gt; string
+</pre>
+<dl><dd>
+ <tt>concat dir file</tt> returns a file name that designates file
+           <tt>file</tt> in directory <tt>dir</tt>. 
+</dl>
+<pre>
+value is_absolute : string -&gt; bool
+</pre>
+<dl><dd>
+ Return <tt>true</tt> if the file name is absolute or starts with an
+           explicit reference to the current directory (<tt>./</tt> or <tt>../</tt> in
+           Unix), and <tt>false</tt> if it is relative to the current directory. 
+</dl>
+<pre>
+value check_suffix : string -&gt; string -&gt; bool
+</pre>
+<dl><dd>
+ <tt>check_suffix name suff</tt> returns <tt>true</tt> if the filename <tt>name</tt>
+           ends with the suffix <tt>suff</tt>. 
+</dl>
+<pre>
+value chop_suffix : string -&gt; string -&gt; string
+</pre>
+<dl><dd>
+ <tt>chop_suffix name suff</tt> removes the suffix <tt>suff</tt> from 
+           the filename <tt>name</tt>. The behavior is undefined if <tt>name</tt> does not
+           end with the suffix <tt>suff</tt>. 
+</dl>
+<pre>
+value basename : string -&gt; string
+value dirname : string -&gt; string
+</pre>
+<dl><dd>
+ Split a file name into directory name / base file name.
+           <tt>concat (dirname name) (basename name)</tt> returns a file name
+           which is equivalent to <tt>name</tt>. Moreover, after setting the
+           current directory to <tt>dirname name</tt> (with <tt>sys__chdir</tt>),
+           references to <tt>basename name</tt> (which is a relative file name)
+	   designate the same file as <tt>name</tt> before the call to <tt>chdir</tt>. 
+</dl>
+<HR>
+<A HREF="node15.5.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.3.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

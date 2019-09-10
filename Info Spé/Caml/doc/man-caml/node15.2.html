@@ -1,0 +1,72 @@
+<HEAD>
+<TITLE><tt>arg</tt>: parsing of command line arguments</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node15.3.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.1.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>arg</tt>: parsing of command line arguments</H2>
+<P>
+<A name="s:arg"></A>
+
+<dl><dd>
+ This module provides a general mechanism for extracting options and
+   arguments from the command line to the program. 
+</dl>
+<dl><dd>
+ Syntax of command lines:
+    A keyword is a character string starting with a <tt>-</tt>.
+    An option is a keyword alone or followed by an argument.
+    There are four types of keywords: Unit, String, Int, and Float.
+    Unit keywords do not take an argument.
+    String, Int, and Float keywords take the following word on the command line
+    as an argument.
+    Arguments not preceded by a keyword are called anonymous arguments. 
+</dl>
+<dl><dd>
+  Examples (<tt>cmd</tt> is assumed to be the command name):
+<br>   <tt>cmd -flag           </tt>(a unit option)
+<br>   <tt>cmd -int 1          </tt>(an int option with argument <tt>1</tt>)
+<br>   <tt>cmd -string foobar  </tt>(a string option with argument <tt>"foobar"</tt>)
+<br>   <tt>cmd -float 12.34    </tt>(a float option with argument <tt>12.34</tt>)
+<br>   <tt>cmd 1 2 3           </tt>(three anonymous arguments: <tt>"1"</tt>, <tt>"2"</tt>, and <tt>"3"</tt>)
+<br>   <tt>cmd 1 2 -flag 3 -string bar 4</tt>
+<br>   <tt>                    </tt>(four anonymous arguments, a unit option, and
+<br>   <tt>                    </tt> a string option with argument <tt>"bar"</tt>)<P>
+</dl>
+<pre>
+type spec =
+  String of (string -&gt; unit)
+| Int of (int -&gt; unit)
+| Unit of (unit -&gt; unit)
+| Float of (float -&gt; unit)
+</pre>
+<dl><dd><P>
+    The concrete type describing the behavior associated with a keyword.<P>
+</dl>
+<pre>
+value parse : (string * spec) list -&gt; (string -&gt; unit) -&gt; unit
+</pre>
+<dl><dd><P>
+    <tt>parse speclist anonfun</tt>
+    parses the command line, calling the functions in <tt>speclist</tt>
+    whenever appropriate, and <tt>anonfun</tt> on anonymous arguments.
+    The functions are called in the same order as they appear on the command
+    line.
+    The strings in the <tt>(string * spec) list</tt> are keywords and must
+    start with a <tt>-</tt>, else they are ignored.
+    For the user to be able to specify anonymous arguments starting with a
+    <tt>-</tt>, include for example <tt>("--", String anonfun)</tt> in <tt>speclist</tt>.<P>
+</dl>
+<pre>
+exception Bad of string
+</pre>
+<dl><dd><P>
+    Functions in <tt>speclist</tt> or <tt>anonfun</tt> can raise <tt>Bad</tt> with an error message
+    to reject invalid arguments.<P>
+</dl>
+<HR>
+<A HREF="node15.3.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.1.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

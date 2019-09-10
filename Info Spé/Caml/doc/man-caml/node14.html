@@ -1,0 +1,62 @@
+<HEAD>
+<TITLE>The core library</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node14.1.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node13.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H1>The core library</H1>
+ <A name="c:stdlib"></A><P>
+This chapter describes the functions provided by the Caml Light
+core library. This library is special in two ways:
+<p><ul>
+<li> It is
+automatically linked with the user's object code files by the <tt>camlc</tt>
+command (chapter <A HREF="node5.html#c:camlc">5</A>). Hence, the globals defined by these
+libraries can be used in standalone programs without having to add any
+<tt>.zo</tt> file on the command line for the linking phase. Similarly, in
+interactive use, these globals can be used in toplevel phrases without
+having to load any <tt>.zo</tt> file in memory.<P>
+<li> The interfaces for the modules below are automatically
+``opened'' when a compilation starts, or when the toplevel system is
+launched. Hence, it is possible to use
+unqualified identifiers to refer to the functions provided by these
+modules, without adding <tt>#open</tt> directives. Actually, the list of
+automatically opened modules depend on the <tt>-O</tt> option given to the
+compiler or to the toplevel system:
+<table border>
+<tr><th><tt>-O</tt> option</th><th>Opened modules (reverse opening order)</th></tr>
+<tr><td><tt>-O cautious</tt> (default)</td><td>
+        <tt>io</tt>, <tt>eq</tt>, <tt>int</tt>, <tt>float</tt>, <tt>ref</tt>, <tt>pair</tt>, <tt>list</tt>,
+        <tt>vect</tt>, <tt>char</tt>, <tt>string</tt>, <tt>bool</tt>, <tt>exc</tt>, <tt>stream</tt>, <tt>builtin</tt></td></tr>
+<tr><td><tt>-O fast</tt></td><td>
+        <tt>io</tt>, <tt>eq</tt>, <tt>int</tt>, <tt>float</tt>, <tt>ref</tt>, <tt>pair</tt>, <tt>list</tt>,
+        <tt>fvect</tt>, <tt>fchar</tt>, <tt>fstring</tt>, <tt>bool</tt>, <tt>exc</tt>, <tt>stream</tt>, <tt>builtin</tt></td></tr>
+<tr><td><tt>-O none</tt></td><td><tt>builtin</tt></td></tr>
+</table><P>
+</ul><P>
+<BR><HR><BR><UL>
+<LI><A HREF="node14.1.html">Conventions</A>
+<LI><A HREF="node14.2.html"><tt>bool</tt>: boolean operations </A>
+<LI><A HREF="node14.3.html"><tt>builtin</tt>: base types and constructors </A>
+<LI><A HREF="node14.4.html"><tt>char</tt>: character operations </A>
+<LI><A HREF="node14.5.html"><tt>eq</tt>: generic comparisons </A>
+<LI><A HREF="node14.6.html"><tt>exc</tt>: exceptions </A>
+<LI><A HREF="node14.7.html"><tt>fchar</tt>: character operations, without sanity checks </A>
+<LI><A HREF="node14.8.html"><tt>float</tt>: operations on floating-point numbers </A>
+<LI><A HREF="node14.9.html"><tt>fstring</tt>: string operations, without sanity checks </A>
+<LI><A HREF="node14.10.html"><tt>fvect</tt>: operations on vectors, without sanity checks </A>
+<LI><A HREF="node14.11.html"><tt>int</tt>: operations on integers </A>
+<LI><A HREF="node14.12.html"><tt>io</tt>: buffered input and output </A>
+<LI><A HREF="node14.13.html"><tt>list</tt>: operations on lists </A>
+<LI><A HREF="node14.14.html"><tt>pair</tt>: operations on pairs </A>
+<LI><A HREF="node14.15.html"><tt>ref</tt>: operations on references </A>
+<LI><A HREF="node14.16.html"><tt>stream</tt>: operations on streams </A>
+<LI><A HREF="node14.17.html"><tt>string</tt>: string operations </A>
+<LI><A HREF="node14.18.html"><tt>vect</tt>: operations on vectors </A>
+</UL>
+<HR>
+<A HREF="node14.1.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node13.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

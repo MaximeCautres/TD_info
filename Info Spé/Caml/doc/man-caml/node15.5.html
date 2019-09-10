@@ -1,0 +1,499 @@
+<HEAD>
+<TITLE><tt>format</tt>: pretty printing </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node15.6.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.4.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>format</tt>: pretty printing </H2>
+<P>
+<A name="s:format"></A>
+
+<dl><dd>
+ This module implements a pretty-printing facility to format text
+   within ``pretty-printing boxes''. The pretty-printer breaks lines
+   at specified break hints, and indents lines according to the box
+   structure. 
+</dl>
+<dl><dd>
+ Rule of thumb for casual users:
+<br>   use simple boxes (as obtained by <tt>open_box 0</tt>);
+<br>   use simple break hints (as obtained by <tt>print_cut ()</tt> that outputs a
+   simple break hint, or by <tt>print_space ()</tt> that ouputs a space
+   indicating a break hint);
+<br>   once a box is opened, display its material with basic printing
+   functions (e. g. <tt>print_int</tt> and <tt>print_string</tt>);
+<br>   when the material for a box has been printed, call <tt>close_box ()</tt> to
+   close the box;
+<br>   at the end of your routine, evaluate <tt>print_newline ()</tt> to close
+   all remaining boxes and flush the pretty-printer. 
+</dl>
+<dl><dd>
+ You may alternatively consider this module as providing an extension to the
+   <tt>printf</tt> facility: you can simply add pretty-printing annotations to your
+   regular printf formats, as explained below in the documentation of
+   the function <tt>fprintf</tt>. 
+</dl>
+<dl><dd>
+ The behaviour of pretty-printing commands is unspecified
+   if there is no opened pretty-printing box. Each box opened via
+   one of the <tt>open_</tt> functions below must be closed using <tt>close_box</tt>
+   for proper formatting. Otherwise, some of the material printed in the
+   boxes may not be output, or may be formatted incorrectly. 
+</dl>
+<dl><dd>
+ In case of interactive use, the system closes all opened boxes and
+   flushes all pending text (as with the <tt>print_newline</tt> function)
+   after each phrase. Each phrase is therefore executed in the initial
+   state of the pretty-printer. 
+</dl>
+<H3>Boxes </H3>
+<pre>
+value open_box : int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>open_box d</tt> opens a new pretty-printing box
+           with offset <tt>d</tt>. 
+           This box is the general purpose pretty-printing box.
+           Material in this box is displayed ``horizontal or vertical'':
+           break hints inside the box may lead to a new line, if there
+           is no more room on the line to print the remainder of the box,
+           or if a new line may lead to a new indentation
+           (demonstrating the indentation of the box).
+           When a new line is printed in the box, <tt>d</tt> is added to the
+           current indentation. 
+</dl>
+<pre>
+value close_box : unit -&gt; unit
+</pre>
+<dl><dd>
+ Close the most recently opened pretty-printing box. 
+</dl>
+<H3>Formatting functions </H3>
+<pre>
+value print_string : string -&gt; unit
+</pre>
+<dl><dd>
+ <tt>print_string str</tt> prints <tt>str</tt> in the current box. 
+</dl>
+<pre>
+value print_as : int -&gt; string -&gt; unit
+</pre>
+<dl><dd>
+ <tt>print_as len str</tt> prints <tt>str</tt> in the
+           current box. The pretty-printer formats <tt>str</tt> as if
+           it were of length <tt>len</tt>. 
+</dl>
+<pre>
+value print_int : int -&gt; unit
+</pre>
+<dl><dd>
+ Print an integer in the current box. 
+</dl>
+<pre>
+value print_float : float -&gt; unit
+</pre>
+<dl><dd>
+ Print a floating point number in the current box. 
+</dl>
+<pre>
+value print_char : char -&gt; unit
+</pre>
+<dl><dd>
+ Print a character in the current box. 
+</dl>
+<pre>
+value print_bool : bool -&gt; unit
+</pre>
+<dl><dd>
+ Print an boolean in the current box. 
+</dl>
+<H3>Break hints </H3>
+<pre>
+value print_space : unit -&gt; unit
+</pre>
+<dl><dd>
+ <tt>print_space ()</tt> is used to separate items (typically to print
+           a space between two words). 
+           It indicates that the line may be split at this
+           point. It either prints one space or splits the line.
+           It is equivalent to <tt>print_break 1 0</tt>. 
+</dl>
+<pre>
+value print_cut : unit -&gt; unit
+</pre>
+<dl><dd>
+ <tt>print_cut ()</tt> is used to mark a good break position.
+           It indicates that the line may be split at this 
+           point. It either prints nothing or splits the line.
+           This allows line splitting at the current
+           point, without printing spaces or adding indentation.
+           It is equivalent to <tt>print_break 0 0</tt>. 
+</dl>
+<pre>
+value print_break : int -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ Insert a break hint in a pretty-printing box.
+           <tt>print_break nspaces offset</tt> indicates that the line may
+           be split (a newline character is printed) at this point,
+           if the contents of the current box does not fit on one line.
+           If the line is split at that point, <tt>offset</tt> is added to
+           the current indentation. If the line is not split,
+           <tt>nspaces</tt> spaces are printed. 
+</dl>
+<pre>
+value print_flush : unit -&gt; unit
+</pre>
+<dl><dd>
+ Flush the pretty printer: all opened boxes are closed,
+           and all pending text is displayed. 
+</dl>
+<pre>
+value print_newline : unit -&gt; unit
+</pre>
+<dl><dd>
+ Equivalent to <tt>print_flush</tt> followed by a new line. 
+</dl>
+<pre>
+value force_newline : unit -&gt; unit
+</pre>
+<dl><dd>
+ Force a newline in the current box. Not the normal way of
+           pretty-printing, you should prefer break hints. 
+</dl>
+<pre>
+value print_if_newline : unit -&gt; unit
+</pre>
+<dl><dd>
+ Execute the next formatting command if the preceding line
+           has just been split. Otherwise, ignore the next formatting
+           command. 
+</dl>
+<H3>Margin </H3>
+<pre>
+value set_margin : int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>set_margin d</tt> sets the value of the right margin
+           to <tt>d</tt> (in characters): this value is used to detect line
+           overflows that leads to split lines.
+           Nothing happens if <tt>d</tt> is smaller than 2 or
+           bigger than 999999999. 
+</dl>
+<pre>
+value get_margin : unit -&gt; int
+</pre>
+<dl><dd>
+ Return the position of the right margin. 
+</dl>
+<H3>Maximum indentation limit </H3>
+<pre>
+value set_max_indent : int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>set_max_indent d</tt> sets the value of the maximum
+           indentation limit to <tt>d</tt> (in characters):
+           once this limit is reached, boxes are rejected to the left,
+           if they do not fit on the current line.
+           Nothing happens if <tt>d</tt> is smaller than 2 or
+           bigger than 999999999. 
+</dl>
+<pre>
+value get_max_indent : unit -&gt; int
+</pre>
+<dl><dd>
+ Return the value of the maximum indentation limit (in
+           characters). 
+</dl>
+<H3>Formatting depth: maximum number of boxes allowed before ellipsis </H3>
+<pre>
+value set_max_boxes : int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>set_max_boxes max</tt> sets the maximum number
+           of boxes simultaneously opened.
+           Material inside boxes nested deeper is printed as an
+           ellipsis (more precisely as the text returned by
+           <tt>get_ellipsis_text ()</tt>).
+           Nothing happens if <tt>max</tt> is not greater than 1. 
+</dl>
+<pre>
+value get_max_boxes : unit -&gt; int
+</pre>
+<dl><dd>
+ Return the maximum number of boxes allowed before ellipsis. 
+</dl>
+<pre>
+value over_max_boxes : unit -&gt; bool
+</pre>
+<dl><dd>
+ Test the maximum number of boxes allowed have
+           already been opened. 
+</dl>
+<H3>Advanced formatting </H3>
+<pre>
+value open_hbox : unit -&gt; unit
+</pre>
+<dl><dd>
+ <tt>open_hbox ()</tt> opens a new pretty-printing box.
+           This box is ``horizontal'': the line is not split in this box
+           (new lines may still occur inside boxes nested deeper). 
+</dl>
+<pre>
+value open_vbox : int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>open_vbox d</tt> opens a new pretty-printing box
+           with offset <tt>d</tt>. 
+           This box is ``vertical'': every break hint inside this
+           box leads to a new line.
+           When a new line is printed in the box, <tt>d</tt> is added to the
+           current indentation. 
+</dl>
+<pre>
+value open_hvbox : int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>open_hvbox d</tt> opens a new pretty-printing box
+           with offset <tt>d</tt>. 
+           This box is ``horizontal-vertical'': it behaves as an
+           ``horizontal'' box if it fits on a single line,
+           otherwise it behaves as a ``vertical'' box.
+           When a new line is printed in the box, <tt>d</tt> is added to the
+           current indentation. 
+</dl>
+<pre>
+value open_hovbox : int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>open_hovbox d</tt> opens a new pretty-printing box
+           with offset <tt>d</tt>. 
+           This box is ``horizontal or vertical'': break hints
+           inside this box may lead to a new line, if there is no more room
+           on the line to print the remainder of the box.
+           When a new line is printed in the box, <tt>d</tt> is added to the
+           current indentation. 
+</dl>
+<H3>Tabulations </H3>
+<pre>
+value open_tbox : unit -&gt; unit
+</pre>
+<dl><dd>
+ Open a tabulation box. 
+</dl>
+<pre>
+value close_tbox : unit -&gt; unit
+</pre>
+<dl><dd>
+ Close the most recently opened tabulation box. 
+</dl>
+<pre>
+value print_tbreak : int -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ Break hint in a tabulation box.
+           <tt>print_tbreak spaces offset</tt> moves the insertion point to
+           the next tabulation (<tt>spaces</tt> being added to this position).
+           Nothing occurs if insertion point is already on a
+           tabulation mark.
+           If there is no next tabulation on the line, then a newline
+           is printed and the insertion point moves to the first
+           tabulation of the box.
+           If a new line is printed, <tt>offset</tt> is added to the current
+           indentation. 
+</dl>
+<pre>
+value set_tab : unit -&gt; unit
+</pre>
+<dl><dd>
+ Set a tabulation mark at the current insertion point. 
+</dl>
+<pre>
+value print_tab : unit -&gt; unit
+</pre>
+<dl><dd>
+ <tt>print_tab ()</tt> is equivalent to <tt>print_tbreak (0,0)</tt>. 
+</dl>
+<H3>Ellipsis </H3>
+<pre>
+value set_ellipsis_text : string -&gt; unit
+</pre>
+<dl><dd>
+ Set the text of the ellipsis printed when too many boxes
+           are opened (a single dot, <tt>.</tt>, by default). 
+</dl>
+<pre>
+value get_ellipsis_text : unit -&gt; string
+</pre>
+<dl><dd>
+ Return the text of the ellipsis. 
+</dl>
+<H3>Redirecting formatter output </H3>
+<pre>
+value set_formatter_out_channel : out_channel -&gt; unit
+</pre>
+<dl><dd>
+ Redirect the pretty-printer output to the given channel. 
+</dl>
+<pre>
+value set_formatter_output_functions :
+      (string -&gt; int -&gt; int -&gt; unit) -&gt; (unit -&gt; unit) -&gt; unit
+</pre>
+<dl><dd>
+ <tt>set_formatter_output_functions out flush</tt> redirects the
+           pretty-printer output to the functions <tt>out</tt> and <tt>flush</tt>.
+           The <tt>out</tt> function performs the pretty-printer output.
+           It is called with a string <tt>s</tt>, a start position <tt>p</tt>,
+           and a number of characters <tt>n</tt>; it is supposed to output
+           characters <tt>p</tt> to <tt>p+n-1</tt> of <tt>s</tt>. The <tt>flush</tt> function is
+           called whenever the pretty-printer is flushed using
+           <tt>print_flush</tt> or <tt>print_newline</tt>. 
+</dl>
+<pre>
+value get_formatter_output_functions :
+        unit -&gt; (string -&gt; int -&gt; int -&gt; unit) * (unit -&gt; unit)
+</pre>
+<dl><dd>
+ Return the current output functions of the pretty-printer. 
+</dl>
+<H3>Multiple formatted output </H3>
+<pre>
+type formatter
+</pre>
+<dl><dd>
+ Abstract data type corresponding to a pretty-printer and
+           all its machinery.
+           Defining new pretty-printers permits the output of
+           material in parallel on several channels.
+           Parameters of the pretty-printer are local to the pretty-printer:
+           margin, maximum indentation limit, maximum number of boxes
+           simultaneously opened, ellipsis, and so on, are specific to
+           each pretty-printer and may be fixed independently.
+           A new formatter is obtained by calling the <tt>make_formatter</tt>
+           function. 
+</dl>
+<pre>
+value std_formatter : formatter
+</pre>
+<dl><dd>
+ The standard formatter used by the formatting functions
+           above. It is defined using <tt>make_formatter</tt> with
+           output function <tt>output stdout</tt> and flushing function
+           <tt>fun () -&gt; flush stdout</tt>. 
+</dl>
+<pre>
+value err_formatter : formatter
+</pre>
+<dl><dd>
+ A formatter to use with formatting functions below for
+           output to standard error. It is defined using <tt>make_formatter</tt> with
+           output function <tt>output stderr</tt> and flushing function
+           <tt>fun () -&gt; flush stderr</tt>. 
+</dl>
+<pre>
+value make_formatter :
+        (string -&gt; int -&gt; int -&gt; unit) -&gt; (unit -&gt; unit) -&gt; formatter
+</pre>
+<dl><dd>
+ <tt>make_formatter out flush</tt> returns a new formatter that
+           writes according to the output function <tt>out</tt>, and flushing
+           function <tt>flush</tt>. Hence, a formatter to out channel <tt>oc</tt>
+           is returned by <tt>make_formatter (output oc) (fun () -&gt; flush oc)</tt>. 
+</dl>
+<pre>
+value pp_open_hbox : formatter -&gt; unit -&gt; unit
+value pp_open_vbox : formatter -&gt; int -&gt; unit
+value pp_open_hvbox : formatter -&gt; int -&gt; unit
+value pp_open_hovbox : formatter -&gt; int -&gt; unit
+value pp_open_box : formatter -&gt; int -&gt; unit
+value pp_close_box : formatter -&gt; unit -&gt; unit
+value pp_print_string : formatter -&gt; string -&gt; unit
+value pp_print_as : formatter -&gt; int -&gt; string -&gt; unit
+value pp_print_int : formatter -&gt; int -&gt; unit
+value pp_print_float : formatter -&gt; float -&gt; unit
+value pp_print_char : formatter -&gt; char -&gt; unit
+value pp_print_bool : formatter -&gt; bool -&gt; unit
+value pp_print_break : formatter -&gt; int -&gt; int -&gt; unit
+value pp_print_cut : formatter -&gt; unit -&gt; unit
+value pp_print_space : formatter -&gt; unit -&gt; unit
+value pp_force_newline : formatter -&gt; unit -&gt; unit
+value pp_print_flush : formatter -&gt; unit -&gt; unit
+value pp_print_newline : formatter -&gt; unit -&gt; unit
+value pp_print_if_newline : formatter -&gt; unit -&gt; unit
+value pp_open_tbox : formatter -&gt; unit -&gt; unit
+value pp_close_tbox : formatter -&gt; unit -&gt; unit
+value pp_print_tbreak : formatter -&gt; int -&gt; int -&gt; unit
+value pp_set_tab : formatter -&gt; unit -&gt; unit
+value pp_print_tab : formatter -&gt; unit -&gt; unit
+value pp_set_margin : formatter -&gt; int -&gt; unit
+value pp_get_margin : formatter -&gt; unit -&gt; int
+value pp_set_max_indent : formatter -&gt; int -&gt; unit
+value pp_get_max_indent : formatter -&gt; unit -&gt; int
+value pp_set_max_boxes : formatter -&gt; int -&gt; unit
+value pp_get_max_boxes : formatter -&gt; unit -&gt; int
+value pp_over_max_boxes : formatter -&gt; unit -&gt; bool
+value pp_set_ellipsis_text : formatter -&gt; string -&gt; unit
+value pp_get_ellipsis_text : formatter -&gt; unit -&gt; string
+value pp_set_formatter_out_channel : formatter -&gt; out_channel -&gt; unit
+value pp_set_formatter_output_functions : formatter -&gt;
+        (string -&gt; int -&gt; int -&gt; unit) -&gt; (unit -&gt; unit) -&gt; unit
+value pp_get_formatter_output_functions :
+        formatter -&gt; unit -&gt; (string -&gt; int -&gt; int -&gt; unit) * (unit -&gt; unit)
+</pre>
+<dl><dd>
+ The basic functions to use with formatters.
+           These functions are the basic ones: usual functions
+           operating on the standard formatter are defined via partial
+           evaluation of these primitives. For instance,
+           <tt>print_string</tt> is equal to <tt>pp_print_string std_formatter</tt>. 
+</dl>
+<pre>
+value fprintf : formatter -&gt; ('a, formatter, unit) format -&gt; 'a
+</pre>
+<dl><dd>
+ <tt>fprintf ff format arg1 ... argN</tt> formats the arguments
+           <tt>arg1</tt> to <tt>argN</tt> according to the format string <tt>format</tt>,
+           and outputs the resulting string on the formatter <tt>ff</tt>.
+           The format is a character string which contains three types of
+           objects: plain characters and conversion specifications as
+           specified in the <tt>printf</tt> module, and pretty-printing
+           indications.
+           The pretty-printing indication characters are introduced by
+           a <tt>@</tt> character, and their meanings are:
+<br>          <tt>[</tt>: open a pretty-printing box. The type and offset of the
+           box may be optionally specified with the following syntax:
+           the <tt>&lt;</tt> character, followed by an optional box type indication,
+           then an optional integer offset, and the closing <tt>&gt;</tt> character. 
+           Box type is one of <tt>h</tt>, <tt>v</tt>, <tt>hv</tt>, or <tt>hov</tt>,
+           which stand respectively for an horizontal, vertical,
+           ``horizontal-vertical'' and ``horizontal or vertical'' box.
+<br>          <tt>]</tt>: close the most recently opened pretty-printing box.
+<br>          <tt>,</tt>: output a good break as with <tt>print_cut ()</tt>.
+<br>          <tt> </tt>: output a space, as with <tt>print_space ()</tt>.
+<br>          <tt>\n</tt>: force a newline, as with <tt>force_newline ()</tt>.
+<br>          <tt>;</tt>: output a good break as with <tt>print_break</tt>. The
+           <tt>nspaces</tt> and <tt>offset</tt> parameters of the break may be
+           optionally specified with the following syntax: 
+           the <tt>&lt;</tt> character, followed by an integer <tt>nspaces</tt> value,
+           then an integer offset, and a closing <tt>&gt;</tt> character. 
+<br>          <tt>.</tt>: flush the pretty printer as with <tt>print_newline ()</tt>.
+<br>          <tt>@</tt>: a plain <tt>@</tt> character. 
+</dl>
+<pre>
+value printf : ('a, formatter, unit) format -&gt; 'a
+</pre>
+<dl><dd>
+ Same as <tt>fprintf</tt>, but output on <tt>std_formatter</tt>. 
+</dl>
+<pre>
+value eprintf: ('a, formatter, unit) format -&gt; 'a
+</pre>
+<dl><dd>
+ Same as <tt>fprintf</tt>, but output on <tt>err_formatter</tt>. 
+</dl>
+<HR>
+<A HREF="node15.6.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.4.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

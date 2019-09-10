@@ -1,0 +1,122 @@
+<HEAD>
+<TITLE><tt>baltree</tt>: basic balanced binary trees </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node15.4.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.2.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>baltree</tt>: basic balanced binary trees </H2>
+<P>
+<A name="s:baltree"></A>
+
+<dl><dd>
+ This module implements balanced ordered binary trees.
+   All operations over binary trees are applicative (no side-effects).
+   The <tt>set</tt> and <tt>map</tt> modules are based on this module.
+   This modules gives a more direct access to the internals of the
+   binary tree implementation than the <tt>set</tt> and <tt>map</tt> abstractions,
+   but is more delicate to use and not as safe. For advanced users only. 
+</dl>
+<pre>
+type 'a t = Empty | Node of 'a t * 'a * 'a t * int
+</pre>
+<dl><dd>
+ The type of trees containing elements of type <tt>'a</tt>.
+           <tt>Empty</tt> is the empty tree (containing no elements). 
+</dl>
+<pre>
+type 'a contents = Nothing | Something of 'a
+</pre>
+<dl><dd>
+ Used with the functions <tt>modify</tt> and <tt>split</tt>, to represent
+           the presence or the absence of an element in a tree. 
+</dl>
+<pre>
+value add: ('a -&gt; int) -&gt; 'a -&gt; 'a t -&gt; 'a t
+</pre>
+<dl><dd>
+ <tt>add f x t</tt> inserts the element <tt>x</tt> into the tree <tt>t</tt>.
+           <tt>f</tt> is an ordering function: <tt>f y</tt> must return <tt>0</tt> if
+           <tt>x</tt> and <tt>y</tt> are equal (or equivalent), a negative integer if
+           <tt>x</tt> is smaller than <tt>y</tt>, and a positive integer if <tt>x</tt> is
+           greater than <tt>y</tt>. The tree <tt>t</tt> is returned unchanged if
+           it already contains an element equivalent to <tt>x</tt> (that is,
+           an element <tt>y</tt> such that <tt>f y</tt> is <tt>0</tt>).
+           The ordering <tt>f</tt> must be consistent with the orderings used
+           to build <tt>t</tt> with <tt>add</tt>, <tt>remove</tt>, <tt>modify</tt> or <tt>split</tt>
+           operations. 
+</dl>
+<pre>
+value contains: ('a -&gt; int) -&gt; 'a t -&gt; bool
+</pre>
+<dl><dd>
+ <tt>contains f t</tt> checks whether <tt>t</tt> contains an element
+           satisfying <tt>f</tt>, that is, an element <tt>x</tt> such
+           that <tt>f x</tt> is <tt>0</tt>. <tt>f</tt> is an ordering function with the same
+           constraints as for <tt>add</tt>. It can be coarser (identify more
+           elements) than the orderings used to build <tt>t</tt>, but must be
+           consistent with them. 
+</dl>
+<pre>
+value find: ('a -&gt; int) -&gt; 'a t -&gt; 'a
+</pre>
+<dl><dd>
+ Same as <tt>contains</tt>, except that <tt>find f t</tt> returns the element <tt>x</tt>
+           such that <tt>f x</tt> is <tt>0</tt>, or raises <tt>Not_found</tt> if none has been
+           found. 
+</dl>
+<pre>
+value remove: ('a -&gt; int) -&gt; 'a t -&gt; 'a t
+</pre>
+<dl><dd>
+ <tt>remove f t</tt> removes one element <tt>x</tt> of <tt>t</tt> such that <tt>f x</tt> is <tt>0</tt>.
+           <tt>f</tt> is an ordering function with the same constraints as for <tt>add</tt>.
+           <tt>t</tt> is returned unchanged if it does not contain any element
+           satisfying <tt>f</tt>. If several elements of <tt>t</tt> satisfy <tt>f</tt>,
+           only one is removed. 
+</dl>
+<pre>
+value modify: ('a -&gt; int) -&gt; ('a contents -&gt; 'a contents) -&gt; 'a t -&gt; 'a t
+</pre>
+<dl><dd>
+ General insertion/modification/deletion function.
+           <tt>modify f g t</tt> searchs <tt>t</tt> for an element <tt>x</tt> satisfying the
+           ordering function <tt>f</tt>. If one is found, <tt>g</tt> is applied to
+           <tt>Something x</tt>; if <tt>g</tt> returns <tt>Nothing</tt>, the element <tt>x</tt>
+           is removed; if <tt>g</tt> returns <tt>Something y</tt>, the element <tt>y</tt>
+           replaces <tt>x</tt> in the tree. (It is assumed that <tt>x</tt> and <tt>y</tt>
+           are equivalent, in particular, that <tt>f y</tt> is <tt>0</tt>.)
+           If the tree does not contain any <tt>x</tt> satisfying <tt>f</tt>,
+           <tt>g</tt> is applied to <tt>Nothing</tt>; if it returns <tt>Nothing</tt>,
+           the tree is returned unchanged; if it returns <tt>Something x</tt>,
+           the element <tt>x</tt> is inserted in the tree. (It is assumed that
+           <tt>f x</tt> is <tt>0</tt>.) The functions <tt>add</tt> and <tt>remove</tt> are special cases
+           of <tt>modify</tt>, slightly more efficient. 
+</dl>
+<pre>
+value split: ('a -&gt; int) -&gt; 'a t -&gt; 'a t * 'a contents * 'a t
+</pre>
+<dl><dd>
+ <tt>split f t</tt> returns a triple <tt>(less, elt, greater)</tt> where
+           <tt>less</tt> is a tree containing all elements <tt>x</tt> of <tt>t</tt> such that
+           <tt>f x</tt> is negative, <tt>greater</tt> is a tree containing all
+           elements <tt>x</tt> of <tt>t</tt> such that <tt>f x</tt> is positive, and <tt>elt</tt>
+           is <tt>Something x</tt> if <tt>t</tt> contains an element <tt>x</tt> such that
+           <tt>f x</tt> is <tt>0</tt>, and <tt>Nothing</tt> otherwise. 
+</dl>
+<pre>
+value compare: ('a -&gt; 'a -&gt; int) -&gt; 'a t -&gt; 'a t -&gt; int
+</pre>
+<dl><dd>
+ Compare two trees. The first argument <tt>f</tt> is a comparison function
+           over the tree elements: <tt>f e1 e2</tt> is zero if the elements <tt>e1</tt> and 
+           <tt>e2</tt> are equal, negative if <tt>e1</tt> is smaller than <tt>e2</tt>,
+           and positive if <tt>e1</tt> is greater than <tt>e2</tt>. <tt>compare f t1 t2</tt>
+           compares the fringes of <tt>t1</tt> and <tt>t2</tt> by lexicographic extension
+           of <tt>f</tt>. 
+</dl>
+<HR>
+<A HREF="node15.4.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.2.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

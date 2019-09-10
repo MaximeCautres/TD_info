@@ -1,0 +1,65 @@
+(***********************************************************************)
+(*                                                                     *) 
+(*                           Objective Caml                            *)
+(*                                                                     *)
+(*               Pierre Weis, projet Cristal, INRIA Rocquencourt       *)
+(*                                                                     *)
+(*  Copyright 2001 Institut National de Recherche en Informatique et   *)
+(*  en Automatique.  All rights reserved.  This file is distributed    *) 
+(*  only by permission.                                                *)
+(*                                                                     *) 
+(***********************************************************************)
+
+#load "graphics.cma";;
+
+Sys.chdir "exemples/OCaml/inria/minilogo";;
+
+let compile f = match Sys.command ("ocamlc -pp camlp4o -c " ^ f) with
+      | 0 -> () | _ -> failwith ("Cannot compile " ^ f);;
+
+let oc_version =
+  let ver = Sys.ocaml_version in
+    let len = String.length ver and s = ref "" in
+      for i = 0 to len - 1 do
+        if ver.[i] <> '.' then s := !s ^ String.make 1 ver.[i]
+      done;
+      int_of_string !s
+;;
+
+compile "crayon.mli";;
+compile "crayon.ml";;
+#load "crayon.cmo";;
+compile "langage.mli";;
+compile "langage.ml";;
+#load "langage.cmo";;
+compile "alex.mli";
+if oc_version < 4050 then
+  compile "alex.ml"
+else (
+  compile "alex/alex.ml";
+  let f = "alex.cmo" in
+    if Sys.file_exists f then Sys.remove f;
+    Sys.rename ("alex/" ^ f) f
+)
+;;
+#load "alex.cmo";;
+compile "asynt.mli";;
+compile "asynt.ml";;
+#load "asynt.cmo";;
+compile "logo.ml";;
+#load "logo.cmo";;
+open Logo;;
+
+print_string "l'instruction \"boucle\" suivante ayant lancŽ l'interprŽteur
+   minilogo, on exŽcute le programme minilogo suivant en appuyant sur le bouton
+   send ou sur la touche enter; pour arrter l'interprŽteur, cliquer sur \"interrupt\"\n"
+;;
+
+boucle();;
+
+pour spirala :d :a :i :n
+  si :n >= 0
+    [av :d td :a spirala :d (:a + :i) :i (:n - 1)] [stop].
+
+ve spirala
+      4 0.5 181.5 1500 .

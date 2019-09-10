@@ -1,0 +1,436 @@
+<HEAD>
+<TITLE>The graphics library</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node17.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.19.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H1>The graphics library</H1>
+<P>
+This chapter describes the portable graphics primitives that come
+standard in the implementation of Caml Light on micro-computers.<P>
+<dl><dt><b>Unix:</b><dd> On Unix workstations running the X11 windows system, an
+implementation of the graphics primitives is available in the
+directory <tt>contrib/libgraph</tt> in the distribution. See the file
+<tt>README</tt> in this directory for information on building and using
+<tt>camlgraph</tt>, a toplevel system that includes the graphics primitives,
+and linking standalone programs with the library. Drawing takes place
+in a separate window that is created when <tt>open_graph</tt> is called.
+</dl><P>
+<dl><dt><b>Mac:</b><dd> The graphics primitive are available from the standalone
+application that runs the toplevel system. They are not available from
+programs compiled by <tt>camlc</tt> and run under the MPW shell. Drawing
+takes place in a separate window, that can be made visible with the
+``Show graphics window'' menu entry.
+</dl><P>
+<dl><dt><b>PC:</b><dd> The graphics primitive are available from the Windows
+application that runs the toplevel system. They are not available from
+programs compiled by <tt>camlc</tt> and run in a DOS command window.
+Drawing takes place in a separate window.
+</dl><P>
+The screen coordinates are interpreted as shown in the figure below.
+Notice that the coordinate system used is the same as in mathematics:
+y increases from the bottom of the screen to the top of the screen,
+and angles are measured counterclockwise (in degrees).
+Drawing is clipped to the screen.
+
+Here are the graphics mode specifications supported by <tt>open_graph</tt> on
+the various implementations of this library.<P>
+<dl><dt><b>Unix:</b><dd> The argument to <tt>open_graph</tt> has the format
+<tt>"</tt><i>display-name</i> <i>geometry</i><tt>"</tt>,
+where <i>display-name</i> is the name of the X-windows display to
+connect to, and <i>geometry</i> is a standard X-windows geometry
+specification. The two components are separated by a space. Either can
+be omitted, or both. Examples:
+<p><dl>
+<dt><tt>open_graph "foo:0"</tt><dd>
+connects to the display <tt>foo:0</tt> and creates a window with the default geometry
+<dt><tt>open_graph "foo:0 300x100+50-0"</tt><dd>
+connects to the display <tt>foo:0</tt> and creates a window 300 pixels wide
+by 100 pixels tall, at location (50,0)
+<dt><tt>open_graph " 300x100+50-0"</tt><dd>
+connects to the default display and creates a window 300 pixels wide
+by 100 pixels tall, at location (50,0)
+<dt><tt>open_graph ""</tt><dd>
+connects to the default display and creates a window with the default
+geometry.
+</dl>
+</dl><P>
+<dl><dt><b>Mac:</b><dd> The argument to <tt>open_graph</tt> is ignored.
+</dl><P>
+<dl><dt><b>PC:</b><dd> The argument to <tt>open_graph</tt> has the format
+<tt>"</tt><i>width</i><tt>x</tt><i>height</i><tt>"</tt> or
+<tt>"</tt><i>width</i><tt>x</tt><i>height</i><tt>+</tt><i>x</i><tt>+</tt><i>y</i><tt>"</tt>,
+where <i>width</i> and <i>height</i> are the initial dimensions of the
+graphics windows, and <i>x</i> and <i>y</i> are the position of the
+upper-left corner of the graphics window. If omitted,
+(<i>width</i>,<i>height</i>) default to (600,400) and
+(<i>x</i>,<i>y</i>) default to (10, 10).
+</dl><P>
+
+<H2><tt>graphics</tt>: machine-independent graphics primitives </H2>
+<P>
+<A name="s:graphics"></A>
+
+<pre>
+exception Graphic_failure of string
+</pre>
+<dl><dd>
+ Raised by the functions below when they encounter an error. 
+</dl>
+<H3>Initializations </H3>
+<pre>
+value open_graph: string -&gt; unit
+</pre>
+<dl><dd>
+ Show the graphics window or switch the screen to graphic mode.
+           The graphics window is cleared. The string argument is used to
+           pass optional information on the desired graphics mode, the
+           graphics window size, and so on. Its interpretation is
+           implementation-dependent. If the empty string is given, a sensible
+           default is selected. 
+</dl>
+<pre>
+value close_graph: unit -&gt; unit
+</pre>
+<dl><dd>
+ Delete the graphics window or switch the screen back to
+           text mode. 
+</dl>
+<pre>
+value clear_graph : unit -&gt; unit
+</pre>
+<dl><dd>
+ Erase the graphics window. 
+</dl>
+<pre>
+value size_x : unit -&gt; int
+value size_y : unit -&gt; int
+</pre>
+<dl><dd>
+ Return the size of the graphics window. Coordinates of the screen
+           pixels range over <tt>0 .. size_x()-1</tt> and <tt>0 .. size_y()-1</tt>.
+           Drawings outside of this rectangle are clipped, without causing
+           an error. The origin (0,0) is at the lower left corner. 
+</dl>
+<H3>Colors </H3>
+<pre>
+type color == int
+</pre>
+<dl><dd>
+ A color is specified by its R, G, B components. Each component
+           is in the range <tt>0..255</tt>. The three components are packed in
+           an <tt>int</tt>: <tt>0xRRGGBB</tt>, where <tt>RR</tt> are the two hexadecimal digits for
+           the red component, <tt>GG</tt> for the green component, <tt>BB</tt> for the
+           blue component. 
+</dl>
+<pre>
+value rgb: int -&gt; int -&gt; int -&gt; color
+</pre>
+<dl><dd>
+ <tt>rgb r g b</tt> returns the integer encoding the color with red
+           component <tt>r</tt>, green component <tt>g</tt>, and blue component <tt>b</tt>.
+           <tt>r</tt>, <tt>g</tt> and <tt>b</tt> are in the range <tt>0..255</tt>. 
+</dl>
+<pre>
+value set_color : color -&gt; unit
+</pre>
+<dl><dd>
+ Set the current drawing color. 
+</dl>
+<pre>
+value black : color
+value white : color
+value red : color
+value green : color
+value blue : color
+value yellow : color
+value cyan : color
+value magenta : color
+</pre>
+<dl><dd>
+ Some predefined colors. 
+</dl>
+<pre>
+value background: color
+value foreground: color
+</pre>
+<dl><dd>
+ Default background and foreground colors (usually, either black
+           foreground on a white background or white foreground on a
+           black background).
+           <tt>clear_graph</tt> fills the screen with the <tt>background</tt> color.
+           The initial drawing color is <tt>foreground</tt>. 
+</dl>
+<H3>Point and line drawing </H3>
+<pre>
+value plot : int -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ Plot the given point with the current drawing color. 
+</dl>
+<pre>
+value point_color : int -&gt; int -&gt; color
+</pre>
+<dl><dd>
+ Return the color of the given point. 
+</dl>
+<pre>
+value moveto : int -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ Position the current point. 
+</dl>
+<pre>
+value current_point : unit -&gt; int * int
+</pre>
+<dl><dd>
+ Return the position of the current point. 
+</dl>
+<pre>
+value lineto : int -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ Draw a line with endpoints the current point and the given point,
+           and move the current point to the given point. 
+</dl>
+<pre>
+value draw_arc : int -&gt; int -&gt; int -&gt; int -&gt; int -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>draw_arc x y rx ry a1 a2</tt> draws an elliptical arc with center
+           <tt>x,y</tt>, horizontal radius <tt>rx</tt>, vertical radius <tt>ry</tt>, from angle
+           <tt>a1</tt> to angle <tt>a2</tt> (in degrees). The current point is unchanged. 
+</dl>
+<pre>
+value draw_ellipse : int -&gt; int -&gt; int -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>draw_ellipse x y rx ry</tt> draws an ellipse with center
+           <tt>x,y</tt>, horizontal radius <tt>rx</tt> and vertical radius <tt>ry</tt>.
+           The current point is unchanged.  
+</dl>
+<pre>
+value draw_circle : int -&gt; int -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>draw_circle x y r</tt> draws a circle with center <tt>x,y</tt> and
+           radius <tt>r</tt>. The current point is unchanged. 
+</dl>
+<pre>
+value set_line_width : int -&gt; unit
+</pre>
+<dl><dd>
+ Set the width of points and lines drawn with the functions above.
+           Under X Windows, <tt>set_line_width 0</tt> selects a width of 1 pixel
+           and a faster, but less precise drawing algorithm than the one
+           used when <tt>set_line_width 1</tt> is specified. 
+</dl>
+<H3>Text drawing </H3>
+<pre>
+value draw_char : char -&gt; unit
+value draw_string : string -&gt; unit
+</pre>
+<dl><dd>
+ Draw a character or a character string with lower left corner
+           at current position. After drawing, the current position is set
+           to the lower right corner of the text drawn. 
+</dl>
+<pre>
+value set_font : string -&gt; unit
+value set_text_size : int -&gt; unit
+</pre>
+<dl><dd>
+ Set the font and character size used for drawing text.
+           The interpretation of the arguments to <tt>set_font</tt> and
+           <tt>set_text_size</tt> is implementation-dependent. 
+</dl>
+<pre>
+value text_size : string -&gt; int * int
+</pre>
+<dl><dd>
+ Return the dimensions of the given text, if it were drawn with
+           the current font and size. 
+</dl>
+<H3>Filling </H3>
+<pre>
+value fill_rect : int -&gt; int -&gt; int -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>fill_rect x y w h</tt> fills the rectangle with lower left corner
+           at <tt>x,y</tt>, width <tt>w</tt> and heigth <tt>h</tt>, with the current color. 
+</dl>
+<pre>
+value fill_poly : (int * int) vect -&gt; unit
+</pre>
+<dl><dd>
+ Fill the given polygon with the current color. The array
+           contains the coordinates of the vertices of the polygon. 
+</dl>
+<pre>
+value fill_arc : int -&gt; int -&gt; int -&gt; int -&gt; int -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ Fill an elliptical pie slice with the current color. The
+           parameters are the same as for <tt>draw_arc</tt>. 
+</dl>
+<pre>
+value fill_ellipse : int -&gt; int -&gt; int -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ Fill an ellipse with the current color. The
+           parameters are the same as for <tt>draw_ellipse</tt>. 
+</dl>
+<pre>
+value fill_circle : int -&gt; int -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ Fill a circle with the current color. The
+           parameters are the same as for <tt>draw_circle</tt>. 
+</dl>
+<H3>Images </H3>
+<pre>
+type image
+</pre>
+<dl><dd>
+ The abstract type for images, in internal representation.
+           Externally, images are represented as matrices of colors. 
+</dl>
+<pre>
+value transp : color
+</pre>
+<dl><dd>
+ In matrices of colors, this color represent a ``transparent''
+           point: when drawing the corresponding image, all pixels on the
+           screen corresponding to a transparent pixel in the image will
+           not be modified, while other points will be set to the color
+           of the corresponding point in the image. This allows superimposing
+           an image over an existing background. 
+</dl>
+<pre>
+value make_image : color vect vect -&gt; image
+</pre>
+<dl><dd>
+ Convert the given color matrix to an image.
+           Each sub-array represents one horizontal line. All sub-arrays
+           must have the same length; otherwise, exception <tt>Graphic_failure</tt>
+           is raised. 
+</dl>
+<pre>
+value dump_image : image -&gt; color vect vect
+</pre>
+<dl><dd>
+ Convert an image to a color matrix. 
+</dl>
+<pre>
+value draw_image : image -&gt; int -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ Draw the given image with lower left corner at the given point. 
+</dl>
+<pre>
+value get_image : int -&gt; int -&gt; int -&gt; int -&gt; image
+</pre>
+<dl><dd>
+ Capture the contents of a rectangle on the screen as an image.
+           The parameters are the same as for <tt>fill_rect</tt>. 
+</dl>
+<pre>
+value create_image : int -&gt; int -&gt; image
+</pre>
+<dl><dd>
+ <tt>create_image w h</tt> returns a new image <tt>w</tt> pixels wide and <tt>h</tt>
+           pixels tall, to be used in conjunction with <tt>blit_image</tt>.
+           The initial image contents are random. 
+</dl>
+<pre>
+value blit_image : image -&gt; int -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>blit_image img x y</tt> copies screen pixels into the image <tt>img</tt>,
+           modifying <tt>img</tt> in-place. The pixels copied are those inside the
+           rectangle with lower left corner at <tt>x,y</tt>, and width and height
+           equal to those of the image. 
+</dl>
+<H3>Mouse and keyboard events </H3>
+<pre>
+type status =
+  { mouse_x : int;              (* X coordinate of the mouse *)
+    mouse_y : int;              (* Y coordinate of the mouse *)
+    button : bool;              (* true if a mouse button is pressed *)
+    keypressed : bool;          (* true if a key has been pressed *)
+    key : char }                (* the character for the key pressed *)
+</pre>
+<dl><dd>
+ To report events. 
+</dl>
+<pre>
+type event =
+    Button_down                 (* A mouse button is pressed *)
+  | Button_up                   (* A mouse button is released *)
+  | Key_pressed                 (* A key is pressed *)
+  | Mouse_motion                (* The mouse is moved *)
+  | Poll                        (* Don't wait; return immediately *)
+</pre>
+<dl><dd>
+ To specify events to wait for. 
+</dl>
+<pre>
+value wait_next_event : event list -&gt; status
+</pre>
+<dl><dd>
+ Wait until one of the events specified in the given event list
+           occurs, and return the status of the mouse and keyboard at
+           that time. If <tt>Poll</tt> is given in the event list, return immediately
+           with the current status. If the mouse cursor is outside of the
+           graphics window, the <tt>mouse_x</tt> and <tt>mouse_y</tt> fields of the event are
+           outside the range <tt>0..size_x()-1, 0..size_y()-1</tt>. Keypresses
+           are queued, and dequeued one by one when the <tt>Key_pressed</tt>
+           event is specified. 
+</dl>
+<H3>Mouse and keyboard polling </H3>
+<pre>
+value mouse_pos : unit -&gt; int * int
+</pre>
+<dl><dd>
+ Return the position of the mouse cursor, relative to the
+           graphics window. If the mouse cursor is outside of the graphics
+           window, <tt>mouse_pos()</tt> returns a point outside of the range
+           <tt>0..size_x()-1, 0..size_y()-1</tt>. 
+</dl>
+<pre>
+value button_down : unit -&gt; bool
+</pre>
+<dl><dd>
+ Return <tt>true</tt> if the mouse button is pressed, <tt>false</tt> otherwise. 
+</dl>
+<pre>
+value read_key : unit -&gt; char
+</pre>
+<dl><dd>
+ Wait for a key to be pressed, and return the corresponding
+           character. Keypresses are queued. 
+</dl>
+<pre>
+value key_pressed : unit -&gt; bool
+</pre>
+<dl><dd>
+ Return <tt>true</tt> if a keypress is available; that is, if <tt>read_key</tt>
+           would not block. 
+</dl>
+<H3>Sound </H3>
+<pre>
+value sound : int -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>sound freq dur</tt> plays a sound at frequency <tt>freq</tt> (in hertz)
+           for a duration <tt>dur</tt> (in milliseconds). On the Macintosh,
+           the frequency is rounded to the nearest note in the equal-tempered
+           scale. 
+</dl>
+
+<HR>
+<A HREF="node17.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.19.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

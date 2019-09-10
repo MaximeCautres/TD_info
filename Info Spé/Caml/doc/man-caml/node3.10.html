@@ -1,0 +1,31 @@
+<HEAD>
+<TITLE>Directives</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node3.11.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node3.9.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2>Directives</H2>
+ <A name="s:directives"></A><P>
+
+<PRE>
+<i>directive</i>:
+      <font color="blue"><code>#</code></font> <font color="blue"><code>open</code></font> <i>string</i>
+   |  <font color="blue"><code>#</code></font> <font color="blue"><code>close</code></font> <i>string</i>
+   |  <font color="blue"><code>#</code></font> <i>ident</i> <i>string</i></PRE>
+<P>
+Directives control the behavior of the compiler. They apply to the
+remainder of the current compilation unit.<P>
+The two directives <tt>#open</tt> and <tt>#close</tt> modify the list of
+opened modules, that the compiler uses to complete unqualified
+identifiers, as described in section <A HREF="node3.3.html#s:names">3.3</A>. The directive 
+<font color="blue"><code>#open</code></font> <i>string</i> adds the module whose name is given by the string
+constant <i>string</i> to the list of opened modules, in first position.
+The directive <font color="blue"><code>#close</code></font> <i>string</i> removes the first occurrence of the
+module whose name is given by the string constant <i>string</i> from the
+list of opened modules.<P>
+Implementations can provide other directives, provided they follow the
+syntax <font color="blue"><code>#</code></font> <i>ident</i> <i>string</i>, where <i>ident</i> is the name of the directive,
+and the string constant <i>string</i> is the argument to the directive. The
+behavior of these additional directives is implementation-dependent.

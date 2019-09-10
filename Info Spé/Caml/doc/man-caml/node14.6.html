@@ -1,0 +1,70 @@
+<HEAD>
+<TITLE><tt>exc</tt>: exceptions </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node14.7.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.5.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>exc</tt>: exceptions </H2>
+<P>
+<A name="s:exc"></A>
+
+<pre>
+value raise : exn -&gt; 'a
+</pre>
+<dl><dd>
+ Raise the given exception value. 
+</dl>
+<H3>A few general-purpose predefined exceptions. </H3>
+<pre>
+exception Out_of_memory
+</pre>
+<dl><dd>
+ Raised by the garbage collector, when there is insufficient
+           memory to complete the computation. 
+</dl>
+<pre>
+exception Invalid_argument of string
+</pre>
+<dl><dd>
+ Raised by library functions to signal that the given
+           arguments do not make sense. 
+</dl>
+<pre>
+exception Failure of string
+</pre>
+<dl><dd>
+ Raised by library functions to signal that they are
+           undefined on the given arguments. 
+</dl>
+<pre>
+exception Not_found
+</pre>
+<dl><dd>
+ Raised by search functions when the desired object
+           could not be found. 
+</dl>
+<pre>
+exception Exit
+</pre>
+<dl><dd>
+ This exception is not raised by any library function.  It is
+	   provided for use in your programs. 
+</dl>
+<pre>
+value failwith : string -&gt; 'a
+</pre>
+<dl><dd>
+ Raise exception <tt>Failure</tt> with the given string. 
+</dl>
+<pre>
+value invalid_arg : string -&gt; 'a
+</pre>
+<dl><dd>
+ Raise exception <tt>Invalid_argument</tt> with the given string. 
+</dl>
+<HR>
+<A HREF="node14.7.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.5.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

@@ -1,0 +1,76 @@
+<HEAD>
+<TITLE><tt>builtin</tt>: base types and constructors </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node14.4.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.2.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>builtin</tt>: base types and constructors </H2>
+<P>
+<A name="s:builtin"></A>
+
+<dl><dd>
+ This module defines some types and exceptions for which the language
+   provides special syntax, and are therefore treated specially
+   by the compiler. 
+</dl>
+<pre>
+type int
+type float
+type string
+type char
+</pre>
+<dl><dd>
+ The types of integers, floating-point numbers, character strings,
+           and characters, respectively. 
+</dl>
+<pre>
+type exn
+</pre>
+<dl><dd>
+ The type of exception values. 
+</dl>
+<pre>
+type bool = false | true
+</pre>
+<dl><dd>
+ The type of boolean values. 
+</dl>
+<pre>
+type 'a vect
+</pre>
+<dl><dd>
+ The type of arrays whose elements have type <tt>'a</tt>. 
+</dl>
+<pre>
+type unit = ()
+</pre>
+<dl><dd>
+ The type of the unit value. 
+</dl>
+<pre>
+type 'a list = [] | prefix :: of 'a * 'a list
+</pre>
+<dl><dd>
+ The type of lists. 
+</dl>
+<pre>
+type 'a option = None | Some of 'a
+</pre>
+<dl><dd>
+ The type of optional values. 
+</dl>
+<pre>
+exception Match_failure of string * int * int
+</pre>
+<dl><dd>
+ The exception raised when a pattern-matching fails.
+           The argument indicates the position in the source code of the
+           pattern-matching (source file name, position of the first
+           character of the matching, position of the last character. 
+</dl>
+<HR>
+<A HREF="node14.4.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.2.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

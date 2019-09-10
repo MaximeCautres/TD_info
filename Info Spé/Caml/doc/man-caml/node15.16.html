@@ -1,0 +1,124 @@
+<HEAD>
+<TITLE><tt>set</tt>: sets over ordered types </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node15.17.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.15.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>set</tt>: sets over ordered types </H2>
+<P>
+<A name="s:set"></A>
+
+<dl><dd>
+ This module implements the set data structure, given a total ordering
+   function over the set elements. All operations over sets
+   are purely applicative (no side-effects).
+   The implementation uses balanced binary trees, and is therefore
+   reasonably efficient: insertion and membership take time
+   logarithmic in the size of the set, for instance. 
+</dl>
+<pre>
+type 'a t
+</pre>
+<dl><dd>
+ The type of sets containing elements of type <tt>'a</tt>. 
+</dl>
+<pre>
+value empty: ('a -&gt; 'a -&gt; int) -&gt; 'a t
+</pre>
+<dl><dd>
+ The empty set.
+           The argument is a total ordering function over the set elements.
+           This is a two-argument function <tt>f</tt> such that
+           <tt>f e1 e2</tt> is zero if the elements <tt>e1</tt> and <tt>e2</tt> are equal,
+           <tt>f e1 e2</tt> is strictly negative if <tt>e1</tt> is smaller than <tt>e2</tt>,
+           and <tt>f e1 e2</tt> is strictly positive if <tt>e1</tt> is greater than <tt>e2</tt>.
+           Examples: a suitable ordering function for type <tt>int</tt>
+           is <tt>prefix -</tt>. You can also use the generic structural comparison
+           function <tt>eq__compare</tt>. 
+</dl>
+<pre>
+value is_empty: 'a t -&gt; bool
+</pre>
+<dl><dd>
+ Test whether a set is empty or not. 
+</dl>
+<pre>
+value mem: 'a -&gt; 'a t -&gt; bool
+</pre>
+<dl><dd>
+ <tt>mem x s</tt> tests whether <tt>x</tt> belongs to the set <tt>s</tt>. 
+</dl>
+<pre>
+value add: 'a -&gt; 'a t -&gt; 'a t
+</pre>
+<dl><dd>
+ <tt>add x s</tt> returns a set containing all elements of <tt>s</tt>,
+           plus <tt>x</tt>. If <tt>x</tt> was already in <tt>s</tt>, <tt>s</tt> is returned unchanged. 
+</dl>
+<pre>
+value remove: 'a -&gt; 'a t -&gt; 'a t
+</pre>
+<dl><dd>
+ <tt>remove x s</tt> returns a set containing all elements of <tt>s</tt>,
+           except <tt>x</tt>. If <tt>x</tt> was not in <tt>s</tt>, <tt>s</tt> is returned unchanged. 
+</dl>
+<pre>
+value union: 'a t -&gt; 'a t -&gt; 'a t
+value inter: 'a t -&gt; 'a t -&gt; 'a t
+value diff: 'a t -&gt; 'a t -&gt; 'a t
+</pre>
+<dl><dd>
+ Union, intersection and set difference. 
+</dl>
+<pre>
+value equal: 'a t -&gt; 'a t -&gt; bool
+</pre>
+<dl><dd>
+ <tt>equal s1 s2</tt> tests whether the sets <tt>s1</tt> and <tt>s2</tt> are
+           equal, that is, contain the same elements. 
+</dl>
+<pre>
+value compare: 'a t -&gt; 'a t -&gt; int
+</pre>
+<dl><dd>
+ Total ordering between sets. Can be used as the ordering function
+           for doing sets of sets. 
+</dl>
+<pre>
+value elements: 'a t -&gt; 'a list
+</pre>
+<dl><dd>
+ Return the list of all elements of the given set.
+           The elements appear in the list in some non-specified order. 
+</dl>
+<pre>
+value iter: ('a -&gt; unit) -&gt; 'a t -&gt; unit
+</pre>
+<dl><dd>
+ <tt>iter f s</tt> applies <tt>f</tt> in turn to all elements of <tt>s</tt>, and
+           discards the results. The elements of <tt>s</tt> are presented to <tt>f</tt>
+           in a non-specified order. 
+</dl>
+<pre>
+value fold: ('a -&gt; 'b -&gt; 'b) -&gt; 'a t -&gt; 'b -&gt; 'b
+</pre>
+<dl><dd>
+ <tt>fold f s a</tt> computes <tt>(f xN ... (f x2 (f x1 a))...)</tt>,
+           where <tt>x1 ... xN</tt> are the elements of <tt>s</tt>.
+           The order in which elements of <tt>s</tt> are presented to <tt>f</tt> is
+           not specified. 
+</dl>
+<pre>
+value choose: 'a t -&gt; 'a
+</pre>
+<dl><dd>
+ Return one element of the given set, or raise <tt>Not_found</tt> if
+           the set is empty. Which element is chosen is not specified,
+           but equal elements will be chosen for equal sets. 
+</dl>
+<HR>
+<A HREF="node15.17.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.15.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

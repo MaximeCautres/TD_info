@@ -1,0 +1,144 @@
+<HEAD>
+<TITLE>The librarian (camllibr)</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node9.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node7.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H1>The librarian (camllibr)</H1>
+ <A name="c:camllibr"></A><P>
+<dl><dt><b>Mac:</b><dd> This command is a MPW tool, not a standalone Macintosh
+application.
+</dl><P>
+<H2>Overview</H2>
+<P>
+The <tt>camllibr</tt> program packs in one single file a set of bytecode
+object files (<tt>.zo</tt> files). The resulting file is also a
+bytecode object file and also has the <tt>.zo</tt> extension. It can be
+passed to the link phase of the <tt>camlc</tt> compiler in replacement of the
+original set of bytecode object files. That is, after running
+<pre>
+        camllibr -o library.zo mod1.zo mod2.zo mod3.zi mod4.zo
+</pre>
+all calls to the linker with the form
+<pre>
+        camlc ... library.zo ...
+</pre>
+are exactly equivalent to
+<pre>
+        camlc ... mod1.zo mod2.zo mod3.zi mod4.zo ...
+</pre><P>
+The typical use of <tt>camllibr</tt> is to build a library composed of
+several modules: this way, users of the library have only one <tt>.zo</tt>
+file to specify on the command line to <tt>camlc</tt>, instead of a bunch of
+<tt>.zo</tt> files, one per module contained in the library.<P>
+The linking phase of <tt>camlc</tt> is clever enough to discard the code
+corresponding to useless phrases: in particular, definitions for
+global variables that are never used after their definitions. Hence,
+there is no problem with putting many modules, even rarely used ones,
+into one single library: this will not result in bigger executables.<P>
+The usage for <tt>camllibr</tt> is:
+<pre>
+        camllibr <i>options</i> <i>file</i><sub>1</sub>.zo ... <i>file</i><sub>n</sub>.zo
+</pre>
+where <i>file</i><sub>1</sub>.zo through <i>file</i><sub>n</sub>.zo are the object files to pack
+together. The order in which these file names are presented on the
+command line is relevant: the compiled phrases contained in the
+library will be executed in that order. (Remember that it is a
+link-time error to refer to a global variable that has not yet been
+defined.)<P>
+<H2>Options</H2>
+<P>
+The following command-line options are recognized by <tt>camllibr</tt>.<P>
+<p><dl><P>
+<dt><tt>-I</tt> <i>directory</i><dd>
+Add the given directory to the list of directories searched for the
+input <tt>.zo</tt> files. By default, the current directory is searched
+first, then the standard library directory. Directories added with
+<tt>-I</tt> are searched after the current directory, but before the standard
+library directory. When several directories are added with several
+<tt>-I</tt> options on the command line, these directories are searched from
+right to left (the rightmost directory is searched first, the leftmost
+is searched last).<P>
+<dt><tt>-o</tt> <i>library-name</i><dd>
+Specify the name of the output file. The default is <tt>library.zo</tt>.<P>
+</dl><P>
+<dl><dt><b>PC:</b><dd> The following option is also supported:
+<p><dl>
+<dt><tt>@</tt><i>response-file</i><dd>
+Process the files whose names are listed in file
+<i>response-file</i>, just as if these names appeared on the command line.
+File names in <i>response-file</i> are separated by blanks (spaces,
+tabs, newlines). This option allows to overcome silly limitations on
+the length of the command line.
+</dl>
+</dl><P>
+<H2>Turning code into a library</H2>
+<P>
+To develop a library, it is usually more convenient to split it into
+several modules, that reflect the internal structure of the library.
+From the standpoint of the library users, however, it is preferable to
+view the library as a single module, with only one interface file
+(<tt>.zi</tt> file) and one implementation file (<tt>.zo</tt> file): linking is easier,
+and there is no need to put a bunch of <tt>#open</tt> directives, nor to
+have to remember the internal structure of the library.<P>
+The <tt>camllibr</tt> command allows having a single <tt>.zo</tt> file for the whole
+library. Here is how the Caml Light module system can be used (some
+say ``abused'') to have a single <tt>.zi</tt> file for the whole library. To
+be more concrete, assume that the library comprises three modules,
+<tt>windows</tt>, <tt>images</tt> and <tt>buttons</tt>. The idea is to add a fourth module,
+<tt>mylib</tt>, that re-exports the public parts of <tt>windows</tt>, <tt>images</tt> and
+<tt>buttons</tt>. The interface <tt>mylib.mli</tt> contains definitions for those
+types that are public (exported with their definitions), declarations
+for those types that are abstract (exported without their
+definitions), and declarations for the functions that can be called
+from the user's code:
+<pre>
+(* File mylib.mli *)
+type 'a option = None | Some of 'a;;    (* a public type *)
+type window and image and button;;      (* three abstract types *)
+value new_window : int -&gt; int -&gt; window (* the public functions *)
+  and draw_image : image -&gt; window -&gt; int -&gt; int -&gt; unit
+  and ...
+</pre>
+The implementation of the <tt>mylib</tt> module simply equates the abstract
+types and the public functions to the corresponding types and
+functions in the modules <tt>windows</tt>, <tt>images</tt> and <tt>buttons</tt>:
+<pre>
+(* File mylib.ml *)
+type window == windows__win
+ and image  == images__pixmap
+ and button == buttons__t;;
+let new_window = windows__open_window
+and draw_image = images__draw
+and ...
+</pre>
+The files <tt>windows.ml</tt>, <tt>images.ml</tt> and <tt>buttons.ml</tt> can open the
+<tt>mylib</tt> module, to access the public types defined in the interface
+<tt>mylib.mli</tt>, such as the <tt>option</tt> type. Of course, these modules must
+not reference the abstract types nor the public functions, to avoid
+circularities.<P>
+Types such as <tt>windows__win</tt> in the example above can be exported by
+the <tt>windows</tt> module either abstractly or concretely (with their
+definition). Often, it is necessary to export them concretely, because
+the other modules in the library (<tt>images</tt>, <tt>buttons</tt>) need to build
+or destructure directly values of that type. Even if <tt>windows__win</tt> is
+exported concretely by the <tt>windows</tt> module, that type will remain
+abstract to the library user, since it is abstracted by the public
+interface <tt>mylib</tt>.<P>
+The actual building of the library <tt>mylib</tt> proceeds as follows:
+<pre>
+camlc -c mylib.mli              # create mylib.zi
+camlc -c windows.mli windows.ml images.mli images.ml
+camlc -c buttons.mli buttons.ml
+camlc -c mylib.ml               # create mylib.zo
+mv mylib.zo tmplib.zo           # renaming to avoid overwriting mylib.zo
+camllibr -o mylib.zo windows.zo images.zo buttons.zo tmplib.zo
+</pre>
+Then, copy <tt>mylib.zi</tt> and <tt>mylib.zo</tt> to a place accessible to the
+library users. The other <tt>.zi</tt> and <tt>.zo</tt> files need not be copied.
+<HR>
+<A HREF="node9.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node7.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

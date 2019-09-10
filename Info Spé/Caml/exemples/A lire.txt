@@ -1,0 +1,1 @@
+Le dossier "exemples" devrait, pour que tous les exemples fonctionnent bien, rester dans le même dossier que l'application WinCaml utilisée et être accessible en écriture.

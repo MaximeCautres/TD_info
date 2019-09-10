@@ -1,0 +1,6 @@
+#! /bin/sh
+
+CURRENTDIR=`pwd`
+cd "$(dirname "$0")"
+rm -f *.cmi *.cmo lexer.ml parser.mli parser.ml
+cd "$CURRENTDIR"

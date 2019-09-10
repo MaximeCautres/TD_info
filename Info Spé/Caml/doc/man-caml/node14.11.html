@@ -1,0 +1,178 @@
+<HEAD>
+<TITLE><tt>int</tt>: operations on integers </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node14.12.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.10.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>int</tt>: operations on integers </H2>
+<P>
+<A name="s:int"></A>
+
+<dl><dd>
+ Integers are 31 bits wide (or 63 bits on 64-bit processors).
+   All operations are taken modulo 2^{31} (or 2^{63}).
+   They do not fail on overflow. 
+</dl>
+<pre>
+exception Division_by_zero
+value minus : int -&gt; int
+value minus_int : int -&gt; int
+</pre>
+<dl><dd>
+ Unary negation. You can write <tt>-e</tt> instead of <tt>minus e</tt>. 
+</dl>
+<pre>
+value succ : int -&gt; int
+</pre>
+<dl><dd>
+ <tt>succ x</tt> is <tt>x+1</tt>. 
+</dl>
+<pre>
+value pred : int -&gt; int
+</pre>
+<dl><dd>
+ <tt>pred x</tt> is <tt>x-1</tt>. 
+</dl>
+<pre>
+value prefix + : int -&gt; int -&gt; int
+value add_int : int -&gt; int -&gt; int
+</pre>
+<dl><dd>
+ Addition. 
+</dl>
+<pre>
+value prefix - : int -&gt; int -&gt; int
+value sub_int : int -&gt; int -&gt; int
+</pre>
+<dl><dd>
+ Subtraction. 
+</dl>
+<pre>
+value prefix * : int -&gt; int -&gt; int
+value mult_int : int -&gt; int -&gt; int
+</pre>
+<dl><dd>
+ Multiplication. 
+</dl>
+<pre>
+value prefix / : int -&gt; int -&gt; int
+value div_int : int -&gt; int -&gt; int
+value prefix quo : int -&gt; int -&gt; int
+</pre>
+<dl><dd>
+ Integer division. Raise <tt>Division_by_zero</tt> if the second argument
+           is 0. Give unpredictable results if either argument is negative. 
+</dl>
+<pre>
+value prefix mod : int -&gt; int -&gt; int
+</pre>
+<dl><dd>
+ Remainder. Raise <tt>Division_by_zero</tt> if the second argument is 0.
+           Give unpredictable results if either argument is negative. 
+</dl>
+<pre>
+value eq_int : int -&gt; int -&gt; bool
+</pre>
+<dl><dd>
+ Integer equality. Equivalent to generic equality, just faster. 
+</dl>
+<pre>
+value neq_int : int -&gt; int -&gt; bool
+</pre>
+<dl><dd>
+ Negation of <tt>eq_int</tt>. 
+</dl>
+<pre>
+value lt_int : int -&gt; int -&gt; bool
+value gt_int : int -&gt; int -&gt; bool
+value le_int : int -&gt; int -&gt; bool
+value ge_int : int -&gt; int -&gt; bool
+</pre>
+<dl><dd>
+ Usual comparisons between integers. 
+</dl>
+<pre>
+value abs : int -&gt; int
+</pre>
+<dl><dd>
+ Return the absolute value of the argument. 
+</dl>
+<pre>
+value max_int : int
+value min_int : int
+</pre>
+<dl><dd>
+ The greatest and smallest integer values. 
+</dl>
+<H3>Bitwise operations </H3>
+<pre>
+value prefix land : int -&gt; int -&gt; int
+</pre>
+<dl><dd>
+ Bitwise logical and. 
+</dl>
+<pre>
+value prefix lor : int -&gt; int -&gt; int
+</pre>
+<dl><dd>
+ Bitwise logical or. 
+</dl>
+<pre>
+value prefix lxor : int -&gt; int -&gt; int
+</pre>
+<dl><dd>
+ Bitwise logical exclusive or. 
+</dl>
+<pre>
+value lnot : int -&gt; int
+</pre>
+<dl><dd>
+ Bitwise complement 
+</dl>
+<pre>
+value prefix lsl : int -&gt; int -&gt; int
+value lshift_left : int -&gt; int -&gt; int
+</pre>
+<dl><dd>
+ <tt>n lsl m</tt>, or equivalently <tt>lshift_left n m</tt>, shifts <tt>n</tt> to the
+           left by <tt>m</tt> bits. 
+</dl>
+<pre>
+value prefix lsr : int -&gt; int -&gt; int
+</pre>
+<dl><dd>
+ <tt>n lsr m</tt> shifts <tt>n</tt> to the right by <tt>m</tt> bits.
+            This is a logical shift: zeroes are inserted regardless of sign.
+</dl>
+<pre>
+value prefix asr : int -&gt; int -&gt; int
+value lshift_right : int -&gt; int -&gt; int
+</pre>
+<dl><dd>
+ <tt>n asr m</tt>, or equivalently <tt>lshift_right n m</tt>, shifts <tt>n</tt> to the
+           right by <tt>m</tt> bits.
+           This is an arithmetic shift: the sign bit is replicated. 
+</dl>
+<H3>Conversion functions </H3>
+<pre>
+value string_of_int : int -&gt; string
+</pre>
+<dl><dd>
+ Convert the given integer to its decimal representation. 
+</dl>
+<pre>
+value int_of_string : string -&gt; int
+</pre>
+<dl><dd>
+ Convert the given string to an integer, in decimal (by default)
+           or in hexadecimal, octal or binary if the string begins with
+           <tt>0x</tt>, <tt>0o</tt> or <tt>0b</tt>.
+           Raise <tt>Failure "int_of_string"</tt> if the given string is not
+           a valid representation of an integer. 
+</dl>
+<HR>
+<A HREF="node14.12.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.10.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

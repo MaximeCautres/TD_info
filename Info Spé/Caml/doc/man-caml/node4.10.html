@@ -1,0 +1,35 @@
+<HEAD>
+<TITLE>Directives</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node5.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node4.9.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2>Directives</H2>
+ <A name="s:exten-directives"></A><P>
+In addition to the standard <tt>#open</tt> and <tt>#close</tt> directives,
+Caml Light provides three additional directives.<P>
+<p><dl>
+<dt><font color="blue"><code>#infix</code></font> <font color="blue"><code>"</code></font> <i>id</i> <font color="blue"><code>"</code></font><dd>
+Change the lexical status of the identifier <i>id</i>: in the remainder of
+the compilation unit, <i>id</i> is recognized as an infix operator, just
+like <font color="blue"><code>+</code></font>. The notation <font color="blue"><code>prefix</code></font> <i>id</i> can be used to refer to the
+identifier <i>id</i> itself. Expressions of the form <i>expr</i><SUB>1</SUB> <i>id</i> <i>expr</i><SUB>2</SUB> are
+parsed as the application <font color="blue"><code>prefix</code></font> <i>id</i> <i>expr</i><SUB>1</SUB> <i>expr</i><SUB>2</SUB>. The argument to
+the <font color="blue"><code>#infix</code></font> directive must be an identifier, that is, a sequence of
+letters, digits and underscores starting with a letter; otherwise, the
+<font color="blue"><code>#infix</code></font> declaration has no effect. Example:
+<pre>
+        #infix "union";;
+        let prefix union = fun x y -&gt; ... ;;
+        [1,2] union [3,4];;
+</pre><P>
+<dt><font color="blue"><code>#uninfix</code></font> <font color="blue"><code>"</code></font> <i>id</i> <font color="blue"><code>"</code></font><dd>
+Remove the infix status attached to the identifier <i>id</i> by a previous
+<font color="blue"><code>#infix</code></font> <font color="blue"><code>"</code></font> <i>id</i> <font color="blue"><code>"</code></font> directive.<P>
+<dt><font color="blue"><code>#directory</code></font> <font color="blue"><code>"</code></font> <i>dir-name</i> <font color="blue"><code>"</code></font><dd>
+Add the named directory to the path of directories searched for
+compiled module interface files. This is equivalent to the <tt>-I</tt>
+command-line option to the batch compiler and the toplevel system.<P>
+</dl><P>

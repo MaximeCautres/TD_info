@@ -1,0 +1,21 @@
+#load "unix.cma";;
+Unix.chdir "exemples/OCaml/inria/calculette/calc";;
+ 
+let ocamllex s = Sys.command ("ocamllex " ^ s)
+and ocamlyacc s = Sys.command ("ocamlyacc " ^ s)
+and compile s = Sys.command ("ocamlc -c " ^ s)
+and ocamllibr s = Sys.command ("ocamlc -a -o " ^ s);;  
+
+
+ocamllex "lexer.mll";;
+ocamlyacc "parser.mly";;
+compile "parser.mli";;
+compile "lexer.ml";;
+compile "parser.ml";;
+compile "calculette.ml";;
+ocamllibr "calculette.cma lexer.cmo parser.cmo calculette.cmo";;
+
+#load "calculette.cma";;
+
+(7 + 5) * - 8 / 4
+(124 / 2) / 2

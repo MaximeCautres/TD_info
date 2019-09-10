@@ -1,0 +1,94 @@
+<HEAD>
+<TITLE>Streams, parsers, and printers</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node4.2.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node4.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2>Streams, parsers, and printers</H2>
+
+<A name="s:streams"></A><P>
+Caml Light comprises a built-in type for <i>streams</i> (possibly infinite
+sequences of elements, that are evaluated on demand), and associated
+stream expressions, to build streams, and stream patterns, to
+destructure streams. Streams and stream patterns provide a natural
+approach to the writing of recursive-descent parsers.<P>
+Streams are presented by the following extensions to the syntactic
+classes of expressions:<P>
+
+<P>
+
+<PRE>
+<i>expr</i>:
+      ...
+   |  <font color="blue"><code>[&lt;</code></font> <font color="blue"><code>&gt;]</code></font>
+   |  <font color="blue"><code>[&lt;</code></font> <i>stream-component</i> <i>{</i><font color="blue"><code>;</code></font> <i>stream-component</i><i>}</i> <font color="blue"><code>&gt;]</code></font>
+   |  <font color="blue"><code>function</code></font> <i>stream-matching</i>
+   |  <font color="blue"><code>match</code></font> <i>expr</i> <font color="blue"><code>with</code></font> <i>stream-matching</i>
+
+<i>stream-component</i>:
+      <font color="blue"><code>'</code></font> <i>expr</i>
+   |  <i>expr</i>
+
+<i>stream-matching</i>:
+      <i>stream-pattern</i> <font color="blue"><code>-&gt;</code></font> <i>expr</i> <i>{</i><font color="blue"><code>|</code></font> <i>stream-pattern</i> <font color="blue"><code>-&gt;</code></font> <i>expr</i><i>}</i>
+
+<i>stream-pattern</i>:
+      <font color="blue"><code>[&lt;</code></font> <font color="blue"><code>&gt;]</code></font>
+   |  <font color="blue"><code>[&lt;</code></font> <i>stream-comp-pat</i> <i>{</i><font color="blue"><code>;</code></font> <i>stream-comp-pat</i><i>}</i> <font color="blue"><code>&gt;]</code></font>
+
+<i>stream-comp-pat</i>:
+      <font color="blue"><code>'</code></font> <i>pattern</i>
+   |  <i>expr</i> <i>pattern</i>
+   |  <i>ident</i>
+
+</PRE>
+<P>
+Stream expressions are bracketed by <tt>[&lt;</tt> and <tt>&gt;]</tt>. They
+represent the concatenation of their components. The component
+<font color="blue"><code>'</code></font> <i>expr</i> represents the one-element stream whose element is the
+value of <i>expr</i>. The component <i>expr</i> represents a
+sub-stream. For instance, if both <tt>s</tt> and <tt>t</tt> are streams of integers,
+then <tt>[&lt;'1; s; t; '2&gt;]</tt> is a stream of integers containing the
+element <tt>1</tt>, then the elements of <tt>s</tt>, then those of <tt>t</tt>, and finally
+<tt>2</tt>. The empty stream is denoted by <tt>[&lt; &gt;]</tt>.<P>
+Unlike any other kind of expressions in the language, stream
+expressions are submitted to lazy evaluation: the components are not
+evaluated when the stream is built, but only when they are accessed
+during stream matching. The components are evaluated once, the first
+time they are accessed; the following accesses reuse the value
+computed the first time.<P>
+Stream patterns, also bracketed by <tt>[&lt;</tt> and <tt>&gt;]</tt>, describe
+initial segments of streams. In particular, the stream pattern
+<tt>[&lt; &gt;]</tt> matches all streams. Stream pattern components are
+matched against the corresponding elements of a stream. The component
+<font color="blue"><code>'</code></font> <i>pattern</i> matches the corresponding stream element against the
+pattern. The component <i>expr</i> <i>pattern</i> applies the function denoted by
+<i>expr</i> to the current stream, then matches the result of
+the function against <i>pattern</i>. Finally, the component <i>ident</i> simply
+binds the identifier to the stream being matched. (The current
+implementation limits <i>ident</i> to appear last in a stream pattern.)<P>
+Stream matching proceeds destructively: once a component has been
+matched, it is discarded from the stream (by in-place modification).<P>
+Stream matching proceeds in two steps: first, a pattern is selected by
+matching the stream against the first components of the stream
+patterns; then, the following components of the selected pattern are
+checked against the stream. If the following components do not match,
+the exception <tt>Parse_error</tt> is raised. There is no backtracking here:
+stream matching commits to the pattern selected according to the first
+element. If none of the first components of the stream patterns match,
+the exception <tt>Parse_failure</tt> is raised. The <tt>Parse_failure</tt> 
+exception causes the next alternative to be tried, if it occurs during
+the matching of the first element of a stream, before matching has
+committed to one pattern. <P>
+See <i>Functional programming using Caml Light</i> for a more gentle
+introductions to streams, and for some examples of their use in
+writing parsers. A more formal presentation of streams, and a
+discussion of alternate semantics, can be found in <i>Parsers in ML</i>
+by Michel Mauny and Daniel de Rauglaudre, in the proceedings of the
+1992 ACM conference on Lisp and Functional Programming.<P>
+<HR>
+<A HREF="node4.2.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node4.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

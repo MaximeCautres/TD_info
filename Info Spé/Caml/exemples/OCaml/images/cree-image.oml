@@ -1,0 +1,36 @@
+#load "graphics.cma";;
+open Graphics;;
+#use "exemples/OCaml/Mandelbrot.oml";;
+let sz = size_x();;
+let image = get_image 0 0 sz sz;;
+(* let im = dump_image image;; *)
+clear_graph();;
+#use "exemples/OCaml/tores.oml";;
+let sz = size_x();;
+let image1 = get_image 0 0 sz sz;;
+(* let im1 = dump_image image1;; *)
+close_graph();;
+(*
+clear_graph();;
+resize_window (2*sz) (2*sz);;
+*)
+let str = string_of_int (2 * sz)
+in
+  open_graph (" " ^ str ^ "x" ^ str);
+  draw_image image 0 0;
+  draw_image image1 sz 0;
+  draw_image image1 0 sz;
+  draw_image image sz sz;
+  (*
+  draw_image (make_image im) 0 0;;
+  draw_image (make_image im1) sz 0;;
+  draw_image (make_image im1) 0 sz;;
+  draw_image (make_image im) sz sz;;
+  *)
+  let v = dump_image (get_image 0 0 (2 * sz) (2 * sz))
+  in
+    let canal_out = open_out_bin "exemples/OCaml/images/image"
+    in
+      output_value canal_out v;
+      close_out canal_out
+;;

@@ -1,0 +1,248 @@
+<HEAD>
+<TITLE>The str library: regular expressions and string processing</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node20.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node18.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H1>The str library: regular expressions and string processing</H1>
+<P>
+The <tt>str</tt> library (distributed in <tt>contrib/libstr</tt>) provides
+high-level string processing functions, some based on regular
+expressions. It is intended to support the kind of file processing
+that is usually performed with scripting languages such as <tt>awk</tt>,
+<tt>perl</tt> or <tt>sed</tt>.<P>
+Programs that use the <tt>str</tt> library must be linked in ``custom
+runtime'' mode, as follows:
+<pre>
+        camlc -custom <i>other options</i> str.zo <i>other files</i> -lstr
+</pre>
+For interactive use of the <tt>str</tt> library, run <tt>camllight camlstr</tt>.<P>
+<dl><dt><b>Mac:</b><dd>
+This library is not available.
+</dl><P>
+<dl><dt><b>PC:</b><dd>
+This library is not available.
+</dl><P>
+
+<H2><tt>str</tt>: regular expressions and high-level string processing </H2>
+<P>
+<A name="s:str"></A>
+
+<H3>Regular expressions </H3>
+<pre>
+type regexp
+</pre>
+<dl><dd>
+ The type of compiled regular expressions. 
+</dl>
+<pre>
+value regexp: string -&gt; regexp
+</pre>
+<dl><dd>
+ Compile a regular expression. The syntax for regular expressions
+           is the same as in Gnu Emacs. The special characters are
+           <tt>\$^.*+?[]</tt>. The following constructs are recognized:
+<br>          <tt>.     </tt> matches any character except newline
+<br>          <tt>*     </tt> (postfix) matches the previous expression zero, one or
+                    several times
+<br>          <tt>+     </tt> (postfix) matches the previous expression one or
+                    several times
+<br>          <tt>?     </tt> (postfix) matches the previous expression once or
+                    not at all
+<br>          <tt>[..]  </tt> character set; ranges are denoted with <tt>-</tt>, as in <tt>a-z</tt>;
+                    an initial <tt>^</tt>, as in <tt>^0-9</tt>, complements the set
+<br>          <tt>^     </tt> matches at beginning of line
+<br>          <tt>$     </tt> matches at end of line
+<br>          <tt>\|    </tt> (infix) alternative between two expressions
+<br>          <tt>\(..\)</tt> grouping and naming of the enclosed expression
+<br>          <tt>\1    </tt> the text matched by the first <tt>\(...\)</tt> expression
+                    (<tt>\2</tt> for the second expression, etc)
+<br>          <tt>\b    </tt> matches word boundaries
+<br>          <tt>\     </tt> quotes special characters. 
+</dl>
+<pre>
+value regexp_case_fold: string -&gt; regexp
+</pre>
+<dl><dd>
+ Same as <tt>regexp</tt>, but the compiled expression will match text
+           in a case-insensitive way: uppercase and lowercase letters will
+           be considered equivalent. 
+</dl>
+<H3>String matching and searching </H3>
+<pre>
+value string_match: regexp -&gt; string -&gt; int -&gt; bool
+</pre>
+<dl><dd>
+ <tt>string_match r s start</tt> tests whether the characters in <tt>s</tt>
+           starting at position <tt>start</tt> match the regular expression <tt>r</tt>.
+           The first character of a string has position <tt>0</tt>, as usual. 
+</dl>
+<pre>
+value search_forward: regexp -&gt; string -&gt; int -&gt; int
+</pre>
+<dl><dd>
+ <tt>search_forward r s start</tt> searchs the string <tt>s</tt> for a substring
+           matching the regular expression <tt>r</tt>. The search starts at position
+           <tt>start</tt> and proceeds towards the end of the string.
+           Return the position of the first character of the matched
+           substring, or raise <tt>Not_found</tt> if no substring matches. 
+</dl>
+<pre>
+value search_backward: regexp -&gt; string -&gt; int -&gt; int
+</pre>
+<dl><dd>
+ Same as <tt>search_forward</tt>, but the search proceeds towards the
+           beginning of the string. 
+</dl>
+<pre>
+value matched_string: string -&gt; string
+</pre>
+<dl><dd>
+ <tt>matched_string s</tt> returns the substring of <tt>s</tt> that was matched
+           by the latest <tt>string_match</tt>, <tt>search_forward</tt> or <tt>search_backward</tt>.
+           The user must make sure that the parameter <tt>s</tt> is the same string
+           that was passed to the matching or searching function. 
+</dl>
+<pre>
+value match_beginning: unit -&gt; int
+value match_end: unit -&gt; int
+</pre>
+<dl><dd>
+ <tt>match_beginning()</tt> returns the position of the first character
+           of the substring that was matched by <tt>string_match</tt>,
+           <tt>search_forward</tt> or <tt>search_backward</tt>. <tt>match_end()</tt> returns
+           the position of the character following the last character of
+           the matched substring. 
+</dl>
+<pre>
+value matched_group: int -&gt; string -&gt; string
+</pre>
+<dl><dd>
+ <tt>matched_group n s</tt> returns the substring of <tt>s</tt> that was matched
+           by the <tt>n</tt>th group <tt>\(...\)</tt> of the regular expression during
+           the latest <tt>string_match</tt>, <tt>search_forward</tt> or <tt>search_backward</tt>.
+           The user must make sure that the parameter <tt>s</tt> is the same string
+           that was passed to the matching or searching function. 
+</dl>
+<pre>
+value group_beginning: int -&gt; int
+value group_end: int -&gt; int
+</pre>
+<dl><dd>
+ <tt>group_beginning n</tt> returns the position of the first character
+           of the substring that was matched by the <tt>n</tt>th group of
+           the regular expression. <tt>group_end n</tt> returns
+           the position of the character following the last character of
+           the matched substring. 
+</dl>
+<H3>Replacement </H3>
+<pre>
+value global_replace: regexp -&gt; string -&gt; string -&gt; string
+</pre>
+<dl><dd>
+ <tt>global_replace regexp repl s</tt> returns a string identical to <tt>s</tt>,
+           except that all substrings of <tt>s</tt> that match <tt>regexp</tt> have been
+           replaced by <tt>repl</tt>. The replacement text <tt>repl</tt> can contain
+           <tt>\1</tt>, <tt>\2</tt>, etc; these sequences will be replaced by the text
+           matched by the corresponding group in the regular expression.
+           <tt>\0</tt> stands for the text matched by the whole regular expression. 
+</dl>
+<pre>
+value replace_first: regexp -&gt; string -&gt; string -&gt; string
+</pre>
+<dl><dd>
+ Same as <tt>global_replace</tt>, except that only the first substring
+           matching the regular expression is replaced. 
+</dl>
+<pre>
+value global_substitute: regexp -&gt; (string -&gt; string) -&gt; string -&gt; string
+</pre>
+<dl><dd>
+ <tt>global_substitute regexp subst s</tt> returns a string identical
+           to <tt>s</tt>, except that all substrings of <tt>s</tt> that match <tt>regexp</tt>
+           have been replaced by the result of function <tt>subst</tt>. The
+           function <tt>subst</tt> is called once for each matching substring,
+           and receives <tt>s</tt> (the whole text) as argument. 
+</dl>
+<pre>
+value substitute_first: regexp -&gt; (string -&gt; string) -&gt; string -&gt; string
+</pre>
+<dl><dd>
+ Same as <tt>global_substitute</tt>, except that only the first substring
+           matching the regular expression is replaced. 
+</dl>
+<H3>Splitting </H3>
+<pre>
+value split: regexp -&gt; string -&gt; string list
+</pre>
+<dl><dd>
+ <tt>split r s</tt> splits <tt>s</tt> into substrings, taking as delimiters
+           the substrings that match <tt>r</tt>, and returns the list of substrings.
+           For instance, <tt>split (regexp "[ \t]+") s</tt> splits <tt>s</tt> into
+           blank-separated words. 
+</dl>
+<pre>
+value bounded_split: regexp -&gt; string -&gt; int -&gt; string list
+</pre>
+<dl><dd>
+ Same as <tt>split</tt>, but splits into at most <tt>n</tt> substrings,
+           where <tt>n</tt> is the extra integer parameter. 
+</dl>
+<H3>Joining </H3>
+<pre>
+value concat: string list -&gt; string
+</pre>
+<dl><dd>
+ Same as <tt>string__concat</tt>: catenate a list of string. 
+</dl>
+<pre>
+value join: string -&gt; string list -&gt; string
+</pre>
+<dl><dd>
+ Catenate a list of string. The first argument is a separator, which
+           is inserted between the strings. 
+</dl>
+<H3>Extracting substrings </H3>
+<pre>
+value string_before: string -&gt; int -&gt; string
+</pre>
+<dl><dd>
+ <tt>string_before s n</tt> returns the substring of all characters of <tt>s</tt>
+           that precede position <tt>n</tt> (excluding the character at 
+           position <tt>n</tt>). 
+</dl>
+<pre>
+value string_after: string -&gt; int -&gt; string
+</pre>
+<dl><dd>
+ <tt>string_after s n</tt> returns the substring of all characters of <tt>s</tt>
+           that follow position <tt>n</tt> (including the character at 
+           position <tt>n</tt>). 
+</dl>
+<pre>
+value first_chars: string -&gt; int -&gt; string
+</pre>
+<dl><dd>
+ <tt>first_chars s n</tt> returns the first <tt>n</tt> characters of <tt>s</tt>.
+           This is the same function as <tt>string_before</tt>. 
+</dl>
+<pre>
+value last_chars: string -&gt; int -&gt; string
+</pre>
+<dl><dd>
+ <tt>last_chars s n</tt> returns the last <tt>n</tt> characters of <tt>s</tt>. 
+</dl>
+<H3>Formatting </H3>
+<pre>
+value format: ('a, unit, string) printf__format -&gt; 'a
+</pre>
+<dl><dd>
+ Same as <tt>printf__sprintf</tt>. 
+</dl>
+<P>
+<HR>
+<A HREF="node20.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node18.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

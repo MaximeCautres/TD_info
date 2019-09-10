@@ -1,0 +1,109 @@
+<HEAD>
+<TITLE>Global definitions</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node3.10.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node3.8.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2>Global definitions</H2>
+<P>
+This section describes the constructs that bind global identifiers
+(value variables, value constructors, type constructors, record
+labels).<P>
+<H3>Type definitions</H3>
+ <A name="s:typdef"></A>
+<P>
+
+<PRE>
+<i>type-definition</i>:
+      <font color="blue"><code>type</code></font> <i>typedef</i> <i>{</i><font color="blue"><code>and</code></font> <i>typedef</i><i>}</i>
+
+<i>typedef</i>:
+      <i>type-params</i> <i>ident</i> <font color="blue"><code>=</code></font> <i>constr-decl</i> <i>{</i><font color="blue"><code>|</code></font> <i>constr-decl</i><i>}</i>
+   |  <i>type-params</i> <i>ident</i> <font color="blue"><code>=</code></font> <font color="blue"><code>{</code></font> <i>label-decl</i> <i>{</i><font color="blue"><code>;</code></font> <i>label-decl</i><i>}</i> <font color="blue"><code>}</code></font>
+   |  <i>type-params</i> <i>ident</i> <font color="blue"><code>==</code></font> <i>typexpr</i>
+   |  <i>type-params</i> <i>ident</i>
+
+<i>type-params</i>:
+      <i>nothing</i>
+   |  <font color="blue"><code>'</code></font> <i>ident</i>
+   |  <font color="blue"><code>(</code></font> <font color="blue"><code>'</code></font> <i>ident</i> <i>{</i><font color="blue"><code>,</code></font> <font color="blue"><code>'</code></font> <i>ident</i><i>}</i> <font color="blue"><code>)</code></font>
+
+<i>constr-decl</i>:
+      <i>ident</i>
+   |  <i>ident</i> <font color="blue"><code>of</code></font> <i>typexpr</i>
+
+<i>label-decl</i>:
+      <i>ident</i> <font color="blue"><code>:</code></font> <i>typexpr</i>
+   |  <font color="blue"><code>mutable</code></font> <i>ident</i> <font color="blue"><code>:</code></font> <i>typexpr</i></PRE>
+<P>
+<P>
+Type definitions bind type constructors to data types: either
+variant types, record types, type abbreviations, or abstract data
+types.<P>
+Type definitions are introduced by the <tt>type</tt> keyword, and
+consist in one or several simple definitions, possibly mutually
+recursive, separated by the <tt>and</tt> keyword. Each simple definition
+defines one type constructor.<P>
+A simple definition consists in an identifier, possibly preceded by
+one or several type parameters, and followed by a data type
+description. The identifier is the local name of the type
+constructor being defined. (The module name for this type constructor
+is the name of the module being compiled.) The optional type parameters are
+either one type variable <font color="blue"><code>'</code></font> <i>ident</i>, for type constructors with one parameter,
+or a list of type variables <i>(</i><font color="blue"><code>'</code></font> <i>ident</i><SUB>1</SUB>,...,<font color="blue"><code>'</code></font> <i>ident</i><SUB>n</SUB><i>)</i>, for
+type constructors with several parameters. These type parameters can
+appear in the type expressions of the right-hand side of the definition.<P>
+<H4>Variant types</H4>
+<P>
+The type definition
+<i>typeparams</i> <i>ident</i> <font color="blue"><code>=</code></font> <i>constr-decl</i><SUB>1</SUB> <font color="blue"><code>|</code></font>...<font color="blue"><code>|</code></font> <i>constr-decl</i><SUB>n</SUB>
+defines a variant type. The constructor declarations
+<i>constr-decl</i><SUB>1</SUB>,...,<i>constr-decl</i><SUB>n</SUB> describe the constructors
+associated to this variant type. The constructor
+declaration <i>ident</i> <font color="blue"><code>of</code></font> <i>typexpr</i> declares the local name <i>ident</i> (in
+the module being compiled) as a non-constant constructor, whose
+argument has type <i>typexpr</i>. The constructor declaration <i>ident</i>
+declares the local name <i>ident</i> (in the module being compiled) as a
+constant constructor.<P>
+<H4>Record types</H4>
+<P>
+The type definition
+<i>typeparams</i> <i>ident</i> <font color="blue"><code>=</code></font> <font color="blue"><code>{</code></font> <i>label-decl</i><SUB>1</SUB> <font color="blue"><code>;</code></font>...<font color="blue"><code>;</code></font> <i>label-decl</i><SUB>n</SUB> <font color="blue"><code>}</code></font>
+defines a record type. The label declarations <i>label-decl</i><SUB>1</SUB>,...,<i>label-decl</i><SUB>n</SUB> describe the labels associated to this record type.
+The label declaration <i>ident</i> <font color="blue"><code>:</code></font> <i>typexpr</i> declares the local
+name <i>ident</i> in the module being compiled as a label, whose argument
+has type <i>typexpr</i>. The label declaration <font color="blue"><code>mutable</code></font> <i>ident</i> <font color="blue"><code>:</code></font> <i>typexpr</i>
+
+behaves similarly; in addition, it allows physical modification over
+the argument to this label.<P>
+<H4>Type abbreviations</H4>
+<P>
+The type definition <i>typeparams</i> <i>ident</i> <font color="blue"><code>==</code></font> <i>typexpr</i> defines the type
+constructor <i>ident</i> as an abbreviation for the type expression
+<i>typexpr</i>.<P>
+<H4>Abstract types</H4>
+<P>
+The type definition <i>typeparams</i> <i>ident</i> defines <i>ident</i> as an abstract
+type. When appearing in a module interface, this definition allows
+exporting a type constructor while hiding how it is represented in the
+module implementation. <P>
+<i>typeparams</i> <i>ident</i> <font color="blue"><code>mutable</code></font> behaves similarly, but makes it apparent that the type
+<i>ident</i> is implemented by a data type accepting physical
+
+<H3>Exception definitions</H3>
+ <A name="s:excdef"></A>
+<P>
+
+<PRE>
+<i>exception-definition</i>:
+      <font color="blue"><code>exception</code></font> <i>constr-decl</i> <i>{</i><font color="blue"><code>and</code></font> <i>constr-decl</i><i>}</i></PRE>
+<P>
+Exception definitions add new constructors to the built-in variant
+type <tt>exn</tt> of exception values. The constructors are declared as
+for a definition of a variant type.<P>
+<HR>
+<A HREF="node3.10.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node3.8.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

@@ -1,0 +1,9 @@
+#load "unix.cma";;
+Unix.chdir "exemples/OCaml/inria/calculette/calc";;
+
+Sys.command ("./build-calculette");;
+Sys.command ("./cleanup");;
+#load "calculette.cma";;
+
+(7 + 5) * - 8 / 4
+(124 / 2) / 2

@@ -1,0 +1,114 @@
+<HEAD>
+<TITLE>Using Caml Light under Emacs</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node13.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node11.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H1>Using Caml Light under Emacs</H1>
+ <A name="c:emacs"></A><P>
+This chapter describes how Caml Light can be used in conjunction with
+Gnu Emacs version 19 (version 18 is also partially supported).<P>
+<dl><dt><b>Unix:</b><dd> The Emacs Lisp files implementing the Caml/Emacs
+interface are in <tt>contrib/camlmode</tt> in the distribution.
+</dl><P>
+<dl><dt><b>Mac:</b><dd> The Caml/Emacs interface is not available. </dl><P>
+<dl><dt><b>PC:</b><dd> The Caml/Emacs interface is not available. </dl><P>
+<H2>Updating your <tt>.emacs</tt></H2>
+<P>
+The following initializations must be added to your <tt>.emacs</tt> file:
+<pre>
+(setq auto-mode-alist (cons '("\\.ml[iylp]?" . caml-mode) auto-mode-alist))
+(autoload 'caml-mode "caml" "Major mode for editing Caml code." t)
+(autoload 'run-caml "inf-caml" "Run an inferior Caml process." t)
+(autoload 'camldebug "camldebug" "Run the Caml debugger." t)
+</pre><P>
+<H2>The <tt>caml</tt> editing mode</H2>
+<P>
+The <tt>caml-mode</tt> function is a major editing mode for Caml source
+files. It provides the correct syntax tables, comment syntax,
+... for the Caml language. An extremely crude indentation facility
+is provided, as well as a slightly enhanced <tt>next-error</tt> command (to
+display the location of a compilation error). The following key
+bindings are performed:<P>
+<p><dl>
+<dt><tt>TAB</tt> (function <tt>caml-indent-command</tt>)<dd>
+At the beginning of a line, indent that line like the
+line above. Successive <tt>TAB</tt>s increase the indentation level by 2
+spaces (by default; can be set with the <tt>caml-mode-indentation</tt>
+variable).<P>
+<dt><tt>M-TAB</tt> (function <tt>caml-unindent-command</tt>)<dd>
+Decrease the indentation level of the current phrase.<P>
+<dt><tt>C-x `</tt> (function <tt>caml-next-error</tt>)<dd>
+Display the next compilation error, just as <tt>next-error</tt>
+does. In addition, it puts the point and the mark around the exact
+location of the error (the subexpression that caused the error). Under
+Emacs 19, that subexpression is also highlighted.<P>
+<dt><tt>M-C-h</tt> (function <tt>caml-mark-phrase</tt>)<dd>
+Mark the Caml phrase that contains the point: the point
+is put at the beginning of the phrase and the mark at the end. Phrases
+are delimited by <tt>;;</tt> (the final double-semicolon). This function does
+not properly ignore <tt>;;</tt> inside string literals or comments.<P>
+<dt><tt>C-x SPC</tt><dd>
+When the Caml debugger is running as an inferior process
+(section <A HREF="node12.html#s:inf-debugger">12.4</A> below), set a breakpoint at the current
+position of the point.<P>
+<dt><tt>M-C-x</tt> or <tt>C-c C-e</tt> (function <tt>caml-eval-phrase</tt>)<dd>
+When a Caml toplevel is running as an
+inferior process (section <A HREF="node12.html#s:inf-caml">12.3</A> below), send it the
+the Caml phrase that contains the point. The phrase will then be
+evaluated by the inferior toplevel as usual. The phrase is delimited
+by <tt>;;</tt> as described for the <tt>caml-mark-phrase</tt> command.<P>
+<dt><tt>C-c C-r</tt> (function <tt>caml-eval-region</tt>)<dd>
+Send the region to a Caml toplevel running in an inferior process.<P>
+</dl><P>
+<H2>Running the toplevel as an inferior process</H2>
+ <A name="s:inf-caml"></A><P>
+<tt>M-x run-caml</tt> starts a Caml toplevel with input and output in an Emacs
+buffer named <tt>*inferior-caml*</tt>. This gives you the full power of Emacs
+to edit the input to the Caml toplevel. An history of input lines is
+maintained, as in Shell mode. This includes the following commands
+(see the function <tt>comint-mode</tt> for a complete description):<P>
+<p><dl>
+<dt><tt>RET</tt><dd> Send the current line to the toplevel.
+<dt><tt>M-n</tt> and <tt>M-p</tt><dd> Move to the next or previous line in the
+history.
+<dt><tt>M-r</tt> and <tt>M-s</tt><dd> Regexp search in the history.
+<dt><tt>C-c C-c</tt><dd> Send a break (interrupt signal) to the Caml toplevel.
+</dl><P>
+Phrases can also be sent to the Caml toplevel for evaluation from any
+buffer in Caml mode, using <tt>M-C-x</tt>, <tt>C-c C-e</tt> or <tt>C-c C-r</tt>.<P>
+<H2>Running the debugger as an inferior process</H2>
+ <A name="s:inf-debugger"></A><P>
+The Caml debugger is started by the command <tt>M-x camldebug</tt>, with
+argument the name of the executable file <i>progname</i> to debug. 
+Communication with the debugger takes place in an Emacs buffer named 
+<tt>*camldebug-</tt><i>progname</i><tt>*</tt>. The editing and history facilities of
+Shell mode are available for interacting with the debugger.<P>
+In addition, Emacs displays the source files containing the current
+event (the current position in the program execution) and highlights
+the location of the event. This display is updated synchronously with
+the debugger action.<P>
+The following bindings for the most common debugger commands are
+available in the <tt>*camldebug-</tt><i>progname</i><tt>*</tt> buffer (see
+section <A HREF="node10.html#s:debugger-commands">10.3</A> for a full explanation of the
+commands):<P>
+<p><dl>
+<dt><tt>M-r</tt><dd> <tt>run</tt> command: execute the program forward.
+<dt><tt>M-s</tt><dd> <tt>step</tt> command: execute the program one step forward.
+<dt><tt>M-b</tt><dd> <tt>back</tt> command: execute the program one step backward.
+<dt><tt>M-l</tt><dd> <tt>last</tt> command: go back one step in the command history.
+<dt><tt>C-c &gt;</tt><dd> <tt>down</tt> command: select the stack frame below the
+current frame.
+<dt><tt>C-c &lt;</tt><dd> <tt>up</tt> command: select the stack frame above the
+current frame.
+<dt><tt>C-c C-f</tt><dd> <tt>finish</tt> command: run till the current function
+returns.
+</dl><P>
+In a buffer in Caml editing mode, <tt>C-x SPC</tt> sets a breakpoint at the
+current position of the point.
+<HR>
+<A HREF="node13.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node11.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

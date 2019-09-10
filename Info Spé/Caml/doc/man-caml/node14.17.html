@@ -1,0 +1,172 @@
+<HEAD>
+<TITLE><tt>string</tt>: string operations </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node14.18.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.16.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>string</tt>: string operations </H2>
+<P>
+<A name="s:string"></A>
+
+<pre>
+value string_length : string -&gt; int
+</pre>
+<dl><dd>
+ Return the length (number of characters) of the given string. 
+</dl>
+<pre>
+value nth_char : string -&gt; int -&gt; char
+</pre>
+<dl><dd>
+ <tt>nth_char s n</tt> returns character number <tt>n</tt> in string <tt>s</tt>.
+           The first character is character number 0.
+           The last character is character number <tt>string_length s - 1</tt>.
+           Raise <tt>Invalid_argument "nth_char"</tt> if <tt>n</tt> is ouside the range
+           0 to <tt>(string_length s - 1)</tt>.
+           You can also write <tt>s.[n]</tt> instead of <tt>nth_char s n</tt>. 
+</dl>
+<pre>
+value set_nth_char : string -&gt; int -&gt; char -&gt; unit
+</pre>
+<dl><dd>
+ <tt>set_nth_char s n c</tt> modifies string <tt>s</tt> in place,
+           replacing the character number <tt>n</tt> by <tt>c</tt>.
+           Raise <tt>Invalid_argument "set_nth_char"</tt> if <tt>n</tt> is ouside the range
+           0 to <tt>(string_length s - 1)</tt>.
+           You can also write <tt>s.[n] &lt;- c</tt> instead of <tt>set_nth_char s n c</tt>. 
+</dl>
+<pre>
+value prefix ^ : string -&gt; string -&gt; string
+</pre>
+<dl><dd>
+ <tt>s1 ^ s2</tt> returns a fresh string containing the concatenation of
+           the strings <tt>s1</tt> and <tt>s2</tt>. 
+</dl>
+<pre>
+value concat : string list -&gt; string
+</pre>
+<dl><dd>
+ Return a fresh string containing the concatenation of
+           all the strings in the argument list. 
+</dl>
+<pre>
+value sub_string : string -&gt; int -&gt; int -&gt; string
+</pre>
+<dl><dd>
+ <tt>sub_string s start len</tt> returns a fresh string of length <tt>len</tt>,
+           containing the characters number <tt>start</tt> to <tt>start + len - 1</tt>
+           of string <tt>s</tt>.
+           Raise <tt>Invalid_argument "sub_string"</tt> if <tt>start</tt> and <tt>len</tt> do not
+           designate a valid substring of <tt>s</tt>; that is, if <tt>start &lt; 0</tt>,
+           or <tt>len &lt; 0</tt>, or <tt>start + len &gt; string_length s</tt>. 
+</dl>
+<pre>
+value create_string : int -&gt; string
+</pre>
+<dl><dd>
+ <tt>create_string n</tt> returns a fresh string of length <tt>n</tt>.
+           The string initially contains arbitrary characters. 
+</dl>
+<pre>
+value make_string : int -&gt; char -&gt; string
+</pre>
+<dl><dd>
+ <tt>make_string n c</tt> returns a fresh string of length <tt>n</tt>,
+           filled with the character <tt>c</tt>. 
+</dl>
+<pre>
+value fill_string : string -&gt; int -&gt; int -&gt; char -&gt; unit
+</pre>
+<dl><dd>
+ <tt>fill_string s start len c</tt> modifies string <tt>s</tt> in place,
+           replacing the characters number <tt>start</tt> to <tt>start + len - 1</tt>
+           by <tt>c</tt>.
+           Raise <tt>Invalid_argument "fill_string"</tt> if <tt>start</tt> and <tt>len</tt> do not
+           designate a valid substring of <tt>s</tt>. 
+</dl>
+<pre>
+value blit_string : string -&gt; int -&gt; string -&gt; int -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>blit_string s1 o1 s2 o2 len</tt> copies <tt>len</tt> characters
+           from string <tt>s1</tt>, starting at character number <tt>o1</tt>, to string <tt>s2</tt>,
+           starting at character number <tt>o2</tt>. It works correctly even if
+           <tt>s1</tt> and <tt>s2</tt> are the same string,
+           and the source and destination chunks overlap.
+           Raise <tt>Invalid_argument "blit_string"</tt> if <tt>o1</tt> and <tt>len</tt> do not
+           designate a valid substring of <tt>s1</tt>, or if <tt>o2</tt> and <tt>len</tt> do not
+           designate a valid substring of <tt>s2</tt>. 
+</dl>
+<pre>
+value replace_string : string -&gt; string -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>replace_string dest src start</tt> copies all characters from the 
+           string <tt>src</tt> into the string <tt>dst</tt>, starting at
+           character number <tt>start</tt> in <tt>dst</tt>.
+           Raise <tt>Invalid_argument "replace_string"</tt> if copying would overflow
+           string <tt>dest</tt>. 
+</dl>
+<pre>
+value eq_string : string -&gt; string -&gt; bool
+value neq_string : string -&gt; string -&gt; bool
+value le_string : string -&gt; string -&gt; bool
+value lt_string : string -&gt; string -&gt; bool
+value ge_string : string -&gt; string -&gt; bool
+value gt_string : string -&gt; string -&gt; bool
+</pre>
+<dl><dd>
+ Comparison functions (lexicographic ordering) between strings. 
+</dl>
+<pre>
+value compare_strings : string -&gt; string -&gt; int
+</pre>
+<dl><dd>
+ General comparison between strings.
+	   <tt>compare_strings s1 s2</tt> returns 0 if <tt>s1</tt> and <tt>s2</tt> are equal,
+	   or else -2 if <tt>s1</tt> is a prefix of <tt>s2</tt>,
+	   or 2 if <tt>s2</tt> is a prefix of <tt>s1</tt>,
+	   or else -1 if <tt>s1</tt> is lexicographically before <tt>s2</tt>,
+	   or 1 if <tt>s2</tt> is lexicographically before <tt>s1</tt>. 
+</dl>
+<pre>
+value string_for_read : string -&gt; string
+</pre>
+<dl><dd>
+ Return a copy of the argument, with special characters represented
+           by escape sequences, following the lexical conventions of
+           Caml Light. 
+</dl>
+<pre>
+value index_char: string -&gt; char -&gt; int
+</pre>
+<dl><dd>
+ <tt>index_char s c</tt> returns the position of the leftmost occurrence of
+           character <tt>c</tt> in string <tt>s</tt>.  Raise <tt>Not_found</tt> if <tt>c</tt> does not
+           occur in <tt>s</tt>. 
+</dl>
+<pre>
+value rindex_char: string -&gt; char -&gt; int
+</pre>
+<dl><dd>
+ <tt>rindex_char s c</tt> returns the position of the rightmost
+           occurrence of character <tt>c</tt> in string <tt>s</tt>.  Raise
+           <tt>Not_found</tt> if <tt>c</tt> does not occur in <tt>s</tt>. 
+</dl>
+<pre>
+value index_char_from: string -&gt; int -&gt; char -&gt; int
+value rindex_char_from: string -&gt; int -&gt; char -&gt; int
+</pre>
+<dl><dd>
+ Same as <tt>index_char</tt> and <tt>rindex_char</tt>, but start searching
+           at the character position given as second argument.
+           <tt>index_char s c</tt> is equivalent to <tt>index_char_from s 0 c</tt>, and
+           <tt>rindex_char s c</tt> to
+           <tt>rindex_char_from s (string_length s - 1) c</tt>. 
+</dl>
+<HR>
+<A HREF="node14.18.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.16.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

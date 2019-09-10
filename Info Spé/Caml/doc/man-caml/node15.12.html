@@ -1,0 +1,26 @@
+<HEAD>
+<TITLE><tt>printexc</tt>: a catch-all exception handler </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node15.13.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.11.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>printexc</tt>: a catch-all exception handler </H2>
+<P>
+<A name="s:printexc"></A>
+
+<pre>
+value f: ('a -&gt; 'b) -&gt; 'a -&gt; 'b
+</pre>
+<dl><dd>
+ <tt>printexc__f fn x</tt> applies <tt>fn</tt> to <tt>x</tt> and returns the result.
+           If the evaluation of <tt>fn x</tt> raises any exception, the
+           name of the exception is printed on standard error output,
+           and the programs aborts with exit code 2.
+           Typical use is <tt>printexc__f main ()</tt>, where <tt>main</tt>, with type
+           <tt>unit-&gt;unit</tt>, is the entry point of a standalone program, to catch
+           and print stray exceptions.
+           For <tt>printexc__f</tt> to work properly, the program must have
+           been linked with the <tt>-g</tt> option. 
+</dl>

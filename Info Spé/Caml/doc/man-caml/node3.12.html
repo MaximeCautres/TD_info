@@ -1,0 +1,63 @@
+<HEAD>
+<TITLE>Module interfaces</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node4.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node3.11.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2>Module interfaces</H2>
+
+
+
+<P>
+
+<PRE>
+<i>interface</i>:
+      <i>{</i><i>intf-phrase</i> <font color="blue"><code>;;</code></font><i>}</i>
+
+<i>intf-phrase</i>:
+      <i>value-declaration</i>
+   |  <i>type-definition</i>
+   |  <i>exception-definition</i>
+   |  <i>directive</i>
+
+<i>value-declaration</i>:
+      <font color="blue"><code>value</code></font> <i>ident</i> <font color="blue"><code>:</code></font> <i>typexpr</i> <i>{</i><font color="blue"><code>and</code></font> <i>ident</i> <font color="blue"><code>:</code></font> <i>typexpr</i><i>}</i></PRE>
+<P>
+Module interfaces declare the global objects (value variables, type
+constructors, variant constructors, record labels) that a module
+exports, that is, makes available to other modules.
+Other modules can refer to these globals using qualified identifiers
+or the <tt>#open</tt> directive, as explained in section <A HREF="node3.3.html#s:names">3.3</A>.<P>
+A module interface consists in a sequence of interface
+phrases, terminated by double semicolons. An interface phrase is
+either a value declaration, a type definition, an exception
+definition, or a directive.<P>
+Value declarations declare global value variables that are
+exported by the module implementation, and the types with which they are
+exported. The module implementation must define these variables, with
+types at least as general as the types declared in the interface. The
+scope of the bindings for these global variables extends from the
+module implementation itself to all modules that refer to those variables.<P>
+Type or exception definitions introduce type constructors, variant
+constructors and record labels as described in sections
+<A HREF="node3.9.html#s:typdef">3.9</A> and <A HREF="node3.9.html#s:excdef">3.9</A>. Exception definitions and type
+definitions that are not abstract type declarations also take effect
+in the module implementation; that is, the type constructors, variant
+constructors and record labels they define are considered bound on
+entrance to the module implementation, and can be referred to by the
+implementation phrases. Type definitions that are not abstract type
+declarations must not be redefined in the module implementation. In
+contrast, the type constructors that are declared abstract in a module
+interface must be defined in the module implementation, with the same names.<P>
+Directives modify the behavior of the compiler on the subsequent
+phrases of the module interface, as described in
+section <A HREF="node3.10.html#s:directives">3.10</A>. Directives apply only to the interface
+currently being compiled; in particular, they have no effect on other
+modules that refer to globals exported by the interface being
+compiled.<P>
+<HR>
+<A HREF="node4.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node3.11.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

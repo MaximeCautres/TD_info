@@ -1,0 +1,77 @@
+<HEAD>
+<TITLE>Values</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node3.5.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node3.3.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2>Values</H2>
+<P>
+This section describes the kinds of values that are manipulated by
+Caml Light programs.<P>
+<H3>Base values</H3>
+<P>
+<H4>Integer numbers</H4>
+<P>
+Integer values are integer numbers from -2^{30} to 2^{30}-1,
+that is -1073741824 to 1073741823. Implementations may support
+a wider range of integer values.<P>
+<H4>Floating-point numbers</H4>
+<P>
+Floating-point values are numbers in floating-point representation.
+Everything about floating-point values is implementation-dependent,
+including the range of representable numbers, the number of
+significant digits, and the way floating-point results are rounded.<P>
+<H4>Characters</H4>
+<P>
+Character values are represented as 8-bit integers between 0 and 255.
+Character codes between 0 and 127 are interpreted following the ASCII
+standard. The interpretation of character codes between 128 and 255 is
+implementation-dependent.<P>
+<H4>Character strings</H4>
+ <A name="s:string-val"></A><P>
+String values are finite sequences of characters.
+Implementations must support strings up to 2^{16}-1 characters in
+length (65535 characters). Implementations may support longer
+strings.<P>
+<H3>Tuples</H3>
+<P>
+Tuples of values are written (v_1, ..., v_n), standing for the
+n-tuple of values v_1 to v_n. Tuples of up to 2^{14}-1 elements
+(16383 elements) must be supported, though implementations may support
+tuples with more elements.<P>
+<H3>Records</H3>
+<P>
+Record values are labeled tuples of values. The record value written
+{ label_1 = v_1; ...; label_n = v_n } associates the value v_i to
+the record label label_i, for i = 1 ... n. Records with up to
+2^{14}-1 fields (16383 fields) must be supported, though
+implementations may support records with more fields.<P>
+<H3>Arrays</H3>
+<P>
+Arrays are finite, variable-sized sequences of values of the same type.
+Arrays of length up to 2^{14}-1 (16383 elements) must be supported,
+though implementations may support larger arrays.<P>
+<H3>Variant values</H3>
+<P>
+Variant values are either a constant constructor, or a pair of a
+non-constant constructor and a value. The former case is written
+cconstr; the latter case is written ncconstr(v), where v is said
+to be the argument of the non-constant constructor ncconstr.<P>
+The following constants are treated like built-in constant
+constructors:
+<table border>
+<tr><th>Constant</th><th>Constructor</th></tr>
+<tr><td><tt>false</tt></td><td>the boolean false</td></tr>
+<tr><td><tt>true</tt></td><td>the boolean true</td></tr>
+<tr><td><tt>()</tt></td><td>the ``unit'' value</td></tr>
+<tr><td><tt>[]</tt></td><td>the empty list</td></tr>
+</table><P>
+<H3>Functions</H3>
+<P>
+Functional values are mappings from values to values.
+<HR>
+<A HREF="node3.5.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node3.3.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

@@ -1,0 +1,136 @@
+
+(************************************************************************************************
+    Exemple d'utilisation de la bibliothèque big_vect (Jean Mouric , Denis Cazor 03/03/2014)
+************************************************************************************************)
+
+
+#load "unix.cma";;
+
+if Sys.word_size = 64 then print_string "noter que big_vect n'a réellement d'intérêt que pour un système 32 bits!!\n";;
+
+if Sys.file_exists "exemples/OCaml/big_vect" then
+   (
+      Unix.chdir "exemples/OCaml/big_vect";
+      let compile f = match Sys.command ("ocamlc -c " ^ f) with
+         | 0 -> ()
+         | _ -> failwith ("Cannot compile " ^ f)
+      in
+         (*if not (Sys.file_exists "big_vect.cmo") then*)
+            compile "big_vect.ml"
+   )
+;;
+
+
+#load "big_vect.cmo";;
+
+
+module Big_vect_sort = struct
+
+open Big_vect (* portée de open limitée au module Big_vect_sort *)
+
+let make_vect = Array.make
+let vect_length = Array.length
+let random__int = Random.int
+let sys__time = Sys.time
+
+let long = 5000000
+let tab = make_vect long 0
+let inittab() =
+for k = 0 to long - 1 do
+   tab.(k) <- random__int (5 * long);
+done
+
+(* tri fusion *)
+
+let merge_sort tab =
+   let l = vect_length tab in
+      let tab1 = make_vect l max_int in
+         let fusion i j =
+            let p = ref i and q = ref (i + j) and k = ref 0 in
+               while (!p < i + j) && (!q < i + 2 * j) && (!p < l) && (!q < l) do
+                  if tab.(!p) < tab.(!q) then
+                     (tab1.(!k) <- tab.(!p);
+                        incr p)
+                  else (tab1.(!k) <- tab.(!q);
+                        incr q);
+                  incr k;
+               done;
+               if !p < i + j then
+                  while (!p < i + j) && (!p < l) do
+                     tab1.(!k) <- tab.(!p);
+                     incr p;
+                     incr k;
+                  done
+               else
+                  while (!q < i + 2 * j) && (!q < l) do
+                     tab1.(!k) <- tab.(!q);
+                     incr q;
+                     incr k;
+                  done;
+               for n = 0 to !k - 1 do
+                  tab.(i + n) <- tab1.(n)
+               done;
+         in
+            let a = ref 1 in
+               while !a < l do
+                  a := !a * 2
+               done;
+               let j = ref 1 in
+                  while !j < !a do
+                     let i = ref 0 in
+                        while !i + 2 * !j <= !a do
+                           fusion !i !j;
+                           i := !i + 2 * !j;
+                        done;
+                        j := 2 * !j;
+                  done
+
+(* tri rapide *)
+
+let quick_sort data =
+   let rec sort (inf, sup) =
+      let min = ref inf and max = ref sup
+      and pivot = (data.(inf) + data.(sup)) / 2 in
+         while !min < !max do
+            while data.(!min) < pivot do incr min; done;
+            while data.(!max) > pivot do decr max; done;
+            if !min <= !max then
+               (let temp = data.(!min) in
+                     data.(!min) <- data.(!max);
+                     data.(!max) <- temp;
+                     incr min;
+                     decr max);
+         done;
+         if inf < !max then sort (inf, !max);
+         if !min < sup then sort (!min, sup);
+   in sort (0, vect_length data - 1)
+
+end;; (* fin du module Big_vect_sort *)
+
+(************************************************************************************************
+                                        Fonctions de test
+************************************************************************************************)
+
+open Big_vect_sort;;
+
+inittab();;
+
+let start = sys__time () in
+   quick_sort tab;
+   print_float (sys__time () -. start);
+   print_newline ();
+   tab;;
+
+inittab();;
+
+let start = sys__time () in
+   merge_sort tab;
+   print_float (sys__time () -. start);
+   print_newline ();
+   tab;;
+
+vect_length tab;;
+
+(************************************************************************************************
+    Exemple d'utilisation de la bibliothèque big_vect (Jean Mouric , Denis Cazor 03/03/2014)
+************************************************************************************************)

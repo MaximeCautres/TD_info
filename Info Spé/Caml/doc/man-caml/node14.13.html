@@ -1,0 +1,213 @@
+<HEAD>
+<TITLE><tt>list</tt>: operations on lists </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node14.14.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.12.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>list</tt>: operations on lists </H2>
+<P>
+<A name="s:list"></A>
+
+<pre>
+value list_length : 'a list -&gt; int
+</pre>
+<dl><dd>
+ Return the length (number of elements) of the given list. 
+</dl>
+<pre>
+value prefix @ : 'a list -&gt; 'a list -&gt; 'a list
+</pre>
+<dl><dd>
+ List concatenation. 
+</dl>
+<pre>
+value hd : 'a list -&gt; 'a
+</pre>
+<dl><dd>
+ Return the first element of the given list. Raise
+           <tt>Failure "hd"</tt> if the list is empty. 
+</dl>
+<pre>
+value tl : 'a list -&gt; 'a list
+</pre>
+<dl><dd>
+ Return the given list without its first element. Raise
+           <tt>Failure "tl"</tt> if the list is empty. 
+</dl>
+<pre>
+value rev : 'a list -&gt; 'a list
+</pre>
+<dl><dd>
+ List reversal. 
+</dl>
+<pre>
+value map : ('a -&gt; 'b) -&gt; 'a list -&gt; 'b list
+</pre>
+<dl><dd>
+ <tt>map f [a1; ...; an]</tt> applies function <tt>f</tt> to <tt>a1, ..., an</tt>,
+           and builds the list <tt>[f a1; ...; f an]</tt>
+           with the results returned by <tt>f</tt>. 
+</dl>
+<pre>
+value do_list : ('a -&gt; unit) -&gt; 'a list -&gt; unit
+</pre>
+<dl><dd>
+ <tt>do_list f [a1; ...; an]</tt> applies function <tt>f</tt> in turn to
+           <tt>a1; ...; an</tt>, discarding all the results. It is equivalent to
+	   <tt>begin f a1; f a2; ...; f an; () end</tt>. 
+</dl>
+<pre>
+value it_list : ('a -&gt; 'b -&gt; 'a) -&gt; 'a -&gt; 'b list -&gt; 'a
+</pre>
+<dl><dd>
+ <tt>it_list f a [b1; ...; bn]</tt> is <tt>f (... (f (f a b1) b2) ...) bn</tt>. 
+</dl>
+<pre>
+value list_it : ('a -&gt; 'b -&gt; 'b) -&gt; 'a list -&gt; 'b -&gt; 'b
+</pre>
+<dl><dd>
+ <tt>list_it f [a1; ...; an] b</tt> is <tt>f a1 (f a2 (... (f an b) ...))</tt>. 
+</dl>
+<pre>
+value map2 : ('a -&gt; 'b -&gt; 'c) -&gt; 'a list -&gt; 'b list -&gt; 'c list
+</pre>
+<dl><dd>
+ <tt>map2 f [a1; ...; an] [b1; ...; bn]</tt> is <tt>[f a1 b1; ...; f an bn]</tt>.
+	   Raise <tt>Invalid_argument "map2"</tt> if the two lists have
+           different lengths. 
+</dl>
+<pre>
+value do_list2 : ('a -&gt; 'b -&gt; unit) -&gt; 'a list -&gt; 'b list -&gt; unit
+</pre>
+<dl><dd>
+ <tt>do_list2 f [a1; ...; an] [b1; ...; bn]</tt> calls in turn
+           <tt>f a1 b1; ...; f an bn</tt>, discarding the results.
+	   Raise <tt>Invalid_argument "do_list2"</tt> if the two lists have
+	   different lengths. 
+</dl>
+<pre>
+value it_list2 : ('a -&gt; 'b -&gt; 'c -&gt; 'a) -&gt; 'a -&gt; 'b list -&gt; 'c list -&gt; 'a
+</pre>
+<dl><dd>
+ <tt>it_list2 f a [b1; ...; bn] [c1; ...; cn]</tt> is
+               <tt>f (... (f (f a b1 c1) b2 c2) ...) bn cn</tt>.
+	   Raise <tt>Invalid_argument "it_list2"</tt> if the two lists have
+	   different lengths. 
+</dl>
+<pre>
+value list_it2 : ('a -&gt; 'b -&gt; 'c -&gt; 'c) -&gt; 'a list -&gt; 'b list -&gt; 'c -&gt; 'c
+</pre>
+<dl><dd>
+ <tt>list_it2 f [a1; ...; an] [b1; ...; bn] c</tt> is
+               <tt>f a1 b1 (f a2 b2 (... (f an bn c) ...))</tt>.
+	   Raise <tt>Invalid_argument "list_it2"</tt> if the two lists have
+	   different lengths. 
+</dl>
+<pre>
+value flat_map : ('a -&gt; 'b list) -&gt; 'a list -&gt; 'b list
+</pre>
+<dl><dd>
+ <tt>flat_map f [l1; ...; ln]</tt> is <tt>(f l1) @ (f l2) @ ... @ (f ln)</tt>. 
+</dl>
+<pre>
+value for_all : ('a -&gt; bool) -&gt; 'a list -&gt; bool
+</pre>
+<dl><dd>
+ <tt>for_all p [a1; ...; an]</tt> is <tt>(p a1) &amp; (p a2) &amp; ... &amp; (p an)</tt>. 
+</dl>
+<pre>
+value exists : ('a -&gt; bool) -&gt; 'a list -&gt; bool
+</pre>
+<dl><dd>
+ <tt>exists p [a1; ...; an]</tt> is <tt>(p a1) or (p a2) or ... or (p an)</tt>. 
+</dl>
+<pre>
+value mem : 'a -&gt; 'a list -&gt; bool
+</pre>
+<dl><dd>
+ <tt>mem a l</tt> is true if and only if <tt>a</tt> is structurally equal (see
+           module <tt>eq</tt>) to an element of <tt>l</tt>. 
+</dl>
+<pre>
+value memq : 'a -&gt; 'a list -&gt; bool
+</pre>
+<dl><dd>
+ <tt>memq a l</tt> is true if and only if <tt>a</tt> is physically equal (see
+           module <tt>eq</tt>) to an element of <tt>l</tt>. 
+</dl>
+<pre>
+value except : 'a -&gt; 'a list -&gt; 'a list
+</pre>
+<dl><dd>
+ <tt>except a l</tt> returns the list <tt>l</tt> where the first element
+           structurally equal to <tt>a</tt> has been removed.
+           The list <tt>l</tt> is returned unchanged if it does not contain <tt>a</tt>. 
+</dl>
+<pre>
+value exceptq : 'a -&gt; 'a list -&gt; 'a list
+</pre>
+<dl><dd>
+ Same as <tt>except</tt>, with physical equality instead of structural
+           equality. 
+</dl>
+<pre>
+value subtract : 'a list -&gt; 'a list -&gt; 'a list
+</pre>
+<dl><dd>
+ <tt>subtract l1 l2</tt> returns the list <tt>l1</tt> where all elements
+           structurally equal to one of the elements of <tt>l2</tt>
+           have been removed. 
+</dl>
+<pre>
+value union : 'a list -&gt; 'a list -&gt; 'a list
+</pre>
+<dl><dd>
+ <tt>union l1 l2</tt> appends before list <tt>l2</tt> all the elements of list <tt>l1</tt>
+           that are not structurally equal to an element of <tt>l2</tt>. 
+</dl>
+<pre>
+value intersect : 'a list -&gt; 'a list -&gt; 'a list
+</pre>
+<dl><dd>
+ <tt>intersect l1 l2</tt> returns the list of the elements of <tt>l1</tt> that
+           are structurally equal to an element of <tt>l2</tt>. 
+</dl>
+<pre>
+value index : 'a -&gt; 'a list -&gt; int
+</pre>
+<dl><dd>
+ <tt>index a l</tt> returns the position of the first element of list <tt>l</tt>
+           that is structurally equal to <tt>a</tt>. The head of the list has
+           position 0. Raise <tt>Not_found</tt> if <tt>a</tt> is not present in <tt>l</tt>. 
+</dl>
+<pre>
+value assoc : 'a -&gt; ('a * 'b) list -&gt; 'b
+</pre>
+<dl><dd>
+ <tt>assoc a l</tt> returns the value associated with key <tt>a</tt> in the list of
+           pairs <tt>l</tt>. That is,
+             <tt>assoc a [ ...; (a,b); ...] = b</tt>
+           if <tt>(a,b)</tt> is the leftmost binding of <tt>a</tt> in list <tt>l</tt>.
+           Raise <tt>Not_found</tt> if there is no value associated with <tt>a</tt> in the
+           list <tt>l</tt>. 
+</dl>
+<pre>
+value assq :  'a -&gt; ('a * 'b) list -&gt; 'b
+</pre>
+<dl><dd>
+ Same as <tt>assoc</tt>, but use physical equality instead of structural
+           equality to compare keys. 
+</dl>
+<pre>
+value mem_assoc : 'a -&gt; ('a * 'b) list -&gt; bool
+</pre>
+<dl><dd>
+ Same as <tt>assoc</tt>, but simply return true if a binding exists,
+           and false if no bindings exist for the given key. 
+</dl>
+<HR>
+<A HREF="node14.14.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.12.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

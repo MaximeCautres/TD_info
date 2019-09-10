@@ -1,0 +1,301 @@
+<HEAD>
+<TITLE>The num library: arbitrary-precision rational arithmetic</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node19.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node17.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H1>The num library: arbitrary-precision rational arithmetic</H1>
+<P>
+The <tt>num</tt> library (distributed in <tt>contrib/libnum</tt>) implements
+exact-precision rational arithmetic. It is built upon the
+state-of-the-art BigNum arbitrary-precision integer arithmetic
+package, and therefore achieves very high performance.<P>
+The functions provided in this library are fully documented in
+<i>The CAML Numbers Reference Manual</i> by 
+Valérie Ménissier-Morain, technical report 141, INRIA, july 1992
+(available by anonymous FTP from <tt>ftp.inria.fr</tt>, directory
+<tt>INRIA/publications/RT</tt>, file <tt>RT-0141.ps.Z</tt>). A summary of the
+functions is given below.<P>
+Programs that use the <tt>num</tt> library must be linked in ``custom
+runtime'' mode, as follows:
+<pre>
+        camlc -custom <i>other options</i> nums.zo <i>other files</i> -lnums
+</pre>
+For interactive use of the <tt>num</tt> library, run <tt>camllight camlnum</tt>.<P>
+<dl><dt><b>Mac:</b><dd>
+This library is not available.
+</dl><P>
+<dl><dt><b>PC:</b><dd>
+This library is available by default in the standard runtime system
+and in the toplevel system. Programs that use this library can be linked
+normally, without the <tt>-custom</tt> option. 
+</dl><P>
+
+<H2><tt>num</tt>: operations on numbers </H2>
+<P>
+<A name="s:num"></A>
+
+<dl><dd>
+ Numbers (type <tt>num</tt>) are arbitrary-precision rational numbers,
+   plus the special elements <tt>1/0</tt> (infinity) and <tt>0/0</tt> (undefined). 
+</dl>
+<pre>
+type num = Int of int | Big_int of big_int | Ratio of ratio
+</pre>
+<dl><dd>
+ The type of numbers. 
+</dl>
+<pre>
+value normalize_num : num -&gt; num
+value numerator_num : num -&gt; num
+value denominator_num : num -&gt; num
+</pre>
+<H3>Arithmetic operations </H3>
+<pre>
+value prefix +/ : num -&gt; num -&gt; num
+value add_num : num -&gt; num -&gt; num
+</pre>
+<dl><dd>
+ Addition 
+</dl>
+<pre>
+value minus_num : num -&gt; num
+</pre>
+<dl><dd>
+ Unary negation. 
+</dl>
+<pre>
+value prefix -/ : num -&gt; num -&gt; num
+value sub_num : num -&gt; num -&gt; num
+</pre>
+<dl><dd>
+ Subtraction 
+</dl>
+<pre>
+value prefix */ : num -&gt; num -&gt; num
+value mult_num : num -&gt; num -&gt; num
+</pre>
+<dl><dd>
+ Multiplication 
+</dl>
+<pre>
+value square_num : num -&gt; num
+</pre>
+<dl><dd>
+ Squaring 
+</dl>
+<pre>
+value prefix // : num -&gt; num -&gt; num
+value div_num : num -&gt; num -&gt; num
+</pre>
+<dl><dd>
+ Division 
+</dl>
+<pre>
+value quo_num : num -&gt; num -&gt; num
+value mod_num : num -&gt; num -&gt; num
+</pre>
+<dl><dd>
+ Euclidean division: quotient and remainder 
+</dl>
+<pre>
+value prefix **/ : num -&gt; num -&gt; num
+value power_num : num -&gt; num -&gt; num
+</pre>
+<dl><dd>
+ Exponentiation 
+</dl>
+<pre>
+value is_integer_num : num -&gt; bool
+</pre>
+<dl><dd>
+ Test if a number is an integer 
+</dl>
+<pre>
+value integer_num : num -&gt; num
+value floor_num : num -&gt; num
+value round_num : num -&gt; num
+value ceiling_num : num -&gt; num
+</pre>
+<dl><dd>
+ Approximate a number by an integer.
+           <tt>floor_num n</tt> returns the largest integer smaller or equal to <tt>n</tt>.
+           <tt>ceiling_num n</tt> returns the smallest integer bigger or equal to <tt>n</tt>.
+           <tt>integer_num n</tt> returns the integer closest to <tt>n</tt>. In case of ties,
+           rounds towards zero.
+           <tt>round_num n</tt> returns the integer closest to <tt>n</tt>. In case of ties,
+           rounds off zero. 
+</dl>
+<pre>
+value sign_num : num -&gt; int
+</pre>
+<dl><dd>
+ Return <tt>-1</tt>, <tt>0</tt> or <tt>1</tt> according to the sign of the argument. 
+</dl>
+<pre>
+value prefix =/ : num -&gt; num -&gt; bool
+value prefix &lt;/ : num -&gt; num -&gt; bool
+value prefix &gt;/ : num -&gt; num -&gt; bool
+value prefix &lt;=/ : num -&gt; num -&gt; bool
+value prefix &gt;=/ : num -&gt; num -&gt; bool
+value prefix &lt;&gt;/ : num -&gt; num -&gt; bool
+value eq_num : num -&gt; num -&gt; bool
+value lt_num : num -&gt; num -&gt; bool
+value le_num : num -&gt; num -&gt; bool
+value gt_num : num -&gt; num -&gt; bool
+value ge_num : num -&gt; num -&gt; bool
+</pre>
+<dl><dd>
+ Usual comparisons between numbers 
+</dl>
+<pre>
+value compare_num : num -&gt; num -&gt; int
+</pre>
+<dl><dd>
+ Return <tt>-1</tt>, <tt>0</tt> or <tt>1</tt> if the first argument is less than,
+           equal to, or greater than the second argument. 
+</dl>
+<pre>
+value max_num : num -&gt; num -&gt; num
+value min_num : num -&gt; num -&gt; num
+</pre>
+<dl><dd>
+ Return the greater (resp. the smaller) of the two arguments. 
+</dl>
+<pre>
+value abs_num : num -&gt; num
+</pre>
+<dl><dd>
+ Absolute value. 
+</dl>
+<pre>
+value succ_num: num -&gt; num
+</pre>
+<dl><dd>
+ <tt>succ n</tt> is <tt>n+1</tt> 
+</dl>
+<pre>
+value pred_num: num -&gt; num
+</pre>
+<dl><dd>
+ <tt>pred n</tt> is <tt>n-1</tt> 
+</dl>
+<pre>
+value incr_num: num ref -&gt; unit
+</pre>
+<dl><dd>
+ <tt>incr r</tt> is <tt>r:=!r+1</tt>, where <tt>r</tt> is a reference to a number. 
+</dl>
+<pre>
+value decr_num: num ref -&gt; unit
+</pre>
+<dl><dd>
+ <tt>decr r</tt> is <tt>r:=!r-1</tt>, where <tt>r</tt> is a reference to a number. 
+</dl>
+<H3>Coercions with strings </H3>
+<pre>
+value string_of_num : num -&gt; string
+</pre>
+<dl><dd>
+ Convert a number to a string, using fractional notation. 
+</dl>
+<pre>
+value approx_num_fix : int -&gt; num -&gt; string
+value approx_num_exp : int -&gt; num -&gt; string
+</pre>
+<dl><dd>
+ Approximate a number by a decimal. The first argument is the
+           required precision. The second argument is the number to
+           approximate. <tt>approx_fix</tt> uses decimal notation; the first
+           argument is the number of digits after the decimal point.
+           <tt>approx_exp</tt> uses scientific (exponential) notation; the
+           first argument is the number of digits in the mantissa. 
+</dl>
+<pre>
+value num_of_string : string -&gt; num
+</pre>
+<dl><dd>
+ Convert a string to a number. 
+</dl>
+<H3>Coercions between numerical types </H3>
+<pre>
+value int_of_num : num -&gt; int
+value num_of_int : int -&gt; num
+value nat_of_num : num -&gt; nat__nat
+value num_of_nat : nat__nat -&gt; num
+value num_of_big_int : big_int -&gt; num
+value big_int_of_num : num -&gt; big_int
+value ratio_of_num : num -&gt; ratio
+value num_of_ratio : ratio -&gt; num
+value float_of_num : num -&gt; float
+value num_of_float : float -&gt; num
+value sys_print_num : int -&gt; string -&gt; num -&gt; string -&gt; unit
+value print_num : num -&gt; unit
+</pre>
+<H2><tt>arith_status</tt>: flags that control rational arithmetic </H2>
+<P>
+<A name="s:arithstatus"></A>
+
+<pre>
+value arith_status: unit -&gt; unit
+</pre>
+<dl><dd>
+ Print the current status of the arithmetic flags. 
+</dl>
+<pre>
+value get_error_when_null_denominator : unit -&gt; bool
+value set_error_when_null_denominator : bool -&gt; unit
+</pre>
+<dl><dd>
+ Get or set the flag <tt>null_denominator</tt>. When on, attempting to 
+           create a rational with a null denominator raises an exception.
+           When off, rationals with null denominators are accepted.
+           Initially: on. 
+</dl>
+<pre>
+value get_normalize_ratio : unit -&gt; bool
+value set_normalize_ratio : bool -&gt; unit
+</pre>
+<dl><dd>
+ Get or set the flag <tt>normalize_ratio</tt>. When on, rational
+           numbers are normalized after each operation. When off,
+           rational numbers are not normalized until printed.
+           Initially: off. 
+</dl>
+<pre>
+value get_normalize_ratio_when_printing : unit -&gt; bool
+value set_normalize_ratio_when_printing : bool -&gt; unit
+</pre>
+<dl><dd>
+ Get or set the flag <tt>normalize_ratio_when_printing</tt>.
+           When on, rational numbers are normalized before being printed.
+           When off, rational numbers are printed as is, without normalization.
+           Initially: on. 
+</dl>
+<pre>
+value get_approx_printing : unit -&gt; bool
+value set_approx_printing : bool -&gt; unit
+</pre>
+<dl><dd>
+ Get or set the flag <tt>approx_printing</tt>.
+           When on, rational numbers are printed as a decimal approximation.
+           When off, rational numbers are printed as a fraction.
+           Initially: off. 
+</dl>
+<pre>
+value get_floating_precision : unit -&gt; int
+value set_floating_precision : int -&gt; unit
+</pre>
+<dl><dd>
+ Get or set the parameter <tt>floating_precision</tt>.
+           This parameter is the number of digits displayed when
+           <tt>approx_printing</tt> is on.
+           Initially: 12. 
+</dl>
+<P>
+<HR>
+<A HREF="node19.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node17.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

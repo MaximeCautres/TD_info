@@ -1,0 +1,11 @@
+#load "graphics.cma";;
+#load "unix.cma";;
+open Unix;;
+chdir "exemples/OCaml/inria/hanoi";;
+#use "grahanoi-fra.ml";;
+print_string "Pour lancer: jeu <nombre de disques>;;"; print_newline();;
+
+jeu 3;;
+
+(* Pour que la touche "enter" ou le bouton "Envoyer" agisse, il convient que ce panneau
+soit sélectionné et que le point d'insertion soit placé ici, i.e. après le dernier ";;"*)

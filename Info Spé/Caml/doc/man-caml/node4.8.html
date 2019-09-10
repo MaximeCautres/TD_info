@@ -1,0 +1,22 @@
+<HEAD>
+<TITLE>Alternate syntax</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node4.9.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node4.7.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2>Alternate syntax</H2>
+<P>
+The syntax of some constructs has been slightly relaxed:<P>
+<p><ul><P>
+<li> An optional <tt>;</tt> may terminate a sequence, list expression, or
+record expression. For instance, <font color="blue"><code>begin</code></font> <i>e</i><SUB>1</SUB> <font color="blue"><code>;</code></font> <i>e</i><SUB>2</SUB> <font color="blue"><code>;</code></font> <font color="blue"><code>end</code></font> is
+syntactically correct and synonymous with <font color="blue"><code>begin</code></font> <i>e</i><SUB>1</SUB> <font color="blue"><code>;</code></font> <i>e</i><SUB>2</SUB> <font color="blue"><code>end</code></font>.<P>
+<li> Similarly, an optional <tt>|</tt> may begin a pattern-matching
+expression. For instance, <font color="blue"><code>function</code></font> <font color="blue"><code>|</code></font> <i>pat</i><SUB>1</SUB> <font color="blue"><code>-&gt;</code></font> <i>expr</i><SUB>1</SUB> <font color="blue"><code>|</code></font>...
+is syntactically correct and synonymous with
+<font color="blue"><code>function</code></font> <i>pat</i><SUB>1</SUB> <font color="blue"><code>-&gt;</code></font> <i>expr</i><SUB>1</SUB> <font color="blue"><code>|</code></font>....<P>
+<li> The tokens <tt>&amp;&amp;</tt> and <tt>||</tt> are recognized as synonymous for <tt>&amp;</tt>
+(sequential ``and'') and <tt>or</tt> (sequential ``or''), respectively.<P>
+</ul><P>

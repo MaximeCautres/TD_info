@@ -1,0 +1,81 @@
+<HEAD>
+<TITLE><tt>map</tt>: association tables over ordered types </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node15.11.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.9.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>map</tt>: association tables over ordered types </H2>
+<P>
+<A name="s:map"></A>
+
+<dl><dd>
+ This module implements applicative association tables, also known as
+   finite maps or dictionaries, given a total ordering function
+   over the keys.
+   All operations over maps are purely applicative (no side-effects).
+   The implementation uses balanced binary trees, and therefore searching
+   and insertion take time logarithmic in the size of the map. 
+</dl>
+<pre>
+type ('a, 'b) t
+</pre>
+<dl><dd>
+ The type of maps from type <tt>'a</tt> to type <tt>'b</tt>. 
+</dl>
+<pre>
+value empty: ('a -&gt; 'a -&gt; int) -&gt; ('a, 'b) t
+</pre>
+<dl><dd>
+ The empty map.
+           The argument is a total ordering function over the set elements.
+           This is a two-argument function <tt>f</tt> such that
+           <tt>f e1 e2</tt> is zero if the elements <tt>e1</tt> and <tt>e2</tt> are equal,
+           <tt>f e1 e2</tt> is strictly negative if <tt>e1</tt> is smaller than <tt>e2</tt>,
+           and <tt>f e1 e2</tt> is strictly positive if <tt>e1</tt> is greater than <tt>e2</tt>.
+           Examples: a suitable ordering function for type <tt>int</tt>
+           is <tt>prefix -</tt>. You can also use the generic structural comparison
+           function <tt>eq__compare</tt>. 
+</dl>
+<pre>
+value add: 'a -&gt; 'b -&gt; ('a, 'b) t -&gt; ('a, 'b) t
+</pre>
+<dl><dd>
+ <tt>add x y m</tt> returns a map containing the same bindings as
+           <tt>m</tt>, plus a binding of <tt>x</tt> to <tt>y</tt>. Previous bindings for <tt>x</tt> 
+           in <tt>m</tt> are not removed, but simply hidden: they reappear
+           after performing a <tt>remove</tt> operation.
+           (This is the semantics of association lists.) 
+</dl>
+<pre>
+value find:'a -&gt; ('a, 'b) t -&gt; 'b
+</pre>
+<dl><dd>
+ <tt>find x m</tt> returns the current binding of <tt>x</tt> in <tt>m</tt>,
+           or raises <tt>Not_found</tt> if no such binding exists. 
+</dl>
+<pre>
+value remove: 'a -&gt; ('a, 'b) t -&gt; ('a, 'b) t
+</pre>
+<dl><dd>
+ <tt>remove x m</tt> returns a map containing the same bindings
+           as <tt>m</tt> except the current binding for <tt>x</tt>. The previous
+           binding for <tt>x</tt> is restored if it exists. <tt>m</tt> is returned
+           unchanged if <tt>x</tt> is not bound in <tt>m</tt>. 
+</dl>
+<pre>
+value iter: ('a -&gt; 'b -&gt; unit) -&gt; ('a, 'b) t -&gt; unit
+</pre>
+<dl><dd>
+ <tt>iter f m</tt> applies <tt>f</tt> to all bindings in map <tt>m</tt>,
+	   discarding the results.
+           <tt>f</tt> receives the key as first argument, and the associated value
+           as second argument. The order in which the bindings are passed to
+           <tt>f</tt> is unspecified. Only current bindings are presented to <tt>f</tt>:
+           bindings hidden by more recent bindings are not passed to <tt>f</tt>. 
+</dl>
+<HR>
+<A HREF="node15.11.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.9.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

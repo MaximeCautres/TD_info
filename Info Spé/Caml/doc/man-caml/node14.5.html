@@ -1,0 +1,87 @@
+<HEAD>
+<TITLE><tt>eq</tt>: generic comparisons </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node14.6.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.4.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>eq</tt>: generic comparisons </H2>
+<P>
+<A name="s:eq"></A>
+
+<pre>
+value prefix = : 'a -&gt; 'a -&gt; bool
+</pre>
+<dl><dd>
+ <tt>e1 = e2</tt> tests for structural equality of <tt>e1</tt> and <tt>e2</tt>.
+           Mutable structures (e.g. references and arrays) are equal
+           if and only if their current contents are structurally equal,
+           even if the two mutable objects are not the same physical object.
+           Equality between functional values raises <tt>Invalid_argument</tt>.
+           Equality between cyclic data structures may not terminate. 
+</dl>
+<pre>
+value prefix &lt;&gt; : 'a -&gt; 'a -&gt; bool
+</pre>
+<dl><dd>
+ Negation of <tt>prefix =</tt>. 
+</dl>
+<pre>
+value prefix &lt; : 'a -&gt; 'a -&gt; bool
+value prefix &lt;= : 'a -&gt; 'a -&gt; bool
+value prefix &gt; : 'a -&gt; 'a -&gt; bool
+value prefix &gt;= : 'a -&gt; 'a -&gt; bool
+</pre>
+<dl><dd>
+ Structural ordering functions. These functions coincide with
+           the usual orderings over integer, string and floating-point
+           numbers, and extend them to a total ordering over all types.
+           The ordering is compatible with <tt>prefix =</tt>. As in the case
+           of <tt>prefix =</tt>, mutable structures are compared by contents.
+           Comparison between functional values raises <tt>Invalid_argument</tt>.
+           Comparison between cyclic structures may not terminate. 
+</dl>
+<pre>
+value compare: 'a -&gt; 'a -&gt; int
+</pre>
+<dl><dd>
+ <tt>compare x y</tt> returns <tt>0</tt> if <tt>x=y</tt>, a negative integer if
+           <tt>x&lt;y</tt>, and a positive integer if <tt>x&gt;y</tt>. The same restrictions
+           as for <tt>=</tt> apply. <tt>compare</tt> can be used as the comparison function
+           required by the <tt>set</tt> and <tt>map</tt> modules. 
+</dl>
+<pre>
+value min: 'a -&gt; 'a -&gt; 'a
+</pre>
+<dl><dd>
+ Return the smaller of the two arguments. 
+</dl>
+<pre>
+value max: 'a -&gt; 'a -&gt; 'a
+</pre>
+<dl><dd>
+ Return the greater of the two arguments. 
+</dl>
+<pre>
+value prefix == : 'a -&gt; 'a -&gt; bool
+</pre>
+<dl><dd>
+ <tt>e1 == e2</tt> tests for physical equality of <tt>e1</tt> and <tt>e2</tt>.
+           On integers and characters, it is the same as structural
+           equality. On mutable structures, <tt>e1 == e2</tt> is true if and only if
+           physical modification of <tt>e1</tt> also affects <tt>e2</tt>.
+           On non-mutable structures, the behavior of <tt>prefix ==</tt> is
+           implementation-dependent, except that <tt>e1 == e2</tt> implies
+           <tt>e1 = e2</tt>. 
+</dl>
+<pre>
+value prefix != : 'a -&gt; 'a -&gt; bool
+</pre>
+<dl><dd>
+ Negation of <tt>prefix ==</tt>. 
+</dl>
+<HR>
+<A HREF="node14.6.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.4.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

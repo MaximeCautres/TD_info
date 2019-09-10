@@ -1,0 +1,39 @@
+<HEAD>
+<TITLE>Mutable variant types</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node4.7.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node4.5.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2>Mutable variant types</H2>
+<P>
+
+The argument of a value constructor can be declared ``mutable'' when
+the variant type is defined:
+<pre>
+        type foo = A of mutable int
+                 | B of mutable int * int
+                 | ...
+</pre>
+This allows in-place modification of the argument part of a
+constructed value. Modification is performed by a new kind of
+expressions, written <i>ident</i> <font color="blue"><code>&lt;-</code></font> <i>expr</i>, where <i>ident</i> is an identifier
+bound by pattern-matching to the argument of a mutable constructor,
+and <i>expr</i> denotes the value that must be stored in place of that
+argument. Continuing the example above:
+<pre>
+        let x = A 1 in
+          begin match x with A y -&gt; y &lt;- 2 | _ -&gt; () end;
+          x
+</pre>
+returns the value <tt>A 2</tt>. The notation <i>ident</i> <font color="blue"><code>&lt;-</code></font> <i>expr</i> works also if
+<i>ident</i> is an identifier bound by pattern-matching to the value of a
+mutable field in a record. For instance,
+<pre>
+        type bar = {mutable lbl : int};;
+        let x = {lbl = 1} in
+          begin match x with {lbl = y} -&gt; y &lt;- 2 end;
+          x
+</pre>
+returns the value <tt>{lbl = 2}</tt>.<P>

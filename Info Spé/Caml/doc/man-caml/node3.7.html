@@ -1,0 +1,107 @@
+<HEAD>
+<TITLE>Patterns</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node3.8.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node3.6.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2>Patterns</H2>
+
+<P>
+
+<PRE>
+<i>pattern</i>:
+      <i>ident</i>
+   |  <font color="blue"><code>_</code></font>
+   |  <i>pattern</i> <font color="blue"><code>as</code></font> <i>ident</i>
+   |  <font color="blue"><code>(</code></font> <i>pattern</i> <font color="blue"><code>)</code></font>
+   |  <font color="blue"><code>(</code></font> <i>pattern</i> <font color="blue"><code>:</code></font> <i>typexpr</i> <font color="blue"><code>)</code></font>
+   |  <i>pattern</i> <font color="blue"><code>|</code></font> <i>pattern</i>
+   |  <i>constant</i>
+   |  <i>ncconstr</i> <i>pattern</i>
+   |  <i>pattern</i> <font color="blue"><code>,</code></font> <i>pattern</i> <i>{</i><font color="blue"><code>,</code></font> <i>pattern</i><i>}</i>
+   |  <font color="blue"><code>{</code></font> <i>label</i> <font color="blue"><code>=</code></font> <i>pattern</i> <i>{</i><font color="blue"><code>;</code></font> <i>label</i> <font color="blue"><code>=</code></font> <i>pattern</i><i>}</i> <font color="blue"><code>}</code></font>
+   |  <font color="blue"><code>[</code></font> <font color="blue"><code>]</code></font>
+   |  <font color="blue"><code>[</code></font> <i>pattern</i> <i>{</i><font color="blue"><code>;</code></font> <i>pattern</i><i>}</i> <font color="blue"><code>]</code></font>
+   |  <i>pattern</i> <font color="blue"><code>::</code></font> <i>pattern</i></PRE>
+<P>
+The table below shows the relative precedences and associativity of
+operators and non-closed pattern constructions. The constructions with
+higher precedences come first.
+
+<table border>
+<tr><th>Operator</th><th>Associativity</th></tr>
+<tr><td>Constructor application</td><td>--</td></tr>
+<tr><td><tt>::</tt></td><td>right</td></tr>
+<tr><td><tt>,</tt></td><td>--</td></tr>
+<tr><td><tt>|</tt></td><td>left</td></tr>
+<tr><td><tt>as</tt></td><td>--</td></tr>
+</table><P>
+Patterns are templates that allow selecting data structures of a
+given shape, and binding identifiers to components of the data
+structure. This selection operation is called pattern matching; its
+outcome is either ``this value does not match this pattern'', or
+``this value matches this pattern, resulting in the following bindings
+of identifiers to values''.<P>
+<H4>Variable patterns</H4>
+<P>
+A pattern that consists in an identifier matches any value,
+binding the identifier to the value. The pattern <font color="blue"><code>_</code></font> also matches
+any value, but does not bind any identifier.<P>
+<H4>Alias patterns</H4>
+
+<P>
+The pattern <i>pattern</i><SUB>1</SUB> <font color="blue"><code>as</code></font> <i>ident</i> matches the same values as
+<i>pattern</i><SUB>1</SUB>. If the matching against <i>pattern</i><SUB>1</SUB> is successful,
+the identifier <i>ident</i> is bound to the matched value, in addition to the
+bindings performed by the matching against <i>pattern</i><SUB>1</SUB>.<P>
+<H4>Parenthesized patterns</H4>
+<P>
+The pattern <font color="blue"><code>(</code></font> <i>pattern</i><SUB>1</SUB> <font color="blue"><code>)</code></font> matches the same values as
+<i>pattern</i><SUB>1</SUB>. A type constraint can appear in a
+parenthesized patterns, as in <font color="blue"><code>(</code></font> <i>pattern</i><SUB>1</SUB> <font color="blue"><code>:</code></font> <i>typexpr</i> <font color="blue"><code>)</code></font>. This
+constraint forces the type of <i>pattern</i><SUB>1</SUB> to be compatible with
+<i>type</i>.<P>
+<H4>``Or'' patterns</H4>
+<P>
+The pattern <i>pattern</i><SUB>1</SUB> <font color="blue"><code>|</code></font> <i>pattern</i><SUB>2</SUB> represents the logical ``or'' of
+the two patterns <i>pattern</i><SUB>1</SUB> and <i>pattern</i><SUB>2</SUB>. A value matches
+<i>pattern</i><SUB>1</SUB> <font color="blue"><code>|</code></font> <i>pattern</i><SUB>2</SUB> either if it matches <i>pattern</i><SUB>1</SUB> or if it
+matches <i>pattern</i><SUB>2</SUB>. The two sub-patterns <i>pattern</i><SUB>1</SUB> and <i>pattern</i><SUB>2</SUB>
+must contain no identifiers. Hence no bindings are returned by
+matching against an ``or'' pattern.<P>
+<H4>Constant patterns</H4>
+<P>
+A pattern consisting in a constant matches the values that
+are equal to this constant.<P>
+<H4>Variant patterns</H4>
+<P>
+The pattern <i>ncconstr</i> <i>pattern</i><SUB>1</SUB> matches all variants whose
+constructor is equal to <i>ncconstr</i>, and whose argument matches
+<i>pattern</i><SUB>1</SUB>.<P>
+The pattern <i>pattern</i><SUB>1</SUB> <font color="blue"><code>::</code></font> <i>pattern</i><SUB>2</SUB> matches non-empty lists whose
+heads match <i>pattern</i><SUB>1</SUB>, and whose tails match <i>pattern</i><SUB>2</SUB>. This
+pattern behaves like <font color="blue"><code>prefix</code></font> <font color="blue"><code>::</code></font> <font color="blue"><code>(</code></font> <i>pattern</i><SUB>1</SUB> <font color="blue"><code>,</code></font> <i>pattern</i><SUB>2</SUB> <font color="blue"><code>)</code></font>.<P>
+The pattern <font color="blue"><code>[</code></font> <i>pattern</i><SUB>1</SUB> <font color="blue"><code>;</code></font>...<font color="blue"><code>;</code></font> <i>pattern</i><SUB>n</SUB> <font color="blue"><code>]</code></font> matches lists
+of length n whose elements match <i>pattern</i><SUB>1</SUB> ... <i>pattern</i><SUB>n</SUB>,
+respectively. This pattern behaves like
+<i>pattern</i><SUB>1</SUB> <font color="blue"><code>::</code></font>...<font color="blue"><code>::</code></font> <i>pattern</i><SUB>n</SUB> <font color="blue"><code>::</code></font> <font color="blue"><code>[]</code></font>.<P>
+<H4>Tuple patterns</H4>
+<P>
+The pattern <i>pattern</i><SUB>1</SUB> <font color="blue"><code>,</code></font>...<font color="blue"><code>,</code></font> <i>pattern</i><SUB>n</SUB> matches n-tuples
+whose components match the patterns <i>pattern</i><SUB>1</SUB> through <i>pattern</i><SUB>n</SUB>. That
+is, the pattern matches the tuple values <i>(</i><i>v</i><SUB>1</SUB>,...,<i>v</i><SUB>n</SUB><i>)</i> such that
+<i>pattern</i><SUB>i</SUB> matches <i>v</i><SUB>i</SUB> for <i>i</i> = 1, ..., <i>n</i>.<P>
+<H4>Record patterns</H4>
+<P>
+The pattern <font color="blue"><code>{</code></font> <i>label</i><SUB>1</SUB> <font color="blue"><code>=</code></font> <i>pattern</i><SUB>1</SUB> <font color="blue"><code>;</code></font>...<font color="blue"><code>;</code></font> <i>label</i><SUB>n</SUB> <font color="blue"><code>=</code></font> <i>pattern</i><SUB>n</SUB> <font color="blue"><code>}</code></font> matches records that define at least the labels
+<i>label</i><SUB>1</SUB> through <i>label</i><SUB>n</SUB>, and such that the value associated to
+<i>label</i><SUB>i</SUB> match the pattern <i>pattern</i><SUB>i</SUB>, for <i>i</i> = 1, ..., <i>n</i>.
+The record value can define more labels than <i>label</i><SUB>1</SUB> ...
+<i>label</i><SUB>n</SUB>; the values associated to these extra labels are not taken
+into account for matching.
+<HR>
+<A HREF="node3.8.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node3.6.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

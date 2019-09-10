@@ -1,0 +1,1 @@
+Ouvrir cree-image.oml avant affiche-image.oml !

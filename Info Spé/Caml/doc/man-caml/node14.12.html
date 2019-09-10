@@ -1,0 +1,432 @@
+<HEAD>
+<TITLE><tt>io</tt>: buffered input and output </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node14.13.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.11.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>io</tt>: buffered input and output </H2>
+<P>
+<A name="s:io"></A>
+
+<pre>
+type in_channel
+type out_channel
+</pre>
+<dl><dd>
+ The abstract types of input channels and output channels. 
+</dl>
+<pre>
+exception End_of_file
+</pre>
+<dl><dd>
+ Raised when an operation cannot complete, because the end
+           of the file has been reached. 
+</dl>
+<pre>
+value stdin : in_channel
+value std_in : in_channel
+value stdout : out_channel
+value std_out : out_channel
+value stderr : out_channel
+value std_err : out_channel
+</pre>
+<dl><dd>
+ The standard input, standard output, and standard error output
+           for the process. <tt>std_in</tt>, <tt>std_out</tt> and <tt>std_err</tt> are respectively
+	   synonymous with <tt>stdin</tt>, <tt>stdout</tt> and <tt>stderr</tt>. 
+</dl>
+<pre>
+value exit : int -&gt; 'a
+</pre>
+<dl><dd>
+ Flush all pending writes on <tt>std_out</tt> and <tt>std_err</tt>,
+           and terminate the process, returning the given status code
+	   to the operating system
+           (usually 0 to indicate no errors, and a small positive integer
+           to indicate failure.) This function should be called at
+           the end of all standalone programs that output results on
+           <tt>std_out</tt> or <tt>std_err</tt>; otherwise, the program may appear
+           to produce no output, or its output may be truncated. 
+</dl>
+<H3>Output functions on standard output </H3>
+<pre>
+value print_char : char -&gt; unit
+</pre>
+<dl><dd>
+ Print the character on standard output. 
+</dl>
+<pre>
+value print_string : string -&gt; unit
+</pre>
+<dl><dd>
+ Print the string on standard output. 
+</dl>
+<pre>
+value print_int : int -&gt; unit
+</pre>
+<dl><dd>
+ Print the integer, in decimal, on standard output. 
+</dl>
+<pre>
+value print_float : float -&gt; unit
+</pre>
+<dl><dd>
+ Print the floating-point number, in decimal, on standard output. 
+</dl>
+<pre>
+value print_endline : string -&gt; unit
+</pre>
+<dl><dd>
+ Print the string, followed by a newline character, on
+           standard output. 
+</dl>
+<pre>
+value print_newline : unit -&gt; unit
+</pre>
+<dl><dd>
+ Print a newline character on standard output, and flush
+           standard output. This can be used to simulate line
+           buffering of standard output. 
+</dl>
+<H3>Output functions on standard error </H3>
+<pre>
+value prerr_char : char -&gt; unit
+</pre>
+<dl><dd>
+ Print the character on standard error. 
+</dl>
+<pre>
+value prerr_string : string -&gt; unit
+</pre>
+<dl><dd>
+ Print the string on standard error. 
+</dl>
+<pre>
+value prerr_int : int -&gt; unit
+</pre>
+<dl><dd>
+ Print the integer, in decimal, on standard error. 
+</dl>
+<pre>
+value prerr_float : float -&gt; unit
+</pre>
+<dl><dd>
+ Print the floating-point number, in decimal, on standard error. 
+</dl>
+<pre>
+value prerr_endline : string -&gt; unit
+</pre>
+<dl><dd>
+ Print the string, followed by a newline character on standard error
+	   and flush standard error. 
+</dl>
+<H3>Input functions on standard input </H3>
+<pre>
+value read_line : unit -&gt; string
+</pre>
+<dl><dd>
+ Flush standard output, then read characters from standard input
+	   until a newline character is encountered. Return the string of
+           all characters read, without the newline character at the end. 
+</dl>
+<pre>
+value read_int : unit -&gt; int
+</pre>
+<dl><dd>
+ Flush standard output, then read one line from standard input
+           and convert it to an integer. Raise <tt>Failure "int_of_string"</tt>
+           if the line read is not a valid representation of an integer. 
+</dl>
+<pre>
+value read_float : unit -&gt; float
+</pre>
+<dl><dd>
+ Flush standard output, then read one line from standard input
+           and convert it to a floating-point number.
+           The result is unspecified if the line read is not a valid
+           representation of a floating-point number. 
+</dl>
+<H3>General output functions </H3>
+<pre>
+value open_out : string -&gt; out_channel
+</pre>
+<dl><dd>
+ Open the named file for writing, and return a new output channel
+           on that file, positionned at the beginning of the file. The
+           file is truncated to zero length if it already exists. It
+           is created if it does not already exists.
+           Raise <tt>sys__Sys_error</tt> if the file could not be opened. 
+</dl>
+<pre>
+value open_out_bin : string -&gt; out_channel
+</pre>
+<dl><dd>
+ Same as <tt>open_out</tt>, but the file is opened in binary mode,
+           so that no translation takes place during writes. On operating
+           systems that do not distinguish between text mode and binary
+           mode, this function behaves like <tt>open_out</tt>. 
+</dl>
+<pre>
+value open_out_gen : sys__open_flag list -&gt; int -&gt; string -&gt; out_channel
+</pre>
+<dl><dd>
+ <tt>open_out_gen mode rights filename</tt> opens the file named
+           <tt>filename</tt> for writing, as above. The extra argument <tt>mode</tt>
+           specify the opening mode (see <tt>sys__open</tt>). The extra
+           argument <tt>rights</tt> specifies the file permissions, in case the
+           file must be created (see <tt>sys__open</tt>).
+           <tt>open_out</tt> and <tt>open_out_bin</tt> are special cases of this function. 
+</dl>
+<pre>
+value open_descriptor_out : int -&gt; out_channel
+</pre>
+<dl><dd>
+ <tt>open_descriptor_out fd</tt> returns a buffered output channel
+           writing to the file descriptor <tt>fd</tt>. The file descriptor <tt>fd</tt>
+           must have been previously opened for writing, else the behavior is
+	   undefined. 
+</dl>
+<pre>
+value flush : out_channel -&gt; unit
+</pre>
+<dl><dd>
+ Flush the buffer associated with the given output channel, 
+           performing all pending writes on that channel.
+           Interactive programs must be careful about flushing <tt>std_out</tt>
+           and <tt>std_err</tt> at the right time. 
+</dl>
+<pre>
+value output_char : out_channel -&gt; char -&gt; unit
+</pre>
+<dl><dd>
+ Write the character on the given output channel. 
+</dl>
+<pre>
+value output_string : out_channel -&gt; string -&gt; unit
+</pre>
+<dl><dd>
+ Write the string on the given output channel. 
+</dl>
+<pre>
+value output : out_channel -&gt; string -&gt; int -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>output chan buff ofs len</tt> writes <tt>len</tt> characters from string 
+           <tt>buff</tt>, starting at offset <tt>ofs</tt>, to the output channel <tt>chan</tt>.
+           Raise <tt>Invalid_argument "output"</tt> if <tt>ofs</tt> and <tt>len</tt> do not
+           designate a valid substring of <tt>buff</tt>. 
+</dl>
+<pre>
+value output_byte : out_channel -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ Write one 8-bit integer (as the single character with that code)
+           on the given output channel. The given integer is taken modulo
+           256. 
+</dl>
+<pre>
+value output_binary_int : out_channel -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ Write one integer in binary format on the given output channel.
+           The only reliable way to read it back is through the
+           <tt>input_binary_int</tt> function. The format is compatible across
+	   all machines for a given version of Caml Light. 
+</dl>
+<pre>
+value output_value : out_channel -&gt; 'a -&gt; unit
+</pre>
+<dl><dd>
+ Write the representation of a structured value of any type
+           to a channel. Circularities and sharing inside the value
+           are detected and preserved. The object can be read back,
+           by the function <tt>input_value</tt>. The format is compatible across
+	   all machines for a given version of Caml Light. 
+</dl>
+<pre>
+value output_compact_value : out_channel -&gt; 'a -&gt; unit
+</pre>
+<dl><dd>
+ Same as <tt>output_value</tt>, but uses a different format, which
+           occupies less space on the file, but takes more time to generate
+           and read back. 
+</dl>
+<pre>
+value seek_out : out_channel -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>seek_out chan pos</tt> sets the current writing position to <tt>pos</tt>
+           for channel <tt>chan</tt>. This works only for regular files. On
+           files of other kinds (such as terminals, pipes and sockets),
+	   the behavior is unspecified. 
+</dl>
+<pre>
+value pos_out : out_channel -&gt; int
+</pre>
+<dl><dd>
+ Return the current writing position for the given channel. 
+</dl>
+<pre>
+value out_channel_length : out_channel -&gt; int
+</pre>
+<dl><dd>
+ Return the total length (number of characters) of the
+           given channel.  This works only for regular files. On files of
+           other kinds, the result is meaningless. 
+</dl>
+<pre>
+value close_out : out_channel -&gt; unit
+</pre>
+<dl><dd>
+ Close the given channel, flushing all buffered write operations.
+	   The behavior is unspecified if any of the functions above is
+	   called on a closed channel. 
+</dl>
+<H3>General input functions </H3>
+<pre>
+value open_in : string -&gt; in_channel
+</pre>
+<dl><dd>
+ Open the named file for reading, and return a new input channel
+           on that file, positionned at the beginning of the file.
+           Raise <tt>sys__Sys_error</tt> if the file could not be opened. 
+</dl>
+<pre>
+value open_in_bin : string -&gt; in_channel
+</pre>
+<dl><dd>
+ Same as <tt>open_in</tt>, but the file is opened in binary mode,
+           so that no translation takes place during reads. On operating
+           systems that do not distinguish between text mode and binary
+           mode, this function behaves like <tt>open_in</tt>. 
+</dl>
+<pre>
+value open_in_gen : sys__open_flag list -&gt; int -&gt; string -&gt; in_channel
+</pre>
+<dl><dd>
+ <tt>open_in_gen mode rights filename</tt> opens the file named
+           <tt>filename</tt> for reading, as above. The extra arguments
+           <tt>mode</tt> and <tt>rights</tt> specify the opening mode and file permissions
+           (see <tt>sys__open</tt>). <tt>open_in</tt> and <tt>open_in_bin</tt> are special cases
+           of this function. 
+</dl>
+<pre>
+value open_descriptor_in : int -&gt; in_channel
+</pre>
+<dl><dd>
+ <tt>open_descriptor_in fd</tt> returns a buffered input channel
+           reading from the file descriptor <tt>fd</tt>. The file descriptor <tt>fd</tt>
+           must have been previously opened for reading, else the behavior is
+	   undefined. 
+</dl>
+<pre>
+value input_char : in_channel -&gt; char
+</pre>
+<dl><dd>
+ Read one character from the given input channel.
+           Raise <tt>End_of_file</tt> if there are no more characters to read. 
+</dl>
+<pre>
+value input_line : in_channel -&gt; string
+</pre>
+<dl><dd>
+ Read characters from the given input channel, until a
+           newline character is encountered. Return the string of
+           all characters read, without the newline character at the end.
+           Raise <tt>End_of_file</tt> if the end of the file is reached
+           at the beginning of line. 
+</dl>
+<pre>
+value input : in_channel -&gt; string -&gt; int -&gt; int -&gt; int
+</pre>
+<dl><dd>
+ <tt>input chan buff ofs len</tt> attempts to read <tt>len</tt> characters
+           from channel <tt>chan</tt>, storing them in string <tt>buff</tt>, starting at
+           character number <tt>ofs</tt>. It returns the actual number of characters
+           read, between 0 and <tt>len</tt> (inclusive).
+           A return value of 0 means that the end of file was reached.
+           A return value between 0 and <tt>len</tt> exclusive means that
+           no more characters were available at that time; <tt>input</tt> must be
+           called again to read the remaining characters, if desired.
+           Exception <tt>Invalid_argument "input"</tt> is raised if <tt>ofs</tt> and <tt>len</tt>
+           do not designate a valid substring of <tt>buff</tt>. 
+</dl>
+<pre>
+value really_input : in_channel -&gt; string -&gt; int -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>really_input chan buff ofs len</tt> reads <tt>len</tt> characters
+           from channel <tt>chan</tt>, storing them in string <tt>buff</tt>, starting at
+           character number <tt>ofs</tt>. Raise <tt>End_of_file</tt> if
+           the end of file is reached before <tt>len</tt> characters have been read.
+           Raise <tt>Invalid_argument "really_input"</tt> if
+           <tt>ofs</tt> and <tt>len</tt> do not designate a valid substring of <tt>buff</tt>. 
+</dl>
+<pre>
+value input_byte : in_channel -&gt; int
+</pre>
+<dl><dd>
+ Same as <tt>input_char</tt>, but return the 8-bit integer representing
+           the character.
+           Raise <tt>End_of_file</tt> if an end of file was reached. 
+</dl>
+<pre>
+value input_binary_int : in_channel -&gt; int
+</pre>
+<dl><dd>
+ Read an integer encoded in binary format from the given input
+           channel. See <tt>output_binary_int</tt>.
+           Raise <tt>End_of_file</tt> if an end of file was reached while reading the
+	   integer. 
+</dl>
+<pre>
+value input_value : in_channel -&gt; 'a
+</pre>
+<dl><dd>
+ Read the representation of a structured value, as produced
+           by <tt>output_value</tt> or <tt>output_compact_value</tt>, and return
+           the corresponding value.
+           This is not type-safe. The type of the returned object is
+           not <tt>'a</tt> properly speaking: the returned object has one
+           unique type, which cannot be determined at compile-time.
+           The programmer should explicitly give the expected type of the
+           returned value, using the following syntax:
+                     <tt>(input_value chan : type)</tt>.
+	   The behavior is unspecified if the object in the file does not
+	   belong to the given type. 
+</dl>
+<pre>
+value seek_in : in_channel -&gt; int -&gt; unit
+</pre>
+<dl><dd>
+ <tt>seek_in chan pos</tt> sets the current reading position to <tt>pos</tt>
+           for channel <tt>chan</tt>. This works only for regular files. On
+           files of other kinds, the behavior is unspecified. 
+</dl>
+<pre>
+value pos_in : in_channel -&gt; int
+</pre>
+<dl><dd>
+ Return the current reading position for the given channel. 
+</dl>
+<pre>
+value in_channel_length : in_channel -&gt; int
+</pre>
+<dl><dd>
+ Return the total length (number of characters) of the
+           given channel. This works only for regular files. On files of
+           other kinds, the result is meaningless. 
+</dl>
+<pre>
+value close_in : in_channel -&gt; unit
+</pre>
+<dl><dd>
+ Close the given channel. Anything can happen if any of the
+           functions above is called on a closed channel. 
+</dl>
+<HR>
+<A HREF="node14.13.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.11.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

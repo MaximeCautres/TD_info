@@ -1,0 +1,1 @@
+Ouvrir loadall.ml avec MacCaml.

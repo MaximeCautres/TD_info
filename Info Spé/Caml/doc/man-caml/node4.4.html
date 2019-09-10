@@ -1,0 +1,23 @@
+<HEAD>
+<TITLE>Recursive definitions of values</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node4.5.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node4.3.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2>Recursive definitions of values</H2>
+<P>
+Besides <tt>let rec</tt> definitions of functional values, as described in
+the reference manual, Caml Light supports a certain class of
+recursive definitions of non-functional values. For instance, the
+following definition is accepted:
+<pre>
+        let rec x = 1 :: y and y = 2 :: x;;
+</pre>
+and correctly binds <tt>x</tt> to the cyclic list <tt>1::2::1::2::</tt>..., and
+<tt>y</tt> to the cyclic list <tt>2::1::2::1::</tt>...
+Informally, the class of accepted definitions consists of those
+definitions where the defined variables occur only inside function
+bodies or as a field of a data structure. Moreover, the patterns in
+the left-hand sides must be identifiers, nothing more complex.<P>

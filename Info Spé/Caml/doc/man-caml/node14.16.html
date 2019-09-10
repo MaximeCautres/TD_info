@@ -1,0 +1,98 @@
+<HEAD>
+<TITLE><tt>stream</tt>: operations on streams </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node14.17.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.15.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>stream</tt>: operations on streams </H2>
+<P>
+<A name="s:stream"></A>
+
+<pre>
+type 'a stream
+</pre>
+<dl><dd>
+ The type of streams containing values of type <tt>'a</tt>. 
+</dl>
+<pre>
+exception Parse_failure
+</pre>
+<dl><dd>
+ Raised by parsers when none of the first component of the stream patterns
+     is accepted 
+</dl>
+<pre>
+exception Parse_error
+</pre>
+<dl><dd>
+ Raised by parsers when the first component of a stream pattern is
+     accepted, but one of the following components is rejected 
+</dl>
+<pre>
+value stream_next : 'a stream -&gt; 'a
+</pre>
+<dl><dd>
+ <tt>stream_next s</tt> returns the first element of stream <tt>s</tt>,
+     and removes it from the stream. Raise <tt>Parse_failure</tt> if the
+     stream is empty. 
+</dl>
+<pre>
+value stream_from : (unit -&gt; 'a) -&gt; 'a stream
+</pre>
+<dl><dd>
+ <tt>stream_from f</tt> returns the stream which fetches its terminals using
+     the function <tt>f</tt>. This function could be defined as:
+<br>    <tt>    let rec stream_from f = [&lt; 'f(); stream_from f &gt;]</tt>
+<br>    but is implemented more efficiently. 
+</dl>
+<pre>
+value stream_of_string : string -&gt; char stream
+</pre>
+<dl><dd>
+ <tt>stream_of_string s</tt> returns the stream of the characters in
+     string <tt>s</tt>. 
+</dl>
+<pre>
+value stream_of_channel : in_channel -&gt; char stream
+</pre>
+<dl><dd>
+ <tt>stream_of_channel ic</tt> returns the stream of characters read on
+     channel <tt>ic</tt>. 
+</dl>
+<pre>
+value do_stream : ('a -&gt; unit) -&gt; 'a stream -&gt; unit
+</pre>
+<dl><dd>
+ <tt>do_stream f s</tt> scans the whole stream <tt>s</tt>, applying the function <tt>f</tt>
+     in turn to each terminal encountered 
+</dl>
+<pre>
+value stream_check : ('a -&gt; bool) -&gt; 'a stream -&gt; 'a
+</pre>
+<dl><dd>
+ <tt>stream_check p</tt> returns the parser which returns the first terminal of
+     the stream if the predicate <tt>p</tt> returns <tt>true</tt> on this terminal,
+     and raises <tt>Parse_failure</tt> otherwise. 
+</dl>
+<pre>
+value end_of_stream : 'a stream -&gt; unit
+</pre>
+<dl><dd>
+ Return <tt>()</tt> iff the stream is empty, and raise <tt>Parse_failure</tt>
+     otherwise.  
+</dl>
+<pre>
+value stream_get : 'a stream -&gt; 'a * 'a stream
+</pre>
+<dl><dd>
+ <tt>stream_get s</tt> return the first element of the stream <tt>s</tt>, and a stream
+     containing the remaining elements of <tt>s</tt>. Raise <tt>Parse_failure</tt> if the
+     stream is empty. The stream <tt>s</tt> is not modified. This function makes it
+     possible to access a stream non-destructively. 
+</dl>
+<HR>
+<A HREF="node14.17.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node14.15.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

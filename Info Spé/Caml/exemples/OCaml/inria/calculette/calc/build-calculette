@@ -1,0 +1,16 @@
+#!/bin/sh
+
+CURRENTDIR=`pwd`
+cd "$(dirname "$0")"
+
+ocamllex lexer.mll       # generates lexer.ml
+ocamlyacc parser.mly     # generates parser.ml and parser.mli
+ocamlc -c parser.mli
+ocamlc -c lexer.ml
+ocamlc -c parser.ml
+ocamlc -c calculette.ml
+#ocamlc -o calculette lexer.cmo parser.cmo calculette.cmo
+ocamlc -a -o calculette.cma lexer.cmo parser.cmo calculette.cmo
+
+cd "$CURRENTDIR"
+

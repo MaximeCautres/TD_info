@@ -1,0 +1,32 @@
+<HEAD>
+<TITLE>Guards</TITLE>
+</HEAD>
+<BODY>
+<A HREF="node4.3.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node4.1.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2>Guards</H2>
+<P>
+<P>
+Cases of a pattern matching can include guard expressions, which are
+arbitrary boolean expressions that must evaluate to <tt>true</tt> for the
+match case to be selected. Guards occur just before the <tt>-&gt;</tt> token and
+are introduced by the <tt>when</tt> keyword:
+
+
+<pre>
+match <i>expr</i> with
+      <i>pattern</i>1 [when <i>cond</i>1] -&gt; <i>expr</i>1
+    | ...
+    | <i>pattern</i>N [when <i>cond</i>N] -&gt; <i>expr</i>N
+</pre>
+
+(Same syntax for the <tt>fun</tt>, <tt>function</tt>, and <tt>try</tt> ... <tt>with</tt> constructs.)
+During matching, if the value of <i>expr</i> matches some pattern
+<i>pattern</i><SUB>i</SUB> which has a guard <i>cond</i><SUB>i</SUB>, then the expression <i>cond</i><SUB>i</SUB>
+is evaluated (in an environment enriched by the bindings performed
+during matching). If <i>cond</i><SUB>i</SUB> evaluates to <tt>true</tt>, then <i>expr</i><SUB>i</SUB> is
+evaluated and its value returned as the result of the matching, as
+usual. But if <i>cond</i><SUB>i</SUB> evaluates to <tt>false</tt>, the matching is resumed
+against the patterns following <i>pattern</i><SUB>i</SUB>.<P>

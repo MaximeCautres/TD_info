@@ -1,0 +1,123 @@
+<HEAD>
+<TITLE><tt>hashtbl</tt>: hash tables and hash functions </TITLE>
+</HEAD>
+<BODY>
+<A HREF="node15.9.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.7.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>
+<HR>
+<H2><tt>hashtbl</tt>: hash tables and hash functions </H2>
+<P>
+<A name="s:hashtbl"></A>
+
+<dl><dd>
+ Hash tables are hashed association tables, with in-place modification. 
+</dl>
+<pre>
+type ('a, 'b) t
+</pre>
+<dl><dd>
+ The type of hash tables from type <tt>'a</tt> to type <tt>'b</tt>. 
+</dl>
+<pre>
+value new : int -&gt; ('a,'b) t
+</pre>
+<dl><dd>
+ <tt>new n</tt> creates a new, empty hash table, with initial size <tt>n</tt>.
+           The table grows as needed, so <tt>n</tt> is just an initial guess.
+           Better results are said to be achieved when <tt>n</tt> is a prime
+           number. Raise <tt>Invalid_argument "hashtbl__new"</tt> if <tt>n</tt> is
+           less than 1. 
+</dl>
+<pre>
+value clear : ('a, 'b) t -&gt; unit
+</pre>
+<dl><dd>
+ Empty a hash table. 
+</dl>
+<pre>
+value add : ('a, 'b) t -&gt; 'a -&gt; 'b -&gt; unit
+</pre>
+<dl><dd>
+ <tt>add tbl x y</tt> adds a binding of <tt>x</tt> to <tt>y</tt> in table <tt>tbl</tt>.
+           Previous bindings for <tt>x</tt> are not removed, but simply
+           hidden. That is, after performing <tt>remove tbl x</tt>, the previous
+           binding for <tt>x</tt>, if any, is restored.
+           (This is the semantics of association lists.) 
+</dl>
+<pre>
+value find : ('a, 'b) t -&gt; 'a -&gt; 'b
+</pre>
+<dl><dd>
+ <tt>find tbl x</tt> returns the current binding of <tt>x</tt> in <tt>tbl</tt>,
+           or raises <tt>Not_found</tt> if no such binding exists. 
+</dl>
+<pre>
+value find_all : ('a, 'b) t -&gt; 'a -&gt; 'b list
+</pre>
+<dl><dd>
+ <tt>find_all tbl x</tt> returns the list of all data associated with <tt>x</tt>
+           in <tt>tbl</tt>. The current binding is returned first, then the previous
+           bindings, in reverse order of introduction in the table. 
+</dl>
+<pre>
+value remove : ('a, 'b) t -&gt; 'a -&gt; unit
+</pre>
+<dl><dd>
+ <tt>remove tbl x</tt> removes the current binding of <tt>x</tt> in <tt>tbl</tt>,
+           restoring the previous binding if it exists.
+           It does nothing if <tt>x</tt> is not bound in <tt>tbl</tt>. 
+</dl>
+<pre>
+value do_table : ('a -&gt; 'b -&gt; unit) -&gt; ('a, 'b) t -&gt; unit
+</pre>
+<dl><dd>
+ <tt>do_table f tbl</tt> applies <tt>f</tt> to all bindings in table <tt>tbl</tt>,
+	   discarding all the results.
+           <tt>f</tt> receives the key as first argument, and the associated value
+           as second argument.
+           Each binding is presented exactly once to <tt>f</tt>.
+           The order in which the bindings are passed to
+           <tt>f</tt> is unpredictable, except that successive bindings for the same
+           key are presented in reverse chronological order 
+           (most recent first). 
+</dl>
+<pre>
+value do_table_rev : ('a -&gt; 'b -&gt; unit) -&gt; ('a, 'b) t -&gt; unit
+</pre>
+<dl><dd>
+ Same as <tt>do_table</tt>, except that successive bindings for the same
+           key are presented in chronological order (oldest first). 
+</dl>
+<H3>The polymorphic hash primitive </H3>
+<pre>
+value hash : 'a -&gt; int
+</pre>
+<dl><dd>
+ <tt>hash x</tt> associates a positive integer to any value of
+           any type. It is guaranteed that
+                if <tt>x = y</tt>, then <tt>hash x = hash y</tt>. 
+           Moreover, <tt>hash</tt> always terminates, even on cyclic
+           structures. 
+</dl>
+<pre>
+value hash_param : int -&gt; int -&gt; 'a -&gt; int
+</pre>
+<dl><dd>
+ <tt>hash_param n m x</tt> computes a hash value for <tt>x</tt>, with the
+           same properties as for <tt>hash</tt>. The two extra parameters <tt>n</tt> and
+           <tt>m</tt> give more precise control over hashing. Hashing performs a
+           depth-first, right-to-left traversal of the structure <tt>x</tt>, stopping
+           after <tt>n</tt> meaningful nodes were encountered, or <tt>m</tt> nodes,
+           meaningful or not, were encountered. Meaningful nodes are: integers;
+           floating-point numbers; strings; characters; booleans; and constant
+           constructors. Larger values of <tt>m</tt> and <tt>n</tt> means that more
+           nodes are taken into account to compute the final hash
+           value, and therefore collisions are less likely to happen.
+           However, hashing takes longer. The parameters <tt>m</tt> and <tt>n</tt>
+           govern the tradeoff between accuracy and speed. 
+</dl>
+<HR>
+<A HREF="node15.9.html"><IMG SRC="next_motif.gif"></A>
+<A HREF="node15.7.html"><IMG SRC="previous_motif.gif"></A>
+<A HREF="index.html"><IMG SRC="contents_motif.gif"></A>

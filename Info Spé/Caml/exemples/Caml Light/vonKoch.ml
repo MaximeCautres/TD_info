@@ -15,7 +15,7 @@ begin
 	vonKoch (a +. 2. *. (c -. a) /. 3. , b +. 2. *. (d -. b) /. 3.) (c,d)
 end;;
 
-open_graph " 560x200";;
+open_graph " 560x180";;
 set_window_title "Courbe de Von Koch";;
 set_color red;;
 vonKoch (10.,10.) (550.,10.);;

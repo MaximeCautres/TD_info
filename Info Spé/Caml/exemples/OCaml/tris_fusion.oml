@@ -71,22 +71,15 @@ let tris_fusion taille =
 ;;
 
 
-let taille = 5000000;;
+let taille = 1000000;;
 
 print_string "sans reconfiguration du collecteur de déchets:\n";;
 tris_fusion taille;;
 
 print_string "après augmentation de la taille des piles: un peu de patience!\n";;
-open Gc;;
-let r = Gc.get () in
-  r.stack_limit <- 1 lsl 30; 
-  Gc.set r
-;;
+Gc.set {(Gc.get ()) with Gc.stack_limit = 1 lsl 30};;
 tris_fusion taille;;
 
 print_string "après reconfiguration du collecteur de déchets...\n";;
-let r = Gc.get () in
-  r.minor_heap_size <- 1 lsl 25; 
-  Gc.set r
-;;
+Gc.set {(Gc.get ()) with Gc.minor_heap_size = 1 lsl 25};;
 tris_fusion taille;;

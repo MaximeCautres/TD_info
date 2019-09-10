@@ -1,1 +1,1 @@
-Le dossier "exemples" devrait, pour que tous les exemples fonctionnent bien, rester dans le mÍme dossier que l'application WinCaml utilisÈe et Ítre accessible en Ècriture.
+Le dossier "exemples" devrait, pour que tous les exemples fonctionnent bien, rester dans le même dossier que l'application MacCaml utilisée et être accessible en écriture (ce qui n'est pas le cas de l'image disque).

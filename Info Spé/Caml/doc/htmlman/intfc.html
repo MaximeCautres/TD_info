@@ -1,49 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="generator" content="hevea 2.18">
-<link rel="stylesheet" type="text/css" href="manual.css">
-<title>Chapter&#XA0;20&#XA0;&#XA0;Interfacing C with OCaml</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"><link rel="stylesheet" type="text/css" href="manual.css">
+<title>Chapter 19  Interfacing C with OCaml</title>
 </head>
 <body>
-<a href="manual033.html"><img src="previous_motif.gif" alt="Previous"></a>
+<a href="manual056.html"><img src="previous_motif.gif" alt="Previous"></a>
 <a href="index.html"><img src="contents_motif.gif" alt="Up"></a>
 <a href="flambda.html"><img src="next_motif.gif" alt="Next"></a>
 <hr>
-<h1 class="chapter" id="c:intf-c">Chapter&#XA0;20&#XA0;&#XA0;Interfacing C with OCaml</h1>
+<h1 class="chapter" id="c:intf-c">Chapter 19  Interfacing C with OCaml</h1>
 <ul>
-<li><a href="intfc.html#sec413">20.1&#XA0;&#XA0;Overview and compilation information</a>
-</li><li><a href="intfc.html#sec420">20.2&#XA0;&#XA0;The <span class="c003">value</span> type</a>
-</li><li><a href="intfc.html#sec424">20.3&#XA0;&#XA0;Representation of OCaml data types</a>
-</li><li><a href="intfc.html#sec431">20.4&#XA0;&#XA0;Operations on values</a>
-</li><li><a href="intfc.html#sec439">20.5&#XA0;&#XA0;Living in harmony with the garbage collector</a>
-</li><li><a href="intfc.html#sec447">20.6&#XA0;&#XA0;A complete example</a>
-</li><li><a href="intfc.html#sec448">20.7&#XA0;&#XA0;Advanced topic: callbacks from C to OCaml</a>
-</li><li><a href="intfc.html#sec458">20.8&#XA0;&#XA0;Advanced example with callbacks</a>
-</li><li><a href="intfc.html#sec459">20.9&#XA0;&#XA0;Advanced topic: custom blocks</a>
-</li><li><a href="intfc.html#sec466">20.10&#XA0;&#XA0;Advanced topic: cheaper C call</a>
-</li><li><a href="intfc.html#sec470">20.11&#XA0;&#XA0;Advanced topic: multithreading</a>
-</li><li><a href="intfc.html#sec473">20.12&#XA0;&#XA0;Advanced topic: interfacing with Windows Unicode APIs</a>
-</li><li><a href="intfc.html#sec475">20.13&#XA0;&#XA0;Building mixed C/OCaml libraries: <span class="c003">ocamlmklib</span></a>
+<li><a href="intfc.html#sec418">19.1  Overview and compilation information</a>
+</li><li><a href="intfc.html#sec425">19.2  The <span class="c003">value</span> type</a>
+</li><li><a href="intfc.html#sec429">19.3  Representation of OCaml data types</a>
+</li><li><a href="intfc.html#sec436">19.4  Operations on values</a>
+</li><li><a href="intfc.html#sec444">19.5  Living in harmony with the garbage collector</a>
+</li><li><a href="intfc.html#sec452">19.6  A complete example</a>
+</li><li><a href="intfc.html#sec453">19.7  Advanced topic: callbacks from C to OCaml</a>
+</li><li><a href="intfc.html#sec463">19.8  Advanced example with callbacks</a>
+</li><li><a href="intfc.html#sec464">19.9  Advanced topic: custom blocks</a>
+</li><li><a href="intfc.html#sec471">19.10  Advanced topic: Bigarrays and the OCaml-C interface</a>
+</li><li><a href="intfc.html#sec475">19.11  Advanced topic: cheaper C call</a>
+</li><li><a href="intfc.html#sec479">19.12  Advanced topic: multithreading</a>
+</li><li><a href="intfc.html#sec482">19.13  Advanced topic: interfacing with Windows Unicode APIs</a>
+</li><li><a href="intfc.html#sec484">19.14  Building mixed C/OCaml libraries: <span class="c003">ocamlmklib</span></a>
 </li></ul>
 <p>This chapter describes how user-defined primitives, written in C, can
 be linked with OCaml code and called from OCaml functions, and how
 these C functions can call back to OCaml code.</p>
-<h2 class="section" id="sec413">20.1&#XA0;&#XA0;Overview and compilation information</h2>
-<h3 class="subsection" id="sec414">20.1.1&#XA0;&#XA0;Declaring primitives</h3>
-<table class="display dcenter"><tr class="c019"><td class="dcell"><table class="c001 cellpading0"><tr><td class="c018">
-<a class="syntax" href="modules.html#definition"><span class="c010">definition</span></a></td><td class="c015">::=</td><td class="c017">&#XA0;...
-&#XA0;</td></tr>
-<tr><td class="c018">&nbsp;</td><td class="c015">&#X2223;</td><td class="c017">&#XA0;<span class="c004">external</span>&#XA0;<a class="syntax" href="names.html#value-name"><span class="c010">value-name</span></a>&#XA0;<span class="c004">:</span>&#XA0;&#XA0;<a class="syntax" href="types.html#typexpr"><span class="c010">typexpr</span></a>&#XA0;<span class="c004">=</span>&#XA0;&#XA0;<a class="syntax" href="#external-declaration"><span class="c010">external-declaration</span></a>
-&#XA0;</td></tr>
+<h2 class="section" id="sec418">19.1  Overview and compilation information</h2>
+<h3 class="subsection" id="sec419">19.1.1  Declaring primitives</h3>
+<div class="syntax"><table class="display dcenter"><tr class="c019"><td class="dcell"><table class="c001 cellpading0"><tr><td class="c018">
+<a class="syntax" href="modules.html#definition"><span class="c010">definition</span></a></td><td class="c015">::=</td><td class="c017"> ...
+ </td></tr>
+<tr><td class="c018">&nbsp;</td><td class="c015">∣</td><td class="c017"> <span class="c004">external</span> <a class="syntax" href="names.html#value-name"><span class="c010">value-name</span></a> <span class="c004">:</span>  <a class="syntax" href="types.html#typexpr"><span class="c010">typexpr</span></a> <span class="c004">=</span>  <a class="syntax" href="#external-declaration"><span class="c010">external-declaration</span></a>
+ </td></tr>
 <tr><td class="c018">&nbsp;</td></tr>
 <tr><td class="c018">
-<a class="syntax" id="external-declaration"><span class="c010">external-declaration</span></a></td><td class="c015">::=</td><td class="c017">&#XA0;<a class="syntax" href="lex.html#string-literal"><span class="c010">string-literal</span></a>&#XA0;&#XA0;[&#XA0;<a class="syntax" href="lex.html#string-literal"><span class="c010">string-literal</span></a>&#XA0;&#XA0;[&#XA0;<a class="syntax" href="lex.html#string-literal"><span class="c010">string-literal</span></a>&#XA0;]&#XA0;]
+<a class="syntax" id="external-declaration"><span class="c010">external-declaration</span></a></td><td class="c015">::=</td><td class="c017"> <a class="syntax" href="lex.html#string-literal"><span class="c010">string-literal</span></a>  [ <a class="syntax" href="lex.html#string-literal"><span class="c010">string-literal</span></a>  [ <a class="syntax" href="lex.html#string-literal"><span class="c010">string-literal</span></a> ] ]
 </td></tr>
 </table></td></tr>
-</table><p>User primitives are declared in an implementation file or
-<span class="c004">struct</span>&#X2026;<span class="c004">end</span> module expression using the <span class="c004">external</span> keyword:
+</table></div><p>User primitives are declared in an implementation file or
+<span class="c004">struct</span>…<span class="c004">end</span> module expression using the <span class="c004">external</span> keyword:
 </p><pre>
         external <span class="c009">name</span> : <span class="c009">type</span> = <span class="c009">C-function-name</span>
 </pre><p>
@@ -55,12 +58,12 @@ standard library module <span class="c003">Pervasives</span>:
                        = "input"
 </pre><p>Primitives with several arguments are always curried. The C function
 does not necessarily have the same name as the ML function.</p><p>External functions thus defined can be specified in interface files or
-<span class="c004">sig</span>&#X2026;<span class="c004">end</span> signatures either as regular values
+<span class="c004">sig</span>…<span class="c004">end</span> signatures either as regular values
 </p><pre>
         val <span class="c009">name</span> : <span class="c009">type</span>
 </pre><p>
 thus hiding their implementation as C functions, or explicitly as
-&#X201C;manifest&#X201D; external functions
+“manifest” external functions
 </p><pre>
         external <span class="c009">name</span> : <span class="c009">type</span> = <span class="c009">C-function-name</span>
 </pre><p>
@@ -68,7 +71,7 @@ The latter is slightly more efficient, as it allows clients of the
 module to call directly the C function instead of going through the
 corresponding OCaml function. On the other hand, it should not be used
 in library modules if they have side-effects at toplevel, as this
-direct call interferes with the linker&#X2019;s algorithm for removing unused
+direct call interferes with the linker’s algorithm for removing unused
 modules from libraries at link-time.</p><p>The arity (number of arguments) of a primitive is automatically
 determined from its OCaml type in the <span class="c003">external</span> declaration, by
 counting the number of function arrows in the type. For instance,
@@ -84,14 +87,14 @@ primitive. For instance,
 </pre><p><span class="c003">f</span> has arity 1, but <span class="c003">g</span> has arity 2. This allows a primitive to
 return a functional value (as in the <span class="c003">f</span> example above): just remember
 to name the functional return type in a type abbreviation.</p><p>The language accepts external declarations with one or two
-flag strings in addition to the C function&#X2019;s name. These flags are
+flag strings in addition to the C function’s name. These flags are
 reserved for the implementation of the standard library.</p>
-<h3 class="subsection" id="sec415">20.1.2&#XA0;&#XA0;Implementing primitives</h3>
-<p>User primitives with arity <span class="c009">n</span> &#X2264; 5 are implemented by C functions
+<h3 class="subsection" id="sec420">19.1.2  Implementing primitives</h3>
+<p>User primitives with arity <span class="c009">n</span> ≤ 5 are implemented by C functions
 that take <span class="c009">n</span> arguments of type <span class="c003">value</span>, and return a result of type
 <span class="c003">value</span>. The type <span class="c003">value</span> is the type of the representations for OCaml
 values. It encodes objects of several base types (integers,
-floating-point numbers, strings,&#XA0;&#X2026;) as well as OCaml data
+floating-point numbers, strings, …) as well as OCaml data
 structures. The type <span class="c003">value</span> and the associated conversion
 functions and macros are described in detail below. For instance,
 here is the declaration for the C function implementing the <span class="c003">input</span>
@@ -141,7 +144,7 @@ Except for very simple primitives, it is often preferable to have two
 distinct C functions to implement these two tasks. The first function
 actually implements the primitive, taking native C values as
 arguments and returning a native C value. The second function,
-often called the &#X201C;stub code&#X201D;, is a simple wrapper around the first
+often called the “stub code”, is a simple wrapper around the first
 function that converts its arguments from OCaml values to C values,
 call the first function, and convert the returned C value to OCaml
 value. For instance, here is the stub code for the <span class="c003">input</span>
@@ -165,7 +168,8 @@ declared as:
 </pre><p>
 To write C code that operates on OCaml values, the following
 include files are provided:
-</p><div class="center"><table class="c000 cellpadding1" border=1><tr><td class="c014"><span class="c013">Include file</span></td><td class="c014"><span class="c013">Provides</span> </td></tr>
+</p><div class="tableau">
+<div class="center"><table class="c000 cellpadding1" border=1><tr><td class="c014"><span class="c013">Include file</span></td><td class="c014"><span class="c013">Provides</span> </td></tr>
 <tr><td class="c022">
 <span class="c003">caml/mlvalues.h</span></td><td class="c021">definition of the <span class="c003">value</span> type, and conversion
 macros </td></tr>
@@ -174,17 +178,17 @@ objects) </td></tr>
 <tr><td class="c022"><span class="c003">caml/memory.h</span></td><td class="c021">miscellaneous memory-related functions
 and macros (for GC interface, in-place modification of structures, etc). </td></tr>
 <tr><td class="c022"><span class="c003">caml/fail.h</span></td><td class="c021">functions for raising exceptions
-(see section&#XA0;<a href="#s%3Ac-exceptions">20.4.5</a>) </td></tr>
+(see section <a href="#s%3Ac-exceptions">19.4.5</a>) </td></tr>
 <tr><td class="c022"><span class="c003">caml/callback.h</span></td><td class="c021">callback from C to OCaml (see
-section&#XA0;<a href="#s%3Acallback">20.7</a>). </td></tr>
+section <a href="#s%3Acallback">19.7</a>). </td></tr>
 <tr><td class="c022"><span class="c003">caml/custom.h</span></td><td class="c021">operations on custom blocks (see
-section&#XA0;<a href="#s%3Acustom">20.9</a>). </td></tr>
+section <a href="#s%3Acustom">19.9</a>). </td></tr>
 <tr><td class="c022"><span class="c003">caml/intext.h</span></td><td class="c021">operations for writing user-defined
 serialization and deserialization functions for custom blocks
-(see section&#XA0;<a href="#s%3Acustom">20.9</a>). </td></tr>
+(see section <a href="#s%3Acustom">19.9</a>). </td></tr>
 <tr><td class="c022"><span class="c003">caml/threads.h</span></td><td class="c021">operations for interfacing in the presence
-of multiple threads (see section&#XA0;<a href="#s%3AC-multithreading">20.11</a>). </td></tr>
-</table></div><p>
+of multiple threads (see section <a href="#s%3AC-multithreading">19.12</a>). </td></tr>
+</table></div></div><p>
 These files reside in the <span class="c003">caml/</span> subdirectory of the OCaml
 standard library directory, which is returned by the command
 <span class="c003">ocamlc -where</span> (usually <span class="c003">/usr/local/lib/ocaml</span> or <span class="c003">/usr/lib/ocaml</span>).</p><p>By default, header files in the <span class="c003">caml/</span> subdirectory give only access
@@ -198,7 +202,7 @@ for most functions, which usually produce clashes with names defined
 by other C libraries that you might use. Including the header files
 without <span class="c003">CAML_NAME_SPACE</span> is only supported for backward
 compatibility.</p>
-<h3 class="subsection" id="sec416">20.1.3&#XA0;&#XA0;Statically linking C code with OCaml code</h3>
+<h3 class="subsection" id="sec421">19.1.3  Statically linking C code with OCaml code</h3>
 <p>
 <a id="staticlink-c-code"></a></p><p>The OCaml runtime system comprises three main parts: the bytecode
 interpreter, the memory manager, and a set of C functions that
@@ -207,8 +211,8 @@ provided to call these C functions, designated by their offset in a
 table of functions (the table of primitives).</p><p>In the default mode, the OCaml linker produces bytecode for the
 standard runtime system, with a standard set of primitives. References
 to primitives that are not in this standard set result in the
-&#X201C;unavailable C primitive&#X201D; error. (Unless dynamic loading of C
-libraries is supported &#X2013; see section&#XA0;<a href="#dynlink-c-code">20.1.4</a> below.)</p><p>In the &#X201C;custom runtime&#X201D; mode, the OCaml linker scans the
+“unavailable C primitive” error. (Unless dynamic loading of C
+libraries is supported – see section <a href="#dynlink-c-code">19.1.4</a> below.)</p><p>In the “custom runtime” mode, the OCaml linker scans the
 object files and determines the set of required primitives. Then, it
 builds a suitable runtime system, by calling the native code linker with:
 </p><ul class="itemize"><li class="li-itemize">
@@ -217,13 +221,13 @@ the table of the required primitives;
 memory manager, and the standard primitives;
 </li><li class="li-itemize">libraries and object code files (<span class="c003">.o</span> files) mentioned on the
 command line for the OCaml linker, that provide implementations
-for the user&#X2019;s primitives.
+for the user’s primitives.
 </li></ul><p>
 This builds a runtime system with the required primitives. The OCaml
 linker generates bytecode for this custom runtime system. The
 bytecode is appended to the end of the custom runtime system, so that
 it will be automatically executed when the output file (custom
-runtime + bytecode) is launched.</p><p>To link in &#X201C;custom runtime&#X201D; mode, execute the <span class="c003">ocamlc</span> command with:
+runtime + bytecode) is launched.</p><p>To link in “custom runtime” mode, execute the <span class="c003">ocamlc</span> command with:
 </p><ul class="itemize"><li class="li-itemize">
 the <span class="c003">-custom</span> option;
 </li><li class="li-itemize">the names of the desired OCaml object files (<span class="c003">.cmo</span> and <span class="c003">.cma</span> files) ;
@@ -269,7 +273,7 @@ options themselves at link-time:
 </pre><p>
 The former alternative is more convenient for the final users of the
 library, however.</p>
-<h3 class="subsection" id="sec417">20.1.4&#XA0;&#XA0;Dynamically linking C code with OCaml code</h3>
+<h3 class="subsection" id="sec422">19.1.4  Dynamically linking C code with OCaml code</h3>
 <p>
 <a id="dynlink-c-code"></a></p><p>Starting with Objective Caml 3.03, an alternative to static linking of C code
 using the <span class="c003">-custom</span> code is provided. In this mode, the OCaml linker
@@ -278,7 +282,7 @@ system) that simply records the names of dynamically-loaded libraries
 containing the C code. The standard OCaml runtime system <span class="c003">ocamlrun</span>
 then loads dynamically these libraries, and resolves references to the
 required primitives, before executing the bytecode.</p><p>This facility is currently supported and known to work well under
-Linux, MacOS&#XA0;X, and Windows. It is supported, but not
+Linux, MacOS X, and Windows. It is supported, but not
 fully tested yet, under FreeBSD, Tru64, Solaris and Irix. It is not
 supported yet under other Unixes.</p><p>To dynamically link C code with OCaml code, the C code must first be
 compiled into a shared library (under Unix) or DLL (under Windows).
@@ -288,7 +292,7 @@ operating system), and 2- building a
 shared library from the resulting object files. The resulting shared
 library or DLL file must be installed in a place where <span class="c003">ocamlrun</span> can
 find it later at program start-up time (see
-section&#XA0;<a href="runtime.html#s-ocamlrun-dllpath">11.3</a>).
+section <a href="runtime.html#s-ocamlrun-dllpath">11.3</a>).
 Finally (step 3), execute the <span class="c003">ocamlc</span> command with
 </p><ul class="itemize"><li class="li-itemize">
 the names of the desired OCaml object files (<span class="c003">.cmo</span> and <span class="c003">.cma</span> files) ;
@@ -298,9 +302,9 @@ a library named <span class="c003">dll</span><span class="c009">name</span><span
 in one of the standard library directories can also be specified as
 <span class="c003">-dllib -l</span><span class="c009">name</span>.
 </li></ul><p>
-Do <em>not</em> set the <span class="c003">-custom</span> flag, otherwise you&#X2019;re back to static linking
-as described in section&#XA0;<a href="#staticlink-c-code">20.1.3</a>.
-The <span class="c003">ocamlmklib</span> tool (see section&#XA0;<a href="#s-ocamlmklib">20.13</a>)
+Do <em>not</em> set the <span class="c003">-custom</span> flag, otherwise you’re back to static linking
+as described in section <a href="#staticlink-c-code">19.1.3</a>.
+The <span class="c003">ocamlmklib</span> tool (see section <a href="#s-ocamlmklib">19.14</a>)
 automates steps 2 and 3.</p><p>As in the case of static linking, it is possible (and recommended) to
 record the names of C libraries in an OCaml <span class="c003">.cma</span> library archive.
 Consider again an OCaml library
@@ -322,13 +326,13 @@ achieving the same effect as
 Using this mechanism, users of the library <span class="c003">mylib.cma</span> do not need to
 known that it references C code, nor whether this C code must be
 statically linked (using <span class="c003">-custom</span>) or dynamically linked.</p>
-<h3 class="subsection" id="sec418">20.1.5&#XA0;&#XA0;Choosing between static linking and dynamic linking</h3>
+<h3 class="subsection" id="sec423">19.1.5  Choosing between static linking and dynamic linking</h3>
 <p>After having described two different ways of linking C code with OCaml
 code, we now review the pros and cons of each, to help developers of
 mixed OCaml/C libraries decide.</p><p>The main advantage of dynamic linking is that it preserves the
 platform-independence of bytecode executables. That is, the bytecode
 executable contains no machine code, and can therefore be compiled on
-platform <span class="c009">A</span> and executed on other platforms <span class="c009">B</span>, <span class="c009">C</span>, &#X2026;, as long
+platform <span class="c009">A</span> and executed on other platforms <span class="c009">B</span>, <span class="c009">C</span>, …, as long
 as the required shared libraries are available on all these
 platforms. In contrast, executables generated by <span class="c003">ocamlc -custom</span> run
 only on the platform on which they were created, because they embark a
@@ -342,7 +346,7 @@ resulting executable is not stand-alone: it requires the shared
 libraries, as well as <span class="c003">ocamlrun</span>, to be installed on the machine
 executing the code. If you wish to distribute a stand-alone
 executable, it is better to link it statically, using <span class="c003">ocamlc -custom -ccopt -static</span> or <span class="c003">ocamlopt -ccopt -static</span>. Dynamic linking also
-raises the &#X201C;DLL hell&#X201D; problem: some care must be taken to ensure
+raises the “DLL hell” problem: some care must be taken to ensure
 that the right versions of the shared libraries are found at start-up
 time.</p><p>The second drawback of dynamic linking is that it complicates the
 construction of the library. The C compiler and linker flags to
@@ -350,7 +354,7 @@ compile to position-independent code and build a shared library vary
 wildly between different Unix systems. Also, dynamic linking is not
 supported on all Unix systems, requiring a fall-back case to static
 linking in the Makefile for the library. The <span class="c003">ocamlmklib</span> command
-(see section&#XA0;<a href="#s-ocamlmklib">20.13</a>) tries to hide some of these system
+(see section <a href="#s-ocamlmklib">19.14</a>) tries to hide some of these system
 dependencies.</p><p>In conclusion: dynamic linking is highly recommended under the native
 Windows port, because there are no portability problems and it is much
 more convenient for the end users. Under Unix, dynamic linking should
@@ -358,7 +362,7 @@ be considered for mature, frequently used libraries because it
 enhances platform-independence of bytecode executables. For new or
 rarely-used libraries, static linking is much simpler to set up in a
 portable way.</p>
-<h3 class="subsection" id="sec419">20.1.6&#XA0;&#XA0;Building standalone custom runtime systems</h3>
+<h3 class="subsection" id="sec424">19.1.6  Building standalone custom runtime systems</h3>
 <p>
 <a id="s:custom-runtime"></a></p><p>It is sometimes inconvenient to build a custom runtime system each
 time OCaml code is linked with C libraries, like <span class="c003">ocamlc -custom</span> does.
@@ -367,11 +371,11 @@ systems (that have bad linkers or slow remote file systems); for
 another thing, the platform-independence of bytecode files is lost,
 forcing to perform one <span class="c003">ocamlc -custom</span> link per platform of interest.</p><p>An alternative to <span class="c003">ocamlc -custom</span> is to build separately a custom
 runtime system integrating the desired C libraries, then generate
-&#X201C;pure&#X201D; bytecode executables (not containing their own runtime
+“pure” bytecode executables (not containing their own runtime
 system) that can run on this custom runtime. This is achieved by the
 <span class="c003">-make-runtime</span> and <span class="c003">-use-runtime</span> flags to <span class="c003">ocamlc</span>. For example,
 to build a custom runtime system integrating the C parts of the
-&#X201C;Unix&#X201D; and &#X201C;Threads&#X201D; libraries, do:
+“Unix” and “Threads” libraries, do:
 </p><pre>        ocamlc -make-runtime -o /home/me/ocamlunixrun unix.cma threads.cma
 </pre><p>To generate a bytecode executable that runs on this runtime system,
 do:
@@ -385,7 +389,7 @@ be given twice: when building the runtime system (so that <span class="c003">oca
 knows which C primitives are required) and also when building the
 bytecode executable (so that the bytecode from <span class="c003">unix.cma</span> and
 <span class="c003">threads.cma</span> is actually linked in).</p>
-<h2 class="section" id="sec420">20.2&#XA0;&#XA0;The <span class="c003">value</span> type</h2>
+<h2 class="section" id="sec425">19.2  The <span class="c003">value</span> type</h2>
 <p>All OCaml objects are represented by the C type <span class="c003">value</span>,
 defined in the include file <span class="c003">caml/mlvalues.h</span>, along with macros to
 manipulate values of that type. An object of type <span class="c003">value</span> is either:
@@ -396,10 +400,10 @@ allocated through one of the <code>caml_alloc_*</code> functions below);
 </li><li class="li-itemize">a pointer to an object outside the heap (e.g., a pointer to a block
 allocated by <span class="c003">malloc</span>, or to a C variable).
 </li></ul>
-<h3 class="subsection" id="sec421">20.2.1&#XA0;&#XA0;Integer values</h3>
+<h3 class="subsection" id="sec426">19.2.1  Integer values</h3>
 <p>Integer values encode 63-bit signed integers (31-bit on 32-bit
 architectures). They are unboxed (unallocated).</p>
-<h3 class="subsection" id="sec422">20.2.2&#XA0;&#XA0;Blocks</h3>
+<h3 class="subsection" id="sec427">19.2.2  Blocks</h3>
 <p>Blocks in the heap are garbage-collected, and therefore have strict
 structure constraints. Each block includes a header containing the
 size of the block (in words), and the tag of the block.
@@ -411,9 +415,10 @@ raw block, whose contents are not scanned by the garbage collector.
 For the benefit of ad-hoc polymorphic primitives such as equality and
 structured input-output, structured and raw blocks are further
 classified according to their tags as follows:
-</p><div class="center"><table class="c000 cellpadding1" border=1><tr><td class="c014"><span class="c013">Tag</span></td><td class="c014"><span class="c013">Contents of the block</span> </td></tr>
+</p><div class="tableau">
+<div class="center"><table class="c000 cellpadding1" border=1><tr><td class="c014"><span class="c013">Tag</span></td><td class="c014"><span class="c013">Contents of the block</span> </td></tr>
 <tr><td class="c022">
-0 to <span class="c003">No_scan_tag</span>&#X2212;1</td><td class="c021">A structured block (an array of
+0 to <span class="c003">No_scan_tag</span>−1</td><td class="c021">A structured block (an array of
 OCaml objects). Each field is a <span class="c003">value</span>. </td></tr>
 <tr><td class="c022"><span class="c003">Closure_tag</span></td><td class="c021">A closure representing a functional value. The first
 word is a pointer to a piece of code, the remaining words are
@@ -425,9 +430,9 @@ floating-point numbers. </td></tr>
 <tr><td class="c022"><span class="c003">Abstract_tag</span></td><td class="c021">A block representing an abstract datatype. </td></tr>
 <tr><td class="c022"><span class="c003">Custom_tag</span></td><td class="c021">A block representing an abstract datatype
 with user-defined finalization, comparison, hashing,
-serialization and deserialization functions atttached. </td></tr>
-</table></div>
-<h3 class="subsection" id="sec423">20.2.3&#XA0;&#XA0;Pointers outside the heap</h3>
+serialization and deserialization functions attached. </td></tr>
+</table></div></div>
+<h3 class="subsection" id="sec428">19.2.3  Pointers outside the heap</h3>
 <p>Any word-aligned pointer to an address outside the heap can be safely
 cast to and from the type <span class="c003">value</span>. This includes pointers returned by
 <span class="c003">malloc</span>, and pointers to C variables (of size at least one word)
@@ -441,10 +446,11 @@ pointer, formerly pointing outside the OCaml heap, now points inside
 the OCaml heap, and this can crash the garbage collector. To avoid
 these problems, it is preferable to wrap the pointer in a OCaml block
 with tag <span class="c003">Abstract_tag</span> or <span class="c003">Custom_tag</span>.</p>
-<h2 class="section" id="sec424">20.3&#XA0;&#XA0;Representation of OCaml data types</h2>
+<h2 class="section" id="sec429">19.3  Representation of OCaml data types</h2>
 <p>This section describes how OCaml data types are encoded in the
 <span class="c003">value</span> type.</p>
-<h3 class="subsection" id="sec425">20.3.1&#XA0;&#XA0;Atomic types</h3>
+<h3 class="subsection" id="sec430">19.3.1  Atomic types</h3>
+<div class="tableau">
 <div class="center"><table class="c000 cellpadding1" border=1><tr><td class="c014"><span class="c013">OCaml type</span></td><td class="c014"><span class="c013">Encoding</span> </td></tr>
 <tr><td class="c016">
 <span class="c003">int</span></td><td class="c016">Unboxed integer values. </td></tr>
@@ -455,14 +461,14 @@ with tag <span class="c003">Abstract_tag</span> or <span class="c003">Custom_tag
 <tr><td class="c016"><span class="c003">int32</span></td><td class="c016">Blocks with tag <span class="c003">Custom_tag</span>. </td></tr>
 <tr><td class="c016"><span class="c003">int64</span></td><td class="c016">Blocks with tag <span class="c003">Custom_tag</span>. </td></tr>
 <tr><td class="c016"><span class="c003">nativeint</span></td><td class="c016">Blocks with tag <span class="c003">Custom_tag</span>. </td></tr>
-</table></div>
-<h3 class="subsection" id="sec426">20.3.2&#XA0;&#XA0;Tuples and records</h3>
+</table></div></div>
+<h3 class="subsection" id="sec431">19.3.2  Tuples and records</h3>
 <p>
-<a id="ss:tuples-and-records"></a></p><p>Tuples are represented by pointers to blocks, with tag&#XA0;0.</p><p>Records are also represented by zero-tagged blocks. The ordering of
+<a id="ss:tuples-and-records"></a></p><p>Tuples are represented by pointers to blocks, with tag 0.</p><p>Records are also represented by zero-tagged blocks. The ordering of
 labels in the record type declaration determines the layout of
 the record fields: the value associated to the label
-declared first is stored in field&#XA0;0 of the block, the value associated
-to the second label goes in field&#XA0;1, and so on.</p><p>As an optimization, records whose fields all have static type <span class="c003">float</span>
+declared first is stored in field 0 of the block, the value associated
+to the second label goes in field 1, and so on.</p><p>As an optimization, records whose fields all have static type <span class="c003">float</span>
 are represented as arrays of floating-point numbers, with tag
 <span class="c003">Double_array_tag</span>. (See the section below on arrays.)</p><p>As another optimization, unboxable record types are represented
 specially; unboxable record types are the immutable record types that
@@ -478,15 +484,15 @@ An attribute (<span class="c003">[@@boxed]</span> or <span class="c003">[@@unbox
 </li><li class="li-itemize">The default representation. In the present version of OCaml, the
 default is the boxed representation.
 </li></ul>
-<h3 class="subsection" id="sec427">20.3.3&#XA0;&#XA0;Arrays</h3>
+<h3 class="subsection" id="sec432">19.3.3  Arrays</h3>
 <p>Arrays of integers and pointers are represented like tuples,
-that is, as pointers to blocks tagged&#XA0;0. They are accessed with the
+that is, as pointers to blocks tagged 0. They are accessed with the
 <span class="c003">Field</span> macro for reading and the <span class="c003">caml_modify</span> function for writing.</p><p>Arrays of floating-point numbers (type <span class="c003">float array</span>)
 have a special, unboxed, more efficient representation.
 These arrays are represented by pointers to blocks with tag
 <span class="c003">Double_array_tag</span>. They should be accessed with the <span class="c003">Double_field</span>
 and <span class="c003">Store_double_field</span> macros.</p>
-<h3 class="subsection" id="sec428">20.3.4&#XA0;&#XA0;Concrete data types</h3>
+<h3 class="subsection" id="sec433">19.3.4  Concrete data types</h3>
 <p>Constructed terms are represented either by unboxed integers (for
 constant constructors) or by blocks whose tag encode the constructor
 (for non-constant constructors). The constant constructors and the
@@ -496,7 +502,8 @@ concrete type declaration. A constant constructor is represented by
 the unboxed integer equal to its constructor number. A non-constant
 constructor declared with <span class="c009">n</span> arguments is represented by
 a block of size <span class="c009">n</span>, tagged with the constructor number; the <span class="c009">n</span>
-fields contain its arguments. Example:</p><div class="center"><table class="c000 cellpadding1" border=1><tr><td class="c014"><span class="c013">Constructed term</span></td><td class="c014"><span class="c013">Representation</span> </td></tr>
+fields contain its arguments. Example:</p><div class="tableau">
+<div class="center"><table class="c000 cellpadding1" border=1><tr><td class="c014"><span class="c013">Constructed term</span></td><td class="c014"><span class="c013">Representation</span> </td></tr>
 <tr><td class="c022">
 <span class="c003">()</span></td><td class="c021"><span class="c003">Val_int(0)</span> </td></tr>
 <tr><td class="c022"><span class="c003">false</span></td><td class="c021"><span class="c003">Val_int(0)</span> </td></tr>
@@ -504,7 +511,7 @@ fields contain its arguments. Example:</p><div class="center"><table class="c000
 <tr><td class="c022"><span class="c003">[]</span></td><td class="c021"><span class="c003">Val_int(0)</span> </td></tr>
 <tr><td class="c022"><span class="c003">h::t</span></td><td class="c021">Block with size = 2 and tag = 0; first field
 contains <span class="c003">h</span>, second field <span class="c003">t</span>. </td></tr>
-</table></div><p>As a convenience, <span class="c003">caml/mlvalues.h</span> defines the macros <span class="c003">Val_unit</span>,
+</table></div></div><p>As a convenience, <span class="c003">caml/mlvalues.h</span> defines the macros <span class="c003">Val_unit</span>,
 <span class="c003">Val_false</span> and <span class="c003">Val_true</span> to refer to <span class="c003">()</span>, <span class="c003">false</span> and <span class="c003">true</span>.</p><p>The following example illustrates the assignment of
 integers and block tags to constructors:
 </p><pre>type t =
@@ -518,10 +525,10 @@ specially; a concrete data type is unboxable if it has exactly one
 constructor and this constructor has exactly one argument. Unboxable
 concrete data types are represented in the same ways as unboxable
 record types: see the description in
-section&#XA0;<a href="#ss%3Atuples-and-records">20.3.2</a>.</p>
-<h3 class="subsection" id="sec429">20.3.5&#XA0;&#XA0;Objects</h3>
+section <a href="#ss%3Atuples-and-records">19.3.2</a>.</p>
+<h3 class="subsection" id="sec434">19.3.5  Objects</h3>
 <p>Objects are represented as blocks with tag <span class="c003">Object_tag</span>. The first
-field of the block refers to the object&#X2019;s class and associated method
+field of the block refers to the object’s class and associated method
 suite, in a format that cannot easily be exploited from C. The second
 field contains a unique object ID, used for comparisons. The remaining
 fields of the object contain the values of the instance variables of
@@ -535,7 +542,7 @@ and methods are functions taking self as first argument, if you want
 to do the method call <span class="c003">foo#bar</span> from the C side, you should call:
 </p><pre>  callback(caml_get_public_method(foo, hash_variant("bar")), foo);
 </pre>
-<h3 class="subsection" id="sec430">20.3.6&#XA0;&#XA0;Polymorphic variants</h3>
+<h3 class="subsection" id="sec435">19.3.6  Polymorphic variants</h3>
 <p>Like constructed terms, polymorphic variant values are represented either
 as integers (for polymorphic variants without argument), or as blocks
 (for polymorphic variants with an argument). Unlike constructed
@@ -553,15 +560,15 @@ That is, <span class="c003">`VConstr(</span><span class="c009">v</span><span cla
 of size 2, whose field number 1 contains the representation of the
 pair <span class="c003">(</span><span class="c009">v</span><span class="c003">, </span><span class="c009">w</span><span class="c003">)</span>, rather than a block of size 3
 containing <span class="c009">v</span> and <span class="c009">w</span> in fields 1 and 2.</p>
-<h2 class="section" id="sec431">20.4&#XA0;&#XA0;Operations on values</h2>
-<h3 class="subsection" id="sec432">20.4.1&#XA0;&#XA0;Kind tests</h3>
+<h2 class="section" id="sec436">19.4  Operations on values</h2>
+<h3 class="subsection" id="sec437">19.4.1  Kind tests</h3>
 <ul class="itemize"><li class="li-itemize">
 <span class="c003">Is_long(</span><span class="c009">v</span><span class="c003">)</span> is true if value <span class="c009">v</span> is an immediate integer,
 false otherwise
 </li><li class="li-itemize"><span class="c003">Is_block(</span><span class="c009">v</span><span class="c003">)</span> is true if value <span class="c009">v</span> is a pointer to a block,
 and false if it is an immediate integer.
 </li></ul>
-<h3 class="subsection" id="sec433">20.4.2&#XA0;&#XA0;Operations on integers</h3>
+<h3 class="subsection" id="sec438">19.4.2  Operations on integers</h3>
 <ul class="itemize"><li class="li-itemize">
 <span class="c003">Val_long(</span><span class="c009">l</span><span class="c003">)</span> returns the value encoding the <span class="c003">long int</span> <span class="c009">l</span>.
 </li><li class="li-itemize"><span class="c003">Long_val(</span><span class="c009">v</span><span class="c003">)</span> returns the <span class="c003">long int</span> encoded in value <span class="c009">v</span>.
@@ -573,14 +580,14 @@ truth value of the C integer <span class="c009">x</span>.
 <span class="c003">false</span>, 1 if <span class="c009">v</span> is <span class="c003">true</span>.
 </li><li class="li-itemize"><span class="c003">Val_true</span>, <span class="c003">Val_false</span> represent the OCaml booleans <span class="c003">true</span> and <span class="c003">false</span>.
 </li></ul>
-<h3 class="subsection" id="sec434">20.4.3&#XA0;&#XA0;Accessing blocks</h3>
+<h3 class="subsection" id="sec439">19.4.3  Accessing blocks</h3>
 <ul class="itemize"><li class="li-itemize">
 <span class="c003">Wosize_val(</span><span class="c009">v</span><span class="c003">)</span> returns the size of the block <span class="c009">v</span>, in words,
 excluding the header.
 </li><li class="li-itemize"><span class="c003">Tag_val(</span><span class="c009">v</span><span class="c003">)</span> returns the tag of the block <span class="c009">v</span>.
 </li><li class="li-itemize"><span class="c003">Field(</span><span class="c009">v</span><span class="c003">, </span><span class="c009">n</span><span class="c003">)</span> returns the value contained in the
 <span class="c009">n</span><sup><span class="c008">th</span></sup> field of the structured block <span class="c009">v</span>. Fields are numbered from 0 to
-<span class="c003">Wosize_val</span>(<span class="c009">v</span>)&#X2212;1.
+<span class="c003">Wosize_val</span>(<span class="c009">v</span>)−1.
 </li><li class="li-itemize"><span class="c003">Store_field(</span><span class="c009">b</span><span class="c003">, </span><span class="c009">n</span><span class="c003">, </span><span class="c009">v</span><span class="c003">)</span> stores the value
 <span class="c009">v</span> in the field number <span class="c009">n</span> of value <span class="c009">b</span>, which must be a
 structured block.
@@ -589,10 +596,10 @@ structured block.
 of the string or byte sequence <span class="c009">v</span>.
 </li><li class="li-itemize"><span class="c003">Byte(</span><span class="c009">v</span><span class="c003">, </span><span class="c009">n</span><span class="c003">)</span> returns the <span class="c009">n</span><sup><span class="c008">th</span></sup> byte of the string
 or byte sequence <span class="c009">v</span>, with type <span class="c003">char</span>. Bytes are numbered from 0 to
-<span class="c003">string_length</span>(<span class="c009">v</span>)&#X2212;1.
+<span class="c003">string_length</span>(<span class="c009">v</span>)−1.
 </li><li class="li-itemize"><span class="c003">Byte_u(</span><span class="c009">v</span><span class="c003">, </span><span class="c009">n</span><span class="c003">)</span> returns the <span class="c009">n</span><sup><span class="c008">th</span></sup> byte of the string
 or byte sequence <span class="c009">v</span>, with type <span class="c003">unsigned char</span>. Bytes are
-numbered from 0 to <span class="c003">string_length</span>(<span class="c009">v</span>)&#X2212;1.
+numbered from 0 to <span class="c003">string_length</span>(<span class="c009">v</span>)−1.
 </li><li class="li-itemize"><span class="c003">String_val(</span><span class="c009">v</span><span class="c003">)</span> returns a pointer to the first byte of the string
 <span class="c009">v</span>, with type <span class="c003">char *</span> or, when OCaml is configured with
 <span class="c003">-force-safe-string</span>, with type <span class="c003">const char *</span>.
@@ -633,10 +640,10 @@ in-place modification of value <span class="c009">v</span>.
 Assigning directly to <span class="c003">Field(</span><span class="c009">v</span><span class="c003">, </span><span class="c009">n</span><span class="c003">)</span> must
 be done with care to avoid confusing the garbage collector (see
 below).</p>
-<h3 class="subsection" id="sec435">20.4.4&#XA0;&#XA0;Allocating blocks</h3>
-<h4 class="subsubsection" id="sec436">Simple interface</h4>
+<h3 class="subsection" id="sec440">19.4.4  Allocating blocks</h3>
+<h4 class="subsubsection" id="sec441">Simple interface</h4>
 <ul class="itemize"><li class="li-itemize">
-<span class="c003">Atom(</span><span class="c009">t</span><span class="c003">)</span> returns an &#X201C;atom&#X201D; (zero-sized block) with tag <span class="c009">t</span>.
+<span class="c003">Atom(</span><span class="c009">t</span><span class="c003">)</span> returns an “atom” (zero-sized block) with tag <span class="c009">t</span>.
 Zero-sized blocks are preallocated outside of the heap. It is
 incorrect to try and allocate a zero-sized block using the functions below.
 For instance, <span class="c003">Atom(0)</span> represents the empty array.
@@ -680,7 +687,7 @@ any boxed type) whose field is the value <span class="c009">v</span>.
 <span class="c003">caml_alloc_unboxed</span> or <span class="c003">caml_alloc_boxed</span> according to the default
 representation of unboxable types in the current version of OCaml.
 </li></ul>
-<h4 class="subsubsection" id="sec437">Low-level interface</h4>
+<h4 class="subsubsection" id="sec442">Low-level interface</h4>
 <p>The following functions are slightly more efficient than <span class="c003">caml_alloc</span>, but
 also much more difficult to use.</p><p>From the standpoint of the allocation functions, blocks are divided
 according to their size as zero-sized blocks, small blocks (with size
@@ -692,7 +699,7 @@ constant size less than or equal to 64 can be assumed to be small. For
 blocks whose size is computed at run-time, the size must be compared
 against <code>Max_young_wosize</code> to determine the correct allocation procedure.</p><ul class="itemize"><li class="li-itemize">
 <span class="c003">caml_alloc_small(</span><span class="c009">n</span><span class="c003">, </span><span class="c009">t</span><span class="c003">)</span> returns a fresh small block of size
-<span class="c009">n</span> &#X2264; <span class="c003">Max_young_wosize</span> words, with tag <span class="c009">t</span>.
+<span class="c009">n</span> ≤ <span class="c003">Max_young_wosize</span> words, with tag <span class="c009">t</span>.
 If this block is a structured block (i.e. if <span class="c009">t</span> &lt; <span class="c003">No_scan_tag</span>), then
 the fields of the block (initially containing garbage) must be initialized
 with legal values (using direct assignment to the fields of the block)
@@ -707,7 +714,7 @@ the fields of the block (initially containing garbage) must be initialized
 with legal values (using the <span class="c003">caml_initialize</span> function described below)
 before the next allocation.
 </li></ul>
-<h3 class="subsection" id="sec438">20.4.5&#XA0;&#XA0;Raising exceptions</h3>
+<h3 class="subsection" id="sec443">19.4.5  Raising exceptions</h3>
 <p> <a id="s:c-exceptions"></a></p><p>Two functions are provided to raise two standard exceptions:
 </p><ul class="itemize"><li class="li-itemize">
 <span class="c003">caml_failwith(</span><span class="c009">s</span><span class="c003">)</span>, where <span class="c009">s</span> is a null-terminated C string (with
@@ -718,7 +725,7 @@ with argument <span class="c009">s</span>.
 </li></ul><p>Raising arbitrary exceptions from C is more delicate: the
 exception identifier is dynamically allocated by the OCaml program, and
 therefore must be communicated to the C function using the
-registration facility described below in section&#XA0;<a href="#s%3Aregister-exn">20.7.3</a>.
+registration facility described below in section <a href="#s%3Aregister-exn">19.7.3</a>.
 Once the exception identifier is recovered in C, the following
 functions actually raise the exception:
 </p><ul class="itemize"><li class="li-itemize">
@@ -728,18 +735,18 @@ no argument;
 <span class="c009">id</span> with the OCaml value <span class="c009">v</span> as argument;
 </li><li class="li-itemize"><span class="c003">caml_raise_with_args(</span><span class="c009">id</span><span class="c003">, </span><span class="c009">n</span><span class="c003">, </span><span class="c009">v</span><span class="c003">)</span>
 raises the exception <span class="c009">id</span> with the OCaml values
-<span class="c009">v</span><span class="c003">[0]</span>, &#X2026;, <span class="c009">v</span><span class="c003">[</span><span class="c009">n</span><span class="c003">-1]</span> as arguments;
+<span class="c009">v</span><span class="c003">[0]</span>, …, <span class="c009">v</span><span class="c003">[</span><span class="c009">n</span><span class="c003">-1]</span> as arguments;
 </li><li class="li-itemize"><span class="c003">caml_raise_with_string(</span><span class="c009">id</span><span class="c003">, </span><span class="c009">s</span><span class="c003">)</span>, where <span class="c009">s</span> is a
 null-terminated C string, raises the exception <span class="c009">id</span> with a copy of
 the C string <span class="c009">s</span> as argument.
 </li></ul>
-<h2 class="section" id="sec439">20.5&#XA0;&#XA0;Living in harmony with the garbage collector</h2>
+<h2 class="section" id="sec444">19.5  Living in harmony with the garbage collector</h2>
 <p>Unused blocks in the heap are automatically reclaimed by the garbage
 collector. This requires some cooperation from C code that
 manipulates heap-allocated blocks.</p>
-<h3 class="subsection" id="sec440">20.5.1&#XA0;&#XA0;Simple interface</h3>
+<h3 class="subsection" id="sec445">19.5.1  Simple interface</h3>
 <p>All the macros described in this section are declared in the
-<span class="c003">memory.h</span> header file.</p><div class="theorem"><span class="c013">Rule&#XA0;1</span>&#XA0;&#XA0;<em>
+<span class="c003">memory.h</span> header file.</p><div class="theorem"><span class="c013">Rule 1</span>  <em>
 A function that has parameters or local variables of type <span class="c003">value</span> must
 begin with a call to one of the <span class="c003">CAMLparam</span> macros and return with
 <span class="c003">CAMLreturn</span>, <span class="c003">CAMLreturn0</span>, or <span class="c003">CAMLreturnT</span>. In particular, <span class="c003">CAMLlocal</span>
@@ -758,8 +765,8 @@ keyword <span class="c003">return</span>. Every occurrence of <span class="c003"
 argument must be
 replaced by <span class="c003">CAMLreturn0</span>. If your C function is a procedure (i.e. if
 it returns void), you must insert <span class="c003">CAMLreturn0</span> at the end (to replace
-C&#X2019;s implicit <span class="c003">return</span>).</p>
-<h5 class="paragraph" id="sec441">Note:</h5>
+C’s implicit <span class="c003">return</span>).</p>
+<h5 class="paragraph" id="sec446">Note:</h5>
 <p> some C compilers give bogus warnings about unused
 variables <span class="c003">caml__dummy_xxx</span> at each use of <span class="c003">CAMLparam</span> and
 <span class="c003">CAMLlocal</span>. You should ignore them.</p><p> <br>
@@ -771,10 +778,10 @@ variables <span class="c003">caml__dummy_xxx</span> at each use of <span class="
   CAMLreturn0;
 }
 </pre>
-<h5 class="paragraph" id="sec442">Note:</h5>
+<h5 class="paragraph" id="sec447">Note:</h5>
 <p> if your function is a primitive with more than 5 arguments
 for use with the byte-code runtime, its arguments are not <span class="c003">value</span>s and
-must not be declared (they have types <span class="c003">value *</span> and <span class="c003">int</span>).</p><div class="theorem"><span class="c013">Rule&#XA0;2</span>&#XA0;&#XA0;<em>
+must not be declared (they have types <span class="c003">value *</span> and <span class="c003">int</span>).</p><div class="theorem"><span class="c013">Rule 2</span>  <em>
 Local variables of type <span class="c003">value</span> must be declared with one of the
 <span class="c003">CAMLlocal</span> macros. Arrays of <span class="c003">value</span>s are declared with
 <span class="c003">CAMLlocalN</span>. These macros must be used at the beginning of the
@@ -793,7 +800,7 @@ variables.</p><p>Example:
   ...
   CAMLreturn (result);
 }
-</pre><div class="theorem"><span class="c013">Rule&#XA0;3</span>&#XA0;&#XA0;<em>
+</pre><div class="theorem"><span class="c013">Rule 3</span>  <em>
 Assignments to the fields of structured blocks must be done with the
 <span class="c003">Store_field</span> macro (for normal blocks) or <span class="c003">Store_double_field</span> macro
 (for arrays and records of floating-point numbers). Other assignments
@@ -812,16 +819,16 @@ block (i.e. <span class="c003">Is_block(</span><span class="c009">b</span><span 
   CAMLreturn (result);
 }
 </pre>
-<h5 class="paragraph" id="sec443">Warning:</h5>
+<h5 class="paragraph" id="sec448">Warning:</h5>
 <p> The first argument of <span class="c003">Store_field</span> and
 <span class="c003">Store_double_field</span> must be a variable declared by <span class="c003">CAMLparam*</span> or
 a parameter declared by <span class="c003">CAMLlocal*</span> to ensure that a garbage
 collection triggered by the evaluation of the other arguments will not
 invalidate the first argument after it is computed.</p>
-<h5 class="paragraph" id="sec444">Use with CAMLlocalN:</h5>
+<h5 class="paragraph" id="sec449">Use with CAMLlocalN:</h5>
 <p> Arrays of values declared using
 <span class="c003">CAMLlocalN</span> must not be written to using <span class="c003">Store_field</span>.
-Use the normal C array syntax instead.</p><div class="theorem"><span class="c013">Rule&#XA0;4</span>&#XA0;&#XA0;<em> Global variables containing values must be registered
+Use the normal C array syntax instead.</p><div class="theorem"><span class="c013">Rule 4</span>  <em> Global variables containing values must be registered
 with the garbage collector using the <span class="c003">caml_register_global_root</span> function.
 </em></div><p>Registration of a global variable <span class="c003">v</span> is achieved by calling
 <span class="c003">caml_register_global_root(&amp;v)</span> just before or just after a valid
@@ -840,14 +847,14 @@ The garbage collector takes advantage of the guarantee that <span class="c003">v
 modified between calls to <span class="c003">caml_modify_generational_global_root</span> to scan it
 less often. This improves performance if the
 modifications of <span class="c003">v</span> happen less often than minor collections.</p>
-<h5 class="paragraph" id="sec445">Note:</h5>
+<h5 class="paragraph" id="sec450">Note:</h5>
 <p> The <span class="c003">CAML</span> macros use identifiers (local variables, type
 identifiers, structure tags) that start with <span class="c003">caml__</span>. Do not use any
 identifier starting with <span class="c003">caml__</span> in your programs.</p>
-<h3 class="subsection" id="sec446">20.5.2&#XA0;&#XA0;Low-level interface</h3>
+<h3 class="subsection" id="sec451">19.5.2  Low-level interface</h3>
 <p>We now give the GC rules corresponding to the low-level allocation
 functions <span class="c003">caml_alloc_small</span> and <span class="c003">caml_alloc_shr</span>. You can ignore those rules
-if you stick to the simplified allocation function <span class="c003">caml_alloc</span>.</p><div class="theorem"><span class="c013">Rule&#XA0;5</span>&#XA0;&#XA0;<em> After a structured block (a block with tag less than
+if you stick to the simplified allocation function <span class="c003">caml_alloc</span>.</p><div class="theorem"><span class="c013">Rule 5</span>  <em> After a structured block (a block with tag less than
 <span class="c003">No_scan_tag</span>) is allocated with the low-level functions, all fields
 of this block must be filled with well-formed values before the next
 allocation operation. If the block has been allocated with
@@ -867,7 +874,7 @@ values. Newly created blocks contain random data, which generally do
 not represent well-formed values.</p><p>If you really need to allocate before the fields can receive their
 final value, first initialize with a constant value (e.g.
 <span class="c003">Val_unit</span>), then allocate, then modify the fields with the correct
-value (see rule&#XA0;6).</p><div class="theorem"><span class="c013">Rule&#XA0;6</span>&#XA0;&#XA0;<em> Direct assignment to a field of a block, as in
+value (see rule 6).</p><div class="theorem"><span class="c013">Rule 6</span>  <em> Direct assignment to a field of a block, as in
 </em><pre><em>
         Field(<span class="c009">v</span>, <span class="c009">n</span>) = <span class="c009">w</span>;
 </em></pre><em>
@@ -901,7 +908,7 @@ First, we write it using the simplified allocation functions:
   CAMLreturn (result);
 }
 </pre><p>Here, the registering of <span class="c003">result</span> is not strictly needed, because no
-allocation takes place after it gets its value, but it&#X2019;s easier and
+allocation takes place after it gets its value, but it’s easier and
 safer to simply register all the local variables that have type <span class="c003">value</span>.</p><p>Here is the same function written using the low-level allocation
 functions. We notice that the cons cells are small blocks and can be
 allocated with <span class="c003">caml_alloc_small</span>, and filled by direct assignments on
@@ -939,10 +946,10 @@ illustrates the use of <span class="c003">caml_modify</span>.
 </pre><p>It would be incorrect to perform
 <span class="c003">Field(r, 1) = tail</span> directly, because the allocation of <span class="c003">tail</span>
 has taken place since <span class="c003">r</span> was allocated.</p>
-<h2 class="section" id="sec447">20.6&#XA0;&#XA0;A complete example</h2>
+<h2 class="section" id="sec452">19.6  A complete example</h2>
 <p>This section outlines how the functions from the Unix <span class="c003">curses</span> library
 can be made available to OCaml programs. First of all, here is
-the interface <span class="c003">curses.mli</span> that declares the <span class="c003">curses</span> primitives and
+the interface <span class="c003">curses.ml</span> that declares the <span class="c003">curses</span> primitives and
 data types:
 </p><pre>(* File curses.ml -- declaration of primitives and data types *)
 type window                   (* The type "window" remains abstract *)
@@ -980,7 +987,8 @@ static struct custom_operations curses_window_ops = {
   custom_hash_default,
   custom_serialize_default,
   custom_deserialize_default,
-  custom_compare_ext_default
+  custom_compare_ext_default,
+  custom_fixed_length_default
 };
 
 /* Accessing the WINDOW * part of an OCaml custom block */
@@ -1079,18 +1087,17 @@ let small_window = newwin 10 5 20 10 in
 </pre><p>(On some machines, you may need to put
 <span class="c003">-cclib -lcurses -cclib -ltermcap</span> or <span class="c003">-cclib -ltermcap</span>
 instead of <span class="c003">-cclib -lcurses</span>.)</p>
-<h2 class="section" id="sec448">20.7&#XA0;&#XA0;Advanced topic: callbacks from C to OCaml</h2>
-<p> <a id="s:callback"></a>
-</p><p>So far, we have described how to call C functions from OCaml. In this
+<h2 class="section" id="sec453">19.7  Advanced topic: callbacks from C to OCaml</h2>
+<p> <a id="s:callback"></a></p><p>So far, we have described how to call C functions from OCaml. In this
 section, we show how C functions can call OCaml functions, either as
 callbacks (OCaml calls C which calls OCaml), or with the main program
 written in C.</p>
-<h3 class="subsection" id="sec449">20.7.1&#XA0;&#XA0;Applying OCaml closures from C</h3>
+<h3 class="subsection" id="sec454">19.7.1  Applying OCaml closures from C</h3>
 <p> <a id="s:callbacks"></a></p><p>C functions can apply OCaml function values (closures) to OCaml values.
 The following functions are provided to perform the applications:
 </p><ul class="itemize"><li class="li-itemize">
 <span class="c003">caml_callback(</span><span class="c009">f, a</span><span class="c003">)</span> applies the functional value <span class="c009">f</span> to
-the value <span class="c009">a</span> and returns the value returned by&#XA0;<span class="c009">f</span>.
+the value <span class="c009">a</span> and returns the value returned by <span class="c009">f</span>.
 </li><li class="li-itemize"><span class="c003">caml_callback2(</span><span class="c009">f, a, b</span><span class="c003">)</span> applies the functional value <span class="c009">f</span>
 (which is assumed to be a curried OCaml function with two arguments) to
 <span class="c009">a</span> and <span class="c009">b</span>.
@@ -1111,12 +1118,12 @@ it can use the functions <span class="c003">caml_callback_exn</span>, <span clas
 arguments as their non-<span class="c003">_exn</span> counterparts, but catch escaping
 exceptions and return them to the C code. The return value <span class="c009">v</span> of the
 <span class="c003">caml_callback*_exn</span> functions must be tested with the macro
-<span class="c003">Is_exception_result(</span><span class="c009">v</span><span class="c003">)</span>. If the macro returns &#X201C;false&#X201D;, no
-exception occured, and <span class="c009">v</span> is the value returned by the OCaml
-function. If <span class="c003">Is_exception_result(</span><span class="c009">v</span><span class="c003">)</span> returns &#X201C;true&#X201D;,
+<span class="c003">Is_exception_result(</span><span class="c009">v</span><span class="c003">)</span>. If the macro returns “false”, no
+exception occurred, and <span class="c009">v</span> is the value returned by the OCaml
+function. If <span class="c003">Is_exception_result(</span><span class="c009">v</span><span class="c003">)</span> returns “true”,
 an exception escaped, and its value (the exception descriptor) can be
 recovered using <span class="c003">Extract_exception(</span><span class="c009">v</span><span class="c003">)</span>.</p>
-<h5 class="paragraph" id="sec450">Warning:</h5>
+<h5 class="paragraph" id="sec455">Warning:</h5>
 <p> If the OCaml function returned with an exception,
 <span class="c003">Extract_exception</span> should be applied to the exception result prior
 to calling a function that may trigger garbage collection.
@@ -1135,7 +1142,7 @@ can crash since <span class="c009">v</span> does not contain a valid value.</p><
       CAMLreturn (res);
     }
 </pre>
-<h3 class="subsection" id="sec451">20.7.2&#XA0;&#XA0;Obtaining or registering OCaml closures for use in C functions</h3>
+<h3 class="subsection" id="sec456">19.7.2  Obtaining or registering OCaml closures for use in C functions</h3>
 <p>There are two ways to obtain OCaml function values (closures) to
 be passed to the <span class="c003">callback</span> functions described above. One way is to
 pass the OCaml function as an argument to a primitive function. For
@@ -1186,7 +1193,7 @@ only once:
         caml_callback(*closure_f, Val_int(arg));
     }
 </pre>
-<h3 class="subsection" id="sec452">20.7.3&#XA0;&#XA0;Registering OCaml exceptions for use in C functions</h3>
+<h3 class="subsection" id="sec457">19.7.3  Registering OCaml exceptions for use in C functions</h3>
 <p> <a id="s:register-exn"></a></p><p>The registration mechanism described above can also be used to
 communicate exception identifiers from OCaml to C. The OCaml code
 registers the exception by evaluating
@@ -1198,7 +1205,7 @@ exception to register. For example:
 </pre><p>The C code can then recover the exception identifier using
 <span class="c003">caml_named_value</span> and pass it as first argument to the functions
 <span class="c003">raise_constant</span>, <span class="c003">raise_with_arg</span>, and <span class="c003">raise_with_string</span> (described
-in section&#XA0;<a href="#s%3Ac-exceptions">20.4.5</a>) to actually raise the exception. For
+in section <a href="#s%3Ac-exceptions">19.4.5</a>) to actually raise the exception. For
 example, here is a C function that raises the <span class="c003">Error</span> exception with
 the given argument:
 </p><pre>    void raise_error(char * msg)
@@ -1206,7 +1213,7 @@ the given argument:
         caml_raise_with_string(*caml_named_value("test exception"), msg);
     }
 </pre>
-<h3 class="subsection" id="sec453">20.7.4&#XA0;&#XA0;Main program in C</h3>
+<h3 class="subsection" id="sec458">19.7.4  Main program in C</h3>
 <p> <a id="s:main-c"></a></p><p>In normal operation, a mixed OCaml/C program starts by executing the
 OCaml initialization code, which then may proceed to call C
 functions. We say that the main program is the OCaml code. In some
@@ -1230,16 +1237,16 @@ executes the initialization code of the OCaml program. Typically, this
 initialization code registers callback functions using <span class="c003">Callback.register</span>.
 Once the OCaml initialization code is complete, control returns to the
 C code that called <span class="c003">caml_main</span>.</li><li class="li-itemize">The C code can then invoke OCaml functions using the callback
-mechanism (see section&#XA0;<a href="#s%3Acallbacks">20.7.1</a>).
+mechanism (see section <a href="#s%3Acallbacks">19.7.1</a>).
 </li></ul>
-<h3 class="subsection" id="sec454">20.7.5&#XA0;&#XA0;Embedding the OCaml code in the C code</h3>
+<h3 class="subsection" id="sec459">19.7.5  Embedding the OCaml code in the C code</h3>
 <p> <a id="s:embedded-code"></a></p><p>The bytecode compiler in custom runtime mode (<span class="c003">ocamlc -custom</span>)
 normally appends the bytecode to the executable file containing the
 custom runtime. This has two consequences. First, the final linking
 step must be performed by <span class="c003">ocamlc</span>. Second, the OCaml runtime library
 must be able to find the name of the executable file from the
 command-line arguments. When using <span class="c003">caml_main(argv)</span> as in
-section&#XA0;<a href="#s%3Amain-c">20.7.4</a>, this means that <span class="c003">argv[0]</span> or <span class="c003">argv[1]</span> must
+section <a href="#s%3Amain-c">19.7.4</a>, this means that <span class="c003">argv[0]</span> or <span class="c003">argv[1]</span> must
 contain the executable file name.</p><p>An alternative is to embed the bytecode in the C code. The
 <span class="c003">-output-obj</span> option to <span class="c003">ocamlc</span> is provided for this purpose. It
 causes the <span class="c003">ocamlc</span> compiler to output a C object file (<span class="c003">.o</span> file,
@@ -1279,20 +1286,20 @@ Unix library. With <span class="c003">ocamlc</span>, you should do:
 </p><pre>
         ocamlc -output-obj -o camlcode.o unix.cma <span class="c009">other</span> .cmo <span class="c009">and</span> .cma <span class="c009">files</span>
         cc -o myprog <span class="c009">C objects and libraries</span> \
-           camlcode.o -L&#X2018;ocamlc -where&#X2018; -lunix -lcamlrun
+           camlcode.o -L‘ocamlc -where‘ -lunix -lcamlrun
 </pre><p>
 With <span class="c003">ocamlopt</span>, you should do:
 </p><pre>
         ocamlopt -output-obj -o camlcode.o unix.cmxa <span class="c009">other</span> .cmx <span class="c009">and</span> .cmxa <span class="c009">files</span>
         cc -o myprog <span class="c009">C objects and libraries</span> \
-           camlcode.o -L&#X2018;ocamlc -where&#X2018; -lunix -lasmrun
+           camlcode.o -L‘ocamlc -where‘ -lunix -lasmrun
 </pre>
-<h5 class="paragraph" id="sec455">Warning:</h5>
+<h5 class="paragraph" id="sec460">Warning:</h5>
 <p> On some ports, special options are required on the final
 linking phase that links together the object file produced by the
 <span class="c003">-output-obj</span> option and the remainder of the program. Those options
-are shown in the configuration file <span class="c003">config/Makefile</span> generated during
-compilation of OCaml, as the variable <span class="c003">LDFLAGS</span>.
+are shown in the configuration file <span class="c003">Makefile.config</span> generated during
+compilation of OCaml, as the variable <span class="c003">OC_LDFLAGS</span>.
 </p><ul class="itemize"><li class="li-itemize">
 Windows with the MSVC compiler: the object file produced by
 OCaml have been compiled with the <span class="c003">/MD</span> flag, and therefore
@@ -1301,7 +1308,7 @@ all other object files linked with it should also be compiled with
 </li><li class="li-itemize">other systems: you may have to add one or more of <span class="c003">-lcurses</span>,
 <span class="c003">-lm</span>, <span class="c003">-ldl</span>, depending on your OS and C compiler.
 </li></ul>
-<h5 class="paragraph" id="sec456">Stack backtraces.</h5>
+<h5 class="paragraph" id="sec461">Stack backtraces.</h5>
 <p> When OCaml bytecode produced by
 <span class="c003">ocamlc -g</span> is embedded in a C program, no debugging information is
 included, and therefore it is impossible to print stack backtraces on
@@ -1312,7 +1319,7 @@ turned on programmatically. This can be achieved from the OCaml side
 by calling <span class="c003">Printexc.record_backtrace true</span> in the initialization of
 one of the OCaml modules. This can also be achieved from the C side
 by calling <span class="c003">caml_record_backtrace(Val_int(1));</span> in the OCaml-C glue code.</p>
-<h5 class="paragraph" id="sec457">Unloading the runtime.</h5>
+<h5 class="paragraph" id="sec462">Unloading the runtime.</h5>
 <p>In case the shared library produced with <span class="c003">-output-obj</span> is to be loaded and
 unloaded repeatedly by a single process, care must be taken to unload the
 OCaml runtime explicitly, in order to avoid various system resource leaks.</p><p>Since 4.05, <span class="c003">caml_shutdown</span> function can be used to shut the runtime down
@@ -1320,7 +1327,7 @@ gracefully, which equals the following:
 </p><ul class="itemize"><li class="li-itemize">
 Running the functions that were registered with <span class="c003">Pervasives.at_exit</span>.
 </li><li class="li-itemize">Triggering finalization of allocated custom blocks (see
-section&#XA0;<a href="#s%3Acustom">20.9</a>). For example, <span class="c003">Pervasives.in_channel</span> and
+section <a href="#s%3Acustom">19.9</a>). For example, <span class="c003">Pervasives.in_channel</span> and
 <span class="c003">Pervasives.out_channel</span> are represented by custom blocks that enclose file
 descriptors, which are to be released.
 </li><li class="li-itemize">Unloading the dependent shared libraries that were loaded by the runtime,
@@ -1339,9 +1346,9 @@ to <span class="c003">caml_shutdown</span> (in a nested fashion). The runtime wi
 there are no outstanding calls to <span class="c003">caml_startup</span>.</p><p>Once a runtime is unloaded, it cannot be started up again without reloading the
 shared library and reinitializing its static data. Therefore, at the moment, the
 facility is only useful for building reloadable shared libraries.</p>
-<h2 class="section" id="sec458">20.8&#XA0;&#XA0;Advanced example with callbacks</h2>
+<h2 class="section" id="sec463">19.8  Advanced example with callbacks</h2>
 <p>This section illustrates the callback facilities described in
-section&#XA0;<a href="#s%3Acallback">20.7</a>. We are going to package some OCaml functions
+section <a href="#s%3Acallback">19.7</a>. We are going to package some OCaml functions
 in such a way that they can be linked with C code and called from C
 just like any C functions. The OCaml functions are defined in the
 following <span class="c003">mod.ml</span> OCaml source:</p><pre>(* File mod.ml -- some "useful" OCaml functions *)
@@ -1412,13 +1419,12 @@ To build the whole program, just invoke the C compiler as follows:
 </p><pre>        cc -o prog -I `ocamlc -where` main.c mod.a -lcurses
 </pre><p>(On some machines, you may need to put <span class="c003">-ltermcap</span> or
 <span class="c003">-lcurses -ltermcap</span> instead of <span class="c003">-lcurses</span>.)</p>
-<h2 class="section" id="sec459">20.9&#XA0;&#XA0;Advanced topic: custom blocks</h2>
-<p> <a id="s:custom"></a>
-</p><p>Blocks with tag <span class="c003">Custom_tag</span> contain both arbitrary user data and a
+<h2 class="section" id="sec464">19.9  Advanced topic: custom blocks</h2>
+<p> <a id="s:custom"></a></p><p>Blocks with tag <span class="c003">Custom_tag</span> contain both arbitrary user data and a
 pointer to a C struct, with type <span class="c003">struct custom_operations</span>, that
 associates user-provided finalization, comparison, hashing,
 serialization and deserialization functions to this block.</p>
-<h3 class="subsection" id="sec460">20.9.1&#XA0;&#XA0;The <span class="c003">struct custom_operations</span></h3>
+<h3 class="subsection" id="sec465">19.9.1  The <span class="c003">struct custom_operations</span></h3>
 <p>The <span class="c003">struct custom_operations</span> is defined in <span class="c003">&lt;caml/custom.h&gt;</span> and
 contains the following fields:
 </p><ul class="itemize"><li class="li-itemize">
@@ -1431,7 +1437,7 @@ The block is passed as first argument to the function.
 The <span class="c003">finalize</span> field can also be <span class="c003">custom_finalize_default</span> to indicate that no
 finalization function is associated with the block.</li><li class="li-itemize"><span class="c003">int (*compare)(value v1, value v2)</span> <br>
 The <span class="c003">compare</span> field contains a pointer to a C function that is
-called whenever two custom blocks are compared using OCaml&#X2019;s generic
+called whenever two custom blocks are compared using OCaml’s generic
 comparison operators (<span class="c003">=</span>, <span class="c003">&lt;&gt;</span>, <span class="c003">&lt;=</span>, <span class="c003">&gt;=</span>, <span class="c003">&lt;</span>, <span class="c003">&gt;</span> and
 <span class="c003">compare</span>). The C function should return 0 if the data contained in
 the two blocks are structurally equal, a negative integer if the data
@@ -1441,7 +1447,7 @@ the data from the second block.<p>The <span class="c003">compare</span> field ca
 default comparison function simply raises <span class="c003">Failure</span>.</p></li><li class="li-itemize"><span class="c003">int (*compare_ext)(value v1, value v2)</span> <br>
 (Since 3.12.1)
 The <span class="c003">compare_ext</span> field contains a pointer to a C function that is
-called whenever one custom block and one unboxed integer are compared using OCaml&#X2019;s generic
+called whenever one custom block and one unboxed integer are compared using OCaml’s generic
 comparison operators (<span class="c003">=</span>, <span class="c003">&lt;&gt;</span>, <span class="c003">&lt;=</span>, <span class="c003">&gt;=</span>, <span class="c003">&lt;</span>, <span class="c003">&gt;</span> and
 <span class="c003">compare</span>). As in the case of the <span class="c003">compare</span> field, the C function
 should return 0 if the two arguments are structurally equal, a
@@ -1450,14 +1456,14 @@ argument, and a positive integer if the first argument compares
 greater than the second argument.<p>The <span class="c003">compare_ext</span> field can be set to <span class="c003">custom_compare_ext_default</span>; this
 default comparison function simply raises <span class="c003">Failure</span>.</p></li><li class="li-itemize"><span class="c003">intnat (*hash)(value v)</span> <br>
 The <span class="c003">hash</span> field contains a pointer to a C function that is called
-whenever OCaml&#X2019;s generic hash operator (see module <span class="c003">Hashtbl</span>) is
+whenever OCaml’s generic hash operator (see module <a href="libref/Hashtbl.html"><span class="c003">Hashtbl</span></a>) is
 applied to a custom block. The C function can return an arbitrary
 integer representing the hash value of the data contained in the
 given custom block. The hash value must be compatible with the
 <span class="c003">compare</span> function, in the sense that two structurally equal data
 (that is, two custom blocks for which <span class="c003">compare</span> returns 0) must have
 the same hash value.<p>The <span class="c003">hash</span> field can be set to <span class="c003">custom_hash_default</span>, in which case
-the custom block is ignored during hash computation.</p></li><li class="li-itemize"><span class="c003">void (*serialize)(value v, uintnat * wsize_32, uintnat * wsize_64)</span> <br>
+the custom block is ignored during hash computation.</p></li><li class="li-itemize"><span class="c003">void (*serialize)(value v, uintnat * bsize_32, uintnat * bsize_64)</span> <br>
 The <span class="c003">serialize</span> field contains a pointer to a C function that is
 called whenever the custom block needs to be serialized (marshaled)
 using the OCaml functions <span class="c003">output_value</span> or <span class="c003">Marshal.to_...</span>.
@@ -1467,7 +1473,7 @@ then call the user-provided <span class="c003">serialize</span> function. That f
 responsible for writing the data contained in the custom block, using
 the <span class="c003">serialize_...</span> functions defined in <span class="c003">&lt;caml/intext.h&gt;</span> and listed
 below. The user-provided <span class="c003">serialize</span> function must then store in its
-<span class="c003">wsize_32</span> and <span class="c003">wsize_64</span> parameters the sizes in bytes of the data
+<span class="c003">bsize_32</span> and <span class="c003">bsize_64</span> parameters the sizes in bytes of the data
 part of the custom block on a 32-bit architecture and on a 64-bit
 architecture, respectively.<p>The <span class="c003">serialize</span> field can be set to <span class="c003">custom_serialize_default</span>,
 in which case the <span class="c003">Failure</span> exception is raised when attempting to
@@ -1486,15 +1492,23 @@ the <span class="c003">serialize</span> operation if the architecture is 32 bits
 <span class="c003">wsize_64</span> if the architecture is 64 bits.<p>The <span class="c003">deserialize</span> field can be set to <span class="c003">custom_deserialize_default</span>
 to indicate that deserialization is not supported. In this case,
 do not register the <span class="c003">struct custom_operations</span> with the deserializer
-using <span class="c003">register_custom_operations</span> (see below).
-</p></li></ul><p>Note: the <span class="c003">finalize</span>, <span class="c003">compare</span>, <span class="c003">hash</span>, <span class="c003">serialize</span> and <span class="c003">deserialize</span>
+using <span class="c003">register_custom_operations</span> (see below).</p></li><li class="li-itemize"><span class="c003">const struct custom_fixed_length* fixed_length</span> <br>
+Normally, space in the serialized output is reserved to write the
+<span class="c003">bsize_32</span> and <span class="c003">bsize_64</span> fields returned by <span class="c003">serialize</span>. However, for
+very short custom blocks, this space can be larger than the data
+itself! As a space optimisation, if <span class="c003">serialize</span> always returns the
+same values for <span class="c003">bsize_32</span> and <span class="c003">bsize_64</span>, then these values may be
+specified in the <span class="c003">fixed_length</span> structure, and do not consume space in
+the serialized output.
+</li></ul><p>Note: the <span class="c003">finalize</span>, <span class="c003">compare</span>, <span class="c003">hash</span>, <span class="c003">serialize</span> and <span class="c003">deserialize</span>
 functions attached to custom block descriptors must never trigger a
 garbage collection. Within these functions, do not call any of the
 OCaml allocation functions, and do not perform a callback into OCaml
 code. Do not use <span class="c003">CAMLparam</span> to register the parameters to these
 functions, and do not use <span class="c003">CAMLreturn</span> to return the result.</p>
-<h3 class="subsection" id="sec461">20.9.2&#XA0;&#XA0;Allocating custom blocks</h3>
-<p>Custom blocks must be allocated via the <span class="c003">caml_alloc_custom</span> function:
+<h3 class="subsection" id="sec466">19.9.2  Allocating custom blocks</h3>
+<p>Custom blocks must be allocated via <span class="c003">caml_alloc_custom</span> or
+<span class="c003">caml_alloc_custom_mem</span>:
 </p><div class="center">
 <span class="c003">caml_alloc_custom(</span><span class="c009">ops</span><span class="c003">, </span><span class="c009">size</span><span class="c003">, </span><span class="c009">used</span><span class="c003">, </span><span class="c009">max</span><span class="c003">)</span>
 </div><p>
@@ -1507,7 +1521,7 @@ pointers to out-of-heap resources. Generally speaking, the
 OCaml incremental major collector adjusts its speed relative to the
 allocation rate of the program. The faster the program allocates, the
 harder the GC works in order to reclaim quickly unreachable blocks
-and avoid having large amount of &#X201C;floating garbage&#X201D; (unreferenced
+and avoid having large amount of “floating garbage” (unreferenced
 objects that the GC has not yet collected).</p><p>Normally, the allocation rate is measured by counting the in-heap size
 of allocated blocks. However, it often happens that finalized
 objects contain pointers to out-of-heap memory blocks and other resources
@@ -1519,7 +1533,7 @@ being allocated: you give the amount of resources allocated to this
 object as parameter <span class="c009">used</span>, and the maximum amount that you want
 to see in floating garbage as parameter <span class="c009">max</span>. The units are
 arbitrary: the GC cares only about the ratio <span class="c009">used</span> / <span class="c009">max</span>.</p><p>For instance, if you are allocating a finalized block holding an X
-Windows bitmap of <span class="c009">w</span> by <span class="c009">h</span> pixels, and you&#X2019;d rather not
+Windows bitmap of <span class="c009">w</span> by <span class="c009">h</span> pixels, and you’d rather not
 have more than 1 mega-pixels of unreclaimed bitmaps, specify
 <span class="c009">used</span> = <span class="c009">w</span> * <span class="c009">h</span> and <span class="c009">max</span> = 1000000.</p><p>Another way to describe the effect of the <span class="c009">used</span> and <span class="c009">max</span>
 parameters is in terms of full GC cycles. If you allocate many custom
@@ -1531,9 +1545,19 @@ the GC will do one full cycle at least every 1000 allocations of
 custom blocks.</p><p>If your finalized blocks contain no pointers to out-of-heap resources,
 or if the previous discussion made little sense to you, just take
 <span class="c009">used</span> = 0 and <span class="c009">max</span> = 1. But if you later find that the
-finalization functions are not called &#X201C;often enough&#X201D;, consider
-increasing the <span class="c009">used</span> / <span class="c009">max</span> ratio.</p>
-<h3 class="subsection" id="sec462">20.9.3&#XA0;&#XA0;Accessing custom blocks</h3>
+finalization functions are not called “often enough”, consider
+increasing the <span class="c009">used</span> / <span class="c009">max</span> ratio.</p><div class="center">
+<span class="c003">caml_alloc_custom_mem(</span><span class="c009">ops</span><span class="c003">, </span><span class="c009">size</span><span class="c003">, </span><span class="c009">used</span><span class="c003">)</span>
+</div><p>
+Use this function when your custom block holds only out-of-heap memory
+(memory allocated with <span class="c003">malloc</span> or <span class="c003">caml_stat_alloc</span>) and no other
+resources. <span class="c003">used</span> should be the number of bytes of out-of-heap
+memory that are held by your custom block. This function works like
+<span class="c003">caml_alloc_custom</span> except that the <span class="c003">max</span> parameter is under the
+control of the user (via the <span class="c003">custom_major_ratio</span>,
+<span class="c003">custom_minor_ratio</span>, and <span class="c003">custom_minor_max_size</span> parameters) and
+proportional to the heap sizes.</p>
+<h3 class="subsection" id="sec467">19.9.3  Accessing custom blocks</h3>
 <p>The data part of a custom block <span class="c009">v</span> can be
 accessed via the pointer <span class="c003">Data_custom_val(</span><span class="c009">v</span><span class="c003">)</span>. This pointer
 has type <span class="c003">void *</span> and should be cast to the actual type of the data
@@ -1543,11 +1567,12 @@ heap. In other terms, never store an OCaml <span class="c003">value</span> in a 
 and do not use <span class="c003">Field</span>, <span class="c003">Store_field</span> nor <span class="c003">caml_modify</span> to access the data
 part of a custom block. Conversely, any C data structure (not
 containing heap pointers) can be stored in a custom block.</p>
-<h3 class="subsection" id="sec463">20.9.4&#XA0;&#XA0;Writing custom serialization and deserialization functions</h3>
+<h3 class="subsection" id="sec468">19.9.4  Writing custom serialization and deserialization functions</h3>
 <p>The following functions, defined in <span class="c003">&lt;caml/intext.h&gt;</span>, are provided to
 write and read back the contents of custom blocks in a portable way.
 Those functions handle endianness conversions when e.g. data is
-written on a little-endian machine and read back on a big-endian machine.</p><div class="center"><table class="c000 cellpadding1" border=1><tr><td class="c014"><span class="c013">Function</span></td><td class="c014"><span class="c013">Action</span> </td></tr>
+written on a little-endian machine and read back on a big-endian machine.</p><div class="tableau">
+<div class="center"><table class="c000 cellpadding1" border=1><tr><td class="c014"><span class="c013">Function</span></td><td class="c014"><span class="c013">Action</span> </td></tr>
 <tr><td class="c022">
 <span class="c003">caml_serialize_int_1</span></td><td class="c021">Write a 1-byte integer </td></tr>
 <tr><td class="c022"><span class="c003">caml_serialize_int_2</span></td><td class="c021">Write a 2-byte integer </td></tr>
@@ -1576,7 +1601,7 @@ written on a little-endian machine and read back on a big-endian machine.</p><di
 <tr><td class="c022"><span class="c003">caml_deserialize_error</span></td><td class="c021">Signal an error during deserialization;
 <span class="c003">input_value</span> or <span class="c003">Marshal.from_...</span> raise a <span class="c003">Failure</span> exception after
 cleaning up their internal data structures </td></tr>
-</table></div><p>Serialization functions are attached to the custom blocks to which
+</table></div></div><p>Serialization functions are attached to the custom blocks to which
 they apply. Obviously, deserialization functions cannot be attached
 this way, since the custom block does not exist yet when
 deserialization begins! Thus, the <span class="c003">struct custom_operations</span> that
@@ -1587,7 +1612,7 @@ reading the identifier off the input stream, allocating a custom block
 of the size specified in the input stream, searching the registered
 <span class="c003">struct custom_operation</span> blocks for one with the same identifier, and
 calling its <span class="c003">deserialize</span> function to fill the data part of the custom block.</p>
-<h3 class="subsection" id="sec464">20.9.5&#XA0;&#XA0;Choosing identifiers</h3>
+<h3 class="subsection" id="sec469">19.9.5  Choosing identifiers</h3>
 <p>Identifiers in <span class="c003">struct custom_operations</span> must be chosen carefully,
 since they must identify uniquely the data structure for serialization
 and deserialization operations. In particular, consider including a
@@ -1600,31 +1625,118 @@ data. We recommend to use a URL
 or a Java-style package name
 (<span class="c003">com.mydomain.mymachine.mylibrary.version-number</span>)
 as identifiers, to minimize the risk of identifier collision.</p>
-<h3 class="subsection" id="sec465">20.9.6&#XA0;&#XA0;Finalized blocks</h3>
+<h3 class="subsection" id="sec470">19.9.6  Finalized blocks</h3>
 <p>Custom blocks generalize the finalized blocks that were present in
 OCaml prior to version 3.00. For backward compatibility, the
 format of custom blocks is compatible with that of finalized blocks,
 and the <span class="c003">alloc_final</span> function is still available to allocate a custom
 block with a given finalization function, but default comparison,
 hashing and serialization functions. <span class="c003">caml_alloc_final(</span><span class="c009">n</span><span class="c003">, </span><span class="c009">f</span><span class="c003">, </span><span class="c009">used</span><span class="c003">, </span><span class="c009">max</span><span class="c003">)</span> returns a fresh custom block of
-size <span class="c009">n</span> words, with finalization function <span class="c009">f</span>. The first
+size <span class="c009">n</span>+1 words, with finalization function <span class="c009">f</span>. The first
 word is reserved for storing the custom operations; the other
-<span class="c009">n</span>-1 words are available for your data. The two parameters
+<span class="c009">n</span> words are available for your data. The two parameters
 <span class="c009">used</span> and <span class="c009">max</span> are used to control the speed of garbage
 collection, as described for <span class="c003">caml_alloc_custom</span>.</p>
-<h2 class="section" id="sec466">20.10&#XA0;&#XA0;Advanced topic: cheaper C call</h2>
+<h2 class="section" id="sec471">19.10  Advanced topic: Bigarrays and the OCaml-C interface</h2>
+<p>
+<a id="s:C-Bigarrays"></a></p><p>This section explains how C stub code that interfaces C or Fortran
+code with OCaml code can use Bigarrays.</p>
+<h3 class="subsection" id="sec472">19.10.1  Include file</h3>
+<p>The include file <span class="c003">&lt;caml/bigarray.h&gt;</span> must be included in the C stub
+file. It declares the functions, constants and macros discussed
+below.</p>
+<h3 class="subsection" id="sec473">19.10.2  Accessing an OCaml bigarray from C or Fortran</h3>
+<p>If <span class="c009">v</span> is a OCaml <span class="c003">value</span> representing a Bigarray, the expression
+<span class="c003">Caml_ba_data_val(</span><span class="c009">v</span><span class="c003">)</span> returns a pointer to the data part of the array.
+This pointer is of type <span class="c003">void *</span> and can be cast to the appropriate C
+type for the array (e.g. <span class="c003">double []</span>, <span class="c003">char [][10]</span>, etc).</p><p>Various characteristics of the OCaml Bigarray can be consulted from C
+as follows:
+</p><div class="tableau">
+<div class="center"><table class="c000 cellpadding1" border=1><tr><td class="c014"><span class="c013">C expression</span></td><td class="c014"><span class="c013">Returns</span> </td></tr>
+<tr><td class="c016">
+<span class="c003">Caml_ba_array_val(</span><span class="c009">v</span><span class="c003">)-&gt;num_dims</span></td><td class="c016">number of dimensions </td></tr>
+<tr><td class="c016"><span class="c003">Caml_ba_array_val(</span><span class="c009">v</span><span class="c003">)-&gt;dim[</span><span class="c009">i</span><span class="c003">]</span></td><td class="c016"><span class="c009">i</span>-th dimension </td></tr>
+<tr><td class="c016"><span class="c003">Caml_ba_array_val(</span><span class="c009">v</span><span class="c003">)-&gt;flags &amp; BIGARRAY_KIND_MASK</span></td><td class="c016">kind of array elements </td></tr>
+</table></div></div><p>
+The kind of array elements is one of the following constants:
+</p><div class="tableau">
+<div class="center"><table class="c000 cellpadding1" border=1><tr><td class="c014"><span class="c013">Constant</span></td><td class="c014"><span class="c013">Element kind</span> </td></tr>
+<tr><td class="c016">
+<span class="c003">CAML_BA_FLOAT32</span></td><td class="c016">32-bit single-precision floats </td></tr>
+<tr><td class="c016"><span class="c003">CAML_BA_FLOAT64</span></td><td class="c016">64-bit double-precision floats </td></tr>
+<tr><td class="c016"><span class="c003">CAML_BA_SINT8</span></td><td class="c016">8-bit signed integers </td></tr>
+<tr><td class="c016"><span class="c003">CAML_BA_UINT8</span></td><td class="c016">8-bit unsigned integers </td></tr>
+<tr><td class="c016"><span class="c003">CAML_BA_SINT16</span></td><td class="c016">16-bit signed integers </td></tr>
+<tr><td class="c016"><span class="c003">CAML_BA_UINT16</span></td><td class="c016">16-bit unsigned integers </td></tr>
+<tr><td class="c016"><span class="c003">CAML_BA_INT32</span></td><td class="c016">32-bit signed integers </td></tr>
+<tr><td class="c016"><span class="c003">CAML_BA_INT64</span></td><td class="c016">64-bit signed integers </td></tr>
+<tr><td class="c016"><span class="c003">CAML_BA_CAML_INT</span></td><td class="c016">31- or 63-bit signed integers </td></tr>
+<tr><td class="c016"><span class="c003">CAML_BA_NATIVE_INT</span></td><td class="c016">32- or 64-bit (platform-native) integers </td></tr>
+</table></div></div><p>
+The following example shows the passing of a two-dimensional Bigarray
+to a C function and a Fortran function.
+</p><pre>    extern void my_c_function(double * data, int dimx, int dimy);
+    extern void my_fortran_function_(double * data, int * dimx, int * dimy);
+
+    value caml_stub(value bigarray)
+    {
+      int dimx = Caml_ba_array_val(bigarray)-&gt;dim[0];
+      int dimy = Caml_ba_array_val(bigarray)-&gt;dim[1];
+      /* C passes scalar parameters by value */
+      my_c_function(Caml_ba_data_val(bigarray), dimx, dimy);
+      /* Fortran passes all parameters by reference */
+      my_fortran_function_(Caml_ba_data_val(bigarray), &amp;dimx, &amp;dimy);
+      return Val_unit;
+    }
+</pre>
+<h3 class="subsection" id="sec474">19.10.3  Wrapping a C or Fortran array as an OCaml Bigarray</h3>
+<p>A pointer <span class="c009">p</span> to an already-allocated C or Fortran array can be
+wrapped and returned to OCaml as a Bigarray using the <span class="c003">caml_ba_alloc</span>
+or <span class="c003">caml_ba_alloc_dims</span> functions.
+</p><ul class="itemize"><li class="li-itemize">
+<span class="c003">caml_ba_alloc(</span><span class="c009">kind</span> <span class="c003">|</span> <span class="c009">layout</span>, <span class="c009">numdims</span>, <span class="c009">p</span>, <span class="c009">dims</span><span class="c003">)</span><p>Return an OCaml Bigarray wrapping the data pointed to by <span class="c009">p</span>.
+<span class="c009">kind</span> is the kind of array elements (one of the <span class="c003">CAML_BA_</span>
+kind constants above). <span class="c009">layout</span> is <span class="c003">CAML_BA_C_LAYOUT</span> for an
+array with C layout and <span class="c003">CAML_BA_FORTRAN_LAYOUT</span> for an array with
+Fortran layout. <span class="c009">numdims</span> is the number of dimensions in the
+array. <span class="c009">dims</span> is an array of <span class="c009">numdims</span> long integers, giving
+the sizes of the array in each dimension.</p></li><li class="li-itemize"><span class="c003">caml_ba_alloc_dims(</span><span class="c009">kind</span> <span class="c003">|</span> <span class="c009">layout</span>, <span class="c009">numdims</span>,
+<span class="c009">p</span>, <span class="c003">(long) </span><span class="c009">dim</span><sub>1</sub>, <span class="c003">(long) </span><span class="c009">dim</span><sub>2</sub>, …, <span class="c003">(long) </span><span class="c009">dim</span><sub><span class="c009">numdims</span></sub><span class="c003">)</span><p>Same as <span class="c003">caml_ba_alloc</span>, but the sizes of the array in each dimension
+are listed as extra arguments in the function call, rather than being
+passed as an array.
+</p></li></ul><p>
+The following example illustrates how statically-allocated C and
+Fortran arrays can be made available to OCaml.
+</p><pre>    extern long my_c_array[100][200];
+    extern float my_fortran_array_[300][400];
+
+    value caml_get_c_array(value unit)
+    {
+      long dims[2];
+      dims[0] = 100; dims[1] = 200;
+      return caml_ba_alloc(CAML_BA_NATIVE_INT | CAML_BA_C_LAYOUT,
+                           2, my_c_array, dims);
+    }
+
+    value caml_get_fortran_array(value unit)
+    {
+      return caml_ba_alloc_dims(CAML_BA_FLOAT32 | CAML_BA_FORTRAN_LAYOUT,
+                                2, my_fortran_array_, 300L, 400L);
+    }
+</pre>
+<h2 class="section" id="sec475">19.11  Advanced topic: cheaper C call</h2>
 <p>
 <a id="s:C-cheaper-call"></a></p><p>This section describe how to make calling C functions cheaper.</p><p><span class="c013">Note:</span> this only applies to the native compiler. So whenever you
 use any of these methods, you have to provide an alternative byte-code
 stub that ignores all the special annotations.</p>
-<h3 class="subsection" id="sec467">20.10.1&#XA0;&#XA0;Passing unboxed values</h3>
+<h3 class="subsection" id="sec476">19.11.1  Passing unboxed values</h3>
 <p>We said earlier that all OCaml objects are represented by the C type
 <span class="c003">value</span>, and one has to use macros such as <span class="c003">Int_val</span> to decode data from
 the <span class="c003">value</span> type. It is however possible to tell the OCaml native-code
 compiler to do this for us and pass arguments unboxed to the C function.
 Similarly it is possible to tell OCaml to expect the result unboxed and box
-it for us.</p><p>The motivation is that, by letting &#X2018;ocamlopt&#X2018; deal with boxing, it can
-often decide to suppress it entirely.</p><p>For instance let&#X2019;s consider this example:</p><pre>external foo : float -&gt; float -&gt; float = "foo"
+it for us.</p><p>The motivation is that, by letting ‘ocamlopt‘ deal with boxing, it can
+often decide to suppress it entirely.</p><p>For instance let’s consider this example:</p><pre>external foo : float -&gt; float -&gt; float = "foo"
 
 let f a b =
   let len = Array.length a in
@@ -1660,31 +1772,32 @@ For convenicence, when all arguments and the result are annotated with
 declaration itself. So we can also write instead:</p><pre>external foo : float -&gt; float -&gt; float = "foo_byte" "foo" [@@unboxed]
 </pre><p>
 The following table summarize what OCaml types can be unboxed, and
-what C types should be used in correspondence:</p><div class="center"><table class="c000 cellpadding1" border=1><tr><td class="c014"><span class="c013">OCaml type</span></td><td class="c014"><span class="c013">C type</span> </td></tr>
+what C types should be used in correspondence:</p><div class="tableau">
+<div class="center"><table class="c000 cellpadding1" border=1><tr><td class="c014"><span class="c013">OCaml type</span></td><td class="c014"><span class="c013">C type</span> </td></tr>
 <tr><td class="c016">
 <span class="c003">float</span></td><td class="c016"><span class="c003">double</span> </td></tr>
 <tr><td class="c016"><span class="c003">int32</span></td><td class="c016"><span class="c003">int32_t</span> </td></tr>
 <tr><td class="c016"><span class="c003">int64</span></td><td class="c016"><span class="c003">int64_t</span> </td></tr>
 <tr><td class="c016"><span class="c003">nativeint</span></td><td class="c016"><span class="c003">intnat</span> </td></tr>
-</table></div><p>Similarly, it is possible to pass untagged OCaml integers between
+</table></div></div><p>Similarly, it is possible to pass untagged OCaml integers between
 OCaml and C. This is done by annotating the arguments and/or result
 with <span class="c003">[@untagged]</span>:</p><pre>external f : string -&gt; (int [@untagged]) = "f_byte" "f"
 </pre><p>
 The corresponding C type must be <span class="c003">intnat</span>.</p><p><span class="c013">Note:</span> do not use the C <span class="c003">int</span> type in correspondence with <span class="c003">(int [@untagged])</span>. This is because they often differ in size.</p>
-<h3 class="subsection" id="sec468">20.10.2&#XA0;&#XA0;Direct C call</h3>
+<h3 class="subsection" id="sec477">19.11.2  Direct C call</h3>
 <p>In order to be able to run the garbage collector in the middle of
 a C function, the OCaml native-code compiler generates some bookkeeping
 code around C calls. Technically it wraps every C call with the C function
 <span class="c003">caml_c_call</span> which is part of the OCaml runtime.</p><p>For small functions that are called repeatedly, this indirection can have
 a big impact on performances. However this is not needed if we know that
-the C function doesn&#X2019;t allocate and doesn&#X2019;t raise exceptions. We can
+the C function doesn’t allocate and doesn’t raise exceptions. We can
 instruct the OCaml native-code compiler of this fact by annotating the
 external declaration with the attribute <span class="c003">[@@noalloc]</span>:</p><pre>external bar : int -&gt; int -&gt; int = "foo" [@@noalloc]
 </pre><p>
 In this case calling <span class="c003">bar</span> from OCaml is as cheap as calling any other
-OCaml function, except for the fact that the OCaml compiler can&#X2019;t
+OCaml function, except for the fact that the OCaml compiler can’t
 inline C functions...</p>
-<h3 class="subsection" id="sec469">20.10.3&#XA0;&#XA0;Example: calling C library functions without indirection</h3>
+<h3 class="subsection" id="sec478">19.11.3  Example: calling C library functions without indirection</h3>
 <p>Using these attributes, it is possible to call C library functions
 with no indirection. For instance many math functions are defined this
 way in the OCaml standard library:</p><pre>external sqrt : float -&gt; float = "caml_sqrt_float" "sqrt"
@@ -1697,12 +1810,12 @@ external exp : float -&gt; float = "caml_exp_float" "exp" [@@unboxed] [@@noalloc
 external log : float -&gt; float = "caml_log_float" "log" [@@unboxed] [@@noalloc]
 (** Natural logarithm. *)
 </pre>
-<h2 class="section" id="sec470">20.11&#XA0;&#XA0;Advanced topic: multithreading</h2>
+<h2 class="section" id="sec479">19.12  Advanced topic: multithreading</h2>
 <p>
 <a id="s:C-multithreading"></a></p><p>Using multiple threads (shared-memory concurrency) in a mixed OCaml/C
 application requires special precautions, which are described in this
 section.</p>
-<h3 class="subsection" id="sec471">20.11.1&#XA0;&#XA0;Registering threads created from C</h3>
+<h3 class="subsection" id="sec480">19.12.1  Registering threads created from C</h3>
 <p>Callbacks from C to OCaml are possible only if the calling thread is
 known to the OCaml run-time system. Threads created from OCaml (through
 the <span class="c003">Thread.create</span> function of the system threads library) are
@@ -1719,10 +1832,10 @@ terminates, to unregister it from the OCaml run-time system.
 Returns 1 on success, 0 on error. If the calling thread was not
 previously registered, does nothing and returns 0.
 </li></ul>
-<h3 class="subsection" id="sec472">20.11.2&#XA0;&#XA0;Parallel execution of long-running C code</h3>
+<h3 class="subsection" id="sec481">19.12.2  Parallel execution of long-running C code</h3>
 <p>The OCaml run-time system is not reentrant: at any time, at most one
 thread can be executing OCaml code or C code that uses the OCaml
-run-time system. Technically, this is enforced by a &#X201C;master lock&#X201D;
+run-time system. Technically, this is enforced by a “master lock”
 that any thread must hold while executing such code.</p><p>When OCaml calls the C code implementing a primitive, the master lock
 is held, therefore the C code has full access to the facilities of the
 run-time system. However, no other thread can execute OCaml code
@@ -1800,9 +1913,9 @@ names, declared in <span class="c003">&lt;caml/signals.h&gt;</span>:
 </li><li class="li-itemize"><span class="c003">caml_leave_blocking_section</span> as an alias for
 <span class="c003">caml_acquire_runtime_system</span>
 </li></ul><p>
-Intuition: a &#X201C;blocking section&#X201D; is a piece of C code that does not
+Intuition: a “blocking section” is a piece of C code that does not
 use the OCaml run-time system, typically a blocking input/output operation.</p>
-<h2 class="section" id="sec473">20.12&#XA0;&#XA0;Advanced topic: interfacing with Windows Unicode APIs</h2>
+<h2 class="section" id="sec482">19.13  Advanced topic: interfacing with Windows Unicode APIs</h2>
 <p>
 <a id="s:interfacing-windows-unicode-apis"></a></p><p>This section contains some general guidelines for writing C stubs that use
 Windows Unicode APIs.</p><p><span class="c013">Note:</span> This is an experimental feature of OCaml: the set of APIs below, as
@@ -1829,7 +1942,7 @@ platform. Strings in the platform encoding are of type <span class="c003">char_o
 them, you need to include both <span class="c003">&lt;caml/misc.h&gt;</span> and <span class="c003">&lt;caml/osdeps.h&gt;</span>.</p><ul class="itemize"><li class="li-itemize"><span class="c003">char_os* caml_stat_strdup_to_os(const char *)</span> copies the argument while
 translating from OCaml encoding to the platform encoding. This function is
 typically used to convert the <span class="c003">char *</span> underlying an OCaml string before passing
-it to an operating system API that takes an Unicode argument. Under Unix, it is
+it to an operating system API that takes a Unicode argument. Under Unix, it is
 equivalent to <span class="c003">caml_stat_strdup</span>.<p><span class="c013">Note:</span> For maximum backwards compatibility in Unicode mode, if the argument
 is not a valid UTF-8 string, this function will fall back to assuming that it is
 encoded in the current code page.</p></li><li class="li-itemize"><span class="c003">char* caml_stat_strdup_of_os(const char_os *)</span> copies the argument while
@@ -1844,7 +1957,7 @@ string returned by <span class="c003">caml_stat_strdup_of_os</span>. Under Unix,
 <span class="c003">caml_copy_string</span>.</li></ul><p><span class="c013">Note:</span> The strings returned by <span class="c003">caml_stat_strdup_to_os</span> and
 <span class="c003">caml_stat_strdup_of_os</span> are allocated using <span class="c003">caml_stat_alloc</span>, so they need to
 be deallocated using <span class="c003">caml_stat_free</span> when they are no longer needed.</p>
-<h5 class="paragraph" id="sec474">Example</h5>
+<h5 class="paragraph" id="sec483">Example</h5>
 <p> We want to bind the function <span class="c003">getenv</span> in a way that works
 both under Unix and Windows. Under Unix this function has the prototype:</p><pre>    char *getenv(const char *);
 </pre><p>While the Unicode version under Windows has the prototype:
@@ -1886,7 +1999,7 @@ CAMLprim value stub_getenv(value var_name)
   CAMLreturn(var_value);
 }
 </pre>
-<h2 class="section" id="sec475">20.13&#XA0;&#XA0;Building mixed C/OCaml libraries: <span class="c003">ocamlmklib</span></h2>
+<h2 class="section" id="sec484">19.14  Building mixed C/OCaml libraries: <span class="c003">ocamlmklib</span></h2>
 <p>
 <a id="s-ocamlmklib"></a></p><p>The <span class="c003">ocamlmklib</span> command facilitates the construction of libraries
 containing both OCaml code and C code, and usable both in static
@@ -1943,7 +2056,7 @@ If not specified, defaults to the output name given with <span class="c003">-o</
 <span class="c006">OCAML_FLEXLINK</span></dt><dd class="dd-description"> Alternative executable to use instead of the
 configured value. Primarily used for bootstrapping.
 </dd></dl>
-<h5 class="paragraph" id="sec476">Example</h5>
+<h5 class="paragraph" id="sec485">Example</h5>
 <p> Consider an OCaml interface to the standard <span class="c003">libz</span>
 C library for reading and writing compressed files. Assume this
 library resides in <span class="c003">/usr/local/zlib</span>. This interface is
@@ -1984,7 +2097,7 @@ libraries are supported.
 
 </p>
 <hr>
-<a href="manual033.html"><img src="previous_motif.gif" alt="Previous"></a>
+<a href="manual056.html"><img src="previous_motif.gif" alt="Previous"></a>
 <a href="index.html"><img src="contents_motif.gif" alt="Up"></a>
 <a href="flambda.html"><img src="next_motif.gif" alt="Next"></a>
 </body>

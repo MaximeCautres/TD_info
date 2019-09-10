@@ -1,5 +1,4 @@
 (* Linux, Mac OS ou Windows avec Cygwin *)
-(* Utiliser une distribution Caml Light complète *)
 
 cd "exemples/Caml Light/inria/calculette/calc";;
 sys__system_command "./build-calculette";;

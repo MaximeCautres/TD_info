@@ -41,7 +41,7 @@ let next t =
                   + t.(i + 1).(j - 1) land 1 + t.(i + 1).(j) land 1 + t.(i + 1).(j + 1) land 1
                in
 
-                  if n < 2 or n > 3 then s.(i).(j) <- 0
+                  if n < 2 || n > 3 then s.(i).(j) <- 0
                   else let x = t.(i).(j) in
                         if n = 3 then s.(i).(j) <- if x = 0 then 1 else if x < 255 then x + 2 else 255
                         else s.(i).(j) <- if x = 0 then 0 else if x < 255 then x + 2 else 255

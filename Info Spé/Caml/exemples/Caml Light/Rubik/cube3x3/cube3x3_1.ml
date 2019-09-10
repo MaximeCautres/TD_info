@@ -1,0 +1,810 @@
+include "exemples/Caml Light/Rubik/cube3x3/divers/types.ml";;
+include "exemples/Caml Light/Rubik/divers/divers.ml";;
+include "exemples/Caml Light/Rubik/cube3x3/divers/section_marques.ml";;
+include "exemples/Caml Light/Rubik/divers/couleurs.ml";;
+include "exemples/Caml Light/Rubik/cube3x3/divers/graphisme.ml";;
+include "exemples/Caml Light/Rubik/cube3x3/divers/boutons.ml";;
+
+
+(*- mouvement aléatoire général à partir des permutations et rotations d'angles et -*)
+(*- de coins et des exposants d'angles, de coins et de centres -*)
+
+random__init (unix__time ());;
+
+(* liste des angles *)
+let angles = select est_angle indices;;
+
+(* liste des coins *)
+let coins = select est_coin indices;;
+
+(* permutation aléatoire d'une liste *)
+let pl_r l =
+	let l' = random_list l
+	in fun i -> assoc i (map2 (fun x y -> x, y) l l')
+;;
+
+(* exposant aléatoire pour les angles *)
+let ea_r i = if est_angle i then random__int 2 else failwith "ea_r";;
+
+(* exposant aléatoire pour les coins *)
+let ec_r i = if est_coin i then random__int 3 else failwith "ec_r";;
+
+(* exposant aléatoire pour les centres *)
+let em_r i = if est_centre i then random__int 3 else failwith "em_r";;
+
+(* mouvement aléatoire général *)
+let mv1_r () = nouveau_mv1 (pl_r angles) (pl_r coins) ea_r ec_r em_r;;
+
+(*- fin de mouvement aléatoire général à partir des permutations et rotations d'angles et de coins -*)
+
+
+(* rotation totale des angles *)
+let rta mv1 =
+	let rta_aux k = let f = fun_of_mv1 k in
+			let indexa i = if f i = st i then 1 else 0 in
+				(list_it (prefix +) (map indexa angles) 0) mod 2
+	in rta_aux (ker mv1)
+;;
+
+(* rotation totale des coins *)
+let rtc mv1 =
+	let rtc_aux k = let f = fun_of_mv1 k in
+			let indexc i = if f i = st i then 1
+				else if f i = transpose (st i) then 2 else 0 in
+				(list_it (prefix +) (map indexc coins) 0) mod 3
+	in rtc_aux (ker mv1)
+;;
+
+(* test d'appartenance d'un mouvement au sous-groupe de Rubik R *)
+(* par nullité des rotations totales et égalité des signatures *)
+(* des permutations d'angles et de coins *)
+let est_dans_R mv1 = let p = sur mv1 in
+		sign angles p = sign coins p && rta mv1 = 0 && rtc mv1 = 0
+;;
+
+
+(*- mouvement de Rubik aléatoire -*)
+
+(* prise en compte de la rotation des minicubes centraux des faces *)
+(* nombre de quarts de tour du centre de la face orthogonale au vecteur sortant 'v' *)
+(* repère OVB *)
+let nqt mv1 v =
+	let r = fun_of_mv1 mv1 v in
+		if r = id then 0
+		else if r = rot v then 1
+		else if r = rot v /./ rot v then 2
+		else if r = rot' v then 3
+		else failwith "nqt"
+;;
+
+let mv1_rubik_r () =
+	(* la fonction 'nouveau_mv1' est définie dans "Rubik/cube3x3/divers/section_commun" *)
+	(* rotation d'un seul angle i *)
+	let rot_angle i n =
+		nouveau_mv1 (fun x -> x) (fun x -> x) (fun x -> if x = i then n else 0) (fun x -> 0) (fun x -> 0)
+	and
+	(* rotation d'un seul coin i *)
+	rot_coin i n =
+		nouveau_mv1 (fun x -> x) (fun x -> x) (fun j -> 0) (fun j -> if j = i then n else 0) (fun x -> 0)
+	in
+		let m = ref (mv1_r ()) in
+			if rta !m <> 0 then m := !m /*/ rot_angle [|0; 1; 1|] 1;
+			if rtc !m <> 0 then m := !m /*/ rot_coin [|1; 1; 1|] (3 - rtc !m);
+			let p = sur !m in
+				if sign angles p <> sign coins p then
+				(* mouvement de transposition de deux angles ou de deux coins *)
+					(let tr i j = sec (fun k -> if k = i then j else if k = j then i else k)
+						in
+							m := !m /*/ tr [|0; 1; 1|] [|1; 0; 1|];
+					);
+				(
+					let sgnc = sign coins (sur !m)
+					and n = (list_it (prefix +) (map (nqt !m) (select est_centre indices)) 0) mod 2
+					in
+						if sgnc = 1 && n <> 0 || sgnc = - 1 && n = 0 then
+							let f x = let ff = fun_of_mv1 !m in if x = [|1; 0; 0|] then ff x /./ rot x else ff x in
+								m := mv1_of_fun f;
+				);
+				!m
+;;
+
+(*- fin de mouvement de Rubik aléatoire -*)
+
+
+(*- Rubik's cube virtuel -*)
+
+(* initialisation du cube : mise en place des mouvements élémentaires de Rubik *)
+let nouveau_cube mouvement context dessine liste_mouvements =
+	
+	let listeops = ref []
+	and dessine () = dessine context mouvement.mv1
+	in
+		let op_externes liste_ops =
+			let fct x () =
+				let t = x /:/ transpose context.matrice in
+					mouvement.mv1 <- mouvement.mv1 /*/ rub t;
+					if liste_mouvements then (
+							print_string (nom_de_face t ^ " ");
+							liste_ops := !liste_ops @ [nom_de_face t];
+						);
+					dessine ()
+			and fct' x () =
+				let t = x /:/ transpose context.matrice in
+					mouvement.mv1 <- mouvement.mv1 /*/ rub' t;
+					if liste_mouvements then (
+							print_string (nom_de_face t ^ "' ");
+							liste_ops := !liste_ops @ [nom_de_face t ^ "'"];
+						);
+					dessine ()
+			in
+				let (a, d, h) = vect (map_vect fct id)
+				and (a', d', h') = vect (map_vect fct' id)
+				and (p, g, b) = vect (map_vect fct idm)
+				and (p', g', b') = vect (map_vect fct' idm)
+				in (OPS (a, d, h), OPS (a', d', h'), OPS (p, g, b), OPS (p', g', b'))
+		
+		and op_internes () =
+			let fct x () =
+				mouvement.mv1 <- mouvement.mv1 /*/ rub x;
+				print_string (nom_de_face x ^ " ");
+				dessine ()
+			and fct' x () =
+				mouvement.mv1 <- mouvement.mv1 /*/ rub' x;
+				if liste_mouvements then print_string (nom_de_face x ^ "' ");
+				dessine ()
+			in
+				let (o, v, blanc) = vect (map_vect fct id)
+				and (o', v', blanc') = vect (map_vect fct' id)
+				and (r, b, j) = vect (map_vect fct idm)
+				and (r', b', j') = vect (map_vect fct' idm)
+				in (OPS (o, v, blanc), OPS (o', v', blanc'), OPS (r, b, j), OPS (r', b', j'))
+		
+		and op_globales () =
+			let rotate pp () = context.matrice <- context.matrice /./ pp;
+				dessine () in
+				let (a, d, h) = vect (map_vect rotate (map_vect rot id))
+				and (a', d', h') = vect (map_vect rotate (map_vect rot' id))
+				in
+					(OPS (a, d, h), OPS (a', d', h'))
+		
+		in
+			let op_ext = op_externes listeops and op_int = op_internes () in
+				let op_from_strings liste_ops =
+					let (OPS (orange, vert, blanc), OPS (orange', vert', blanc'), OPS (rouge,
+					bleu, jaune), OPS (rouge', bleu', jaune')) = op_int
+					in
+						let aux s = assoc s
+							[("orange", orange); ("vert", vert); ("blanc", blanc);
+								("orange'", orange'); ("vert'", vert'); ("blanc'", blanc');
+								("rouge", rouge); ("bleu", bleu); ("jaune", jaune);
+								("rouge'", rouge'); ("bleu'", bleu'); ("jaune'", jaune')]
+						in
+							let rec op_from_strings_aux liste_ops =
+								match liste_ops with
+									t :: r -> aux t :: op_from_strings_aux r
+									| [] -> []
+							in op_from_strings_aux liste_ops
+				in
+					{mouvement1 = mouvement; context1 = context; dessine1 = dessine;
+						op_globales1 = op_globales (); op_externes1 = op_ext;
+						op_internes1 = op_int; liste_ops1 = listeops;
+						op_from_strings1 = op_from_strings;
+						boutons1 = make_vect 1 {titre = ""; orx = 0; ory = 0; largeur = 0;
+							hauteur = 0; couleur = 0; action = fun () -> ()}
+					}
+;;
+
+(* résolution par niveaux du cube *)
+exception Orienter_les_coins;;
+exception Placer_angle_frontal_haut;;
+exception Descendre_coin;;
+exception Remonter_coin;;
+exception Remonter_angle;;
+exception Orienter_les_angles;;
+exception Placer_les_angles;;
+exception Placer_les_coins;;
+
+let resoudre_le_cube cube completement =
+	(* (y, m) = pos0 x : le minicube d'indice x est à l'emplacement d'indice y et m est sa matrice *)
+	(* de déplacement (telle que y=xm) (repère ADH) *)
+	(* (x, m) = pos1 y : l'emplacement d'indice y est occupé par le minicube d'indice x et m est la matrice *)
+	(* de déplacement inverse (x = my) de ce minicube (repère ADH) *)
+	let pos0, pos1 =
+		let pos mv1 x =
+			let p = cube.context1.matrice in
+				let m = transpose p /./ (fun_of_mv1 mv1) (x /:/ transpose p) /./ p
+				in
+					x /:/ m, m
+		in
+			(fun x -> pos cube.mouvement1.mv1 x),
+			(fun x -> pos (inverse cube.mouvement1.mv1) x)
+	and
+	(OPS (a, d, h), OPS (a', d', h'), OPS (p, g, b), OPS (p', g', b')) = cube.op_externes1
+	and
+	(OPS (_, _, h0), OPS (_, _, h0')) = cube.op_globales1
+	in
+		
+		let niveau_superieur () =
+			
+			(* niveau supérieur *)
+			let orienter_le_centre () =
+				let n = nqt cube.mouvement1.mv1 ([|0; 0; 1|] /:/ transpose cube.context1.matrice) in
+					if n = 1 then exe [h']
+					else if n = 2 then exe [h; h]
+					else if n = 3 then exe [h]
+			
+			and placer_et_orienter_les_angles () =
+				let placer_angle_frontal_haut () =
+					let v, _ = pos0 [|1; 0; 1|] in
+						match vect v with
+							| (1, 0, 1) -> ()
+							| (1, 1, 0) -> exe [a']
+							| (1, 0, - 1) -> exe [a; a]
+							| (1, - 1, 0) -> exe [a]
+							| (0, 1, 1) -> exe [d'; a']
+							| (- 1, 1, 0) -> exe [h'; d'; h]
+							| (0, 1, - 1) -> exe [d; a'; d']
+							| (0, - 1, 1) -> exe [g; a]
+							| (- 1, - 1, 0) -> exe [h; g; h']
+							| (0, - 1, - 1) -> exe [g'; a; g]
+							| (- 1, 0, 1) -> exe [p; p; b; b; a; a]
+							| (- 1, 0, - 1) -> exe [b; b; a; a]
+							| _ -> raise Placer_angle_frontal_haut
+				and mal_oriente () =
+					(snd (pos0 [|1; 0; 1|])).(2) <> [|0; 0; 1|]
+				in
+					for i = 0 to 3 do
+						placer_angle_frontal_haut ();
+						if mal_oriente () then exe [h'; d'; h; a'];
+						exe [h0]
+					done
+			
+			and placer_et_orienter_les_coins () =
+				let descendre_coin () =
+					let w, m = pos0 [|1; 1; 1|] in
+						if (w = [|1; 1; 1|]) && (m = id) then ()
+						else
+							match vect w with
+								| (- 1, 1, 1) -> exe [p'; b'; p]
+								| (- 1, - 1, 1) -> exe [p; b; b; p']
+								| (1, - 1, 1) -> exe [g; b; g']
+								| (1, 1, 1) -> exe [a; b; a'; b']
+								| (- 1, 1, - 1) -> exe [b']
+								| (- 1, - 1, - 1) -> exe [b; b]
+								| (1, - 1, - 1) -> exe [b]
+								| (1, 1, - 1) -> ()
+								| _ -> raise Descendre_coin
+				and remonter_coin () =
+					let (v, m) = pos0 [|1; 1; 1|] in
+						if (v = [|1; 1; 1|]) && (m = id) then ()
+						else
+							let w = m.(2) in match vect w with
+									| (1, 0, 0) -> exe [d; a'; d'; a]
+									| (0, 1, 0) -> exe [a'; d; a; d']
+									| (0, 0, - 1) -> exe [a; b'; a'; b; b; d; a'; d'; a]
+									| _ -> raise Remonter_coin
+				in
+					for i = 0 to 3 do
+						descendre_coin ();
+						remonter_coin ();
+						exe [h0]
+					done;
+			
+			in
+				if completement then orienter_le_centre ();
+				placer_et_orienter_les_angles ();
+				placer_et_orienter_les_coins ();
+		
+		and niveau_median () =
+			
+			(* niveau médian *)
+			
+			let orienter_les_centres_lateraux () =
+				let aux () =
+					let n = nqt cube.mouvement1.mv1 ([|1; 0; 0|] /:/ transpose cube.context1.matrice)
+					in
+						if n <> 0 then
+							(
+								exe [a; a; b; b];
+								(
+									if n = 1 then
+										exe [a']
+									else if n = 2 then
+										exe [a; a]
+									else if n = 3 then
+										exe [a];
+								);
+								exe [b; b; a; a]
+							)
+				in
+					exe [aux; h0; aux; h0; aux; h0; aux; h0]
+			
+			and placer_angle_frontal_droit () =
+				let descendre_angle () =
+					let aux () = exe [b; a; b'; a'; b'; d'; b; d] in
+						let x, _ = pos0 [|1; 1; 0|] in
+							match vect x with
+								| (1, 1, 0) -> aux ()
+								| (- 1, 1, 0) -> exe [h0; aux; h0']
+								| (- 1, - 1, 0) -> exe [h0; h0; aux; h0; h0]
+								| (1, - 1, 0) -> exe [h0'; aux; h0]
+								| _ -> ()
+				and remonter_angle () =
+					let aux_r () = exe [b'; d'; b; d; b; a; b'; a']
+					and aux_l () = exe [b; a; b'; a'; b'; d'; b; d]
+					in
+						let x, m = pos0 [|1; 1; 0|] in
+							if m.(0) <> [|0; 0; - 1|] then
+								match vect x with
+									| (1, 0, - 1) -> aux_r ()
+									| (0, - 1, - 1) -> exe [b; aux_r]
+									| (- 1, 0, - 1) -> exe [b; b; aux_r]
+									| (0, 1, - 1) -> exe [b'; aux_r]
+									| _ -> raise Remonter_angle
+							else
+								match vect x with
+									| (1, 0, - 1) -> exe [b; aux_l]
+									| (0, - 1, - 1) -> exe [b; b; aux_l]
+									| (- 1, 0, - 1) -> exe [b'; aux_l]
+									| (0, 1, - 1) -> aux_l ()
+									| _ -> raise Remonter_angle
+				in
+					let x, m = pos0 [|1; 1; 0|] in
+						if (x = [|1; 1; 0|]) && (m = id) then ()
+						else (
+								descendre_angle ();
+								remonter_angle ()
+							)
+			
+			in
+				if completement then orienter_les_centres_lateraux ();
+				for i = 0 to 3 do
+					placer_angle_frontal_droit ();
+					exe [h0]
+				done
+		
+		and niveau_inferieur () =
+			
+			(* niveau inférieur *)
+			
+			let orienter_les_angles () =
+				let est_mal_oriente angle =
+					let (_, m) = pos1 angle in
+						m.(2) <> [|0; 0; 1|]
+				in
+					let v = map_vect est_mal_oriente
+						[|[|1; 0; - 1|]; [|0; - 1; - 1|]; [|- 1; 0; - 1|]; [|0; 1; - 1|]|]
+					in match (v.(0), v.(1), v.(2), v.(3)) with
+							| (false, false, false, false) -> ()
+							| (true, true, true, true) ->
+										exe [d; b; a; b'; a'; d'; b; d; a; b; a'; b'; d'];
+							
+							| (false, false, true, true) -> exe [h0; d; b; a; b'; a'; d']
+							| (true, false, false, true) -> exe [d; b; a; b'; a'; d']
+							| (true, true, false, false) -> exe [h0'; d; b; a; b'; a'; d']
+							| (false, true, true, false) -> exe [h0; h0; d; b; a; b'; a'; d']
+							
+							| (false, _, false, _) -> exe [d; a; b; a'; b'; d']
+							| (_, false, _, false) -> exe [h0; d; a; b; a'; b'; d']
+							| _ -> raise Orienter_les_angles
+			
+			
+			and placer_les_angles () =
+				if completement then
+				(* on fait en sorte que le nombre de quarts de tours soit nul modulo 4 *)
+				(* la permutation des coins devrait alors être paire *)
+				(* de même que la permutation des angles *)
+					(
+						let n = nqt cube.mouvement1.mv1 ([|0; 0; - 1|] /:/ transpose cube.context1.matrice) in
+							if n = 1 then exe [b'] else if n = 3 then exe [b] else if n = 2 then exe [b; b]
+					)
+				else
+				(* on fait en sorte que la permutation des angles soit paire *)
+					(
+						if sign angles (sur cube.mouvement1.mv1) = - 1 then exe [b]
+					);
+				let permuter () =
+					(* laisse fixe l'angle arrière et permute circulairement les autres *)
+					(* dans le sens direct vu d'en bas *)
+					exe [d; b; b; d'; b'; d; b'; d']
+				and permuter' () =
+					(* laisse fixe l'angle arrière et permute circulairement les autres *)
+					(* dans le sens indirect vu d'en bas *)
+					exe [d; b; d'; b; d; b; b; d']
+				in
+					let chercher_un_angle_bien_place () =
+						let i = ref 0 in
+							while !i < 4 && fst (pos0 [|- 1; 0; - 1|]) <> [|- 1; 0; - 1|] do
+								exe [h0];
+								incr i
+							done;
+							!i
+					in
+						let j = chercher_un_angle_bien_place () in
+							if j = 4 (* aucun angle bien placé *) then
+								(
+									permuter ();
+									let _ = chercher_un_angle_bien_place () in ()
+								)
+							else ();
+							
+							let v, _ = pos0 [|1; 0; - 1|] in match vect v with
+									| (0, - 1, - 1) -> permuter ()
+									| (0, 1, - 1) -> permuter' ()
+									| (1, 0, - 1) -> ()
+									| _ -> raise Placer_les_angles
+			
+			and placer_les_coins () =
+				(* à ce stade la permutation des coins devrait être paire *)
+				let permuter () =
+					(* laisse fixe le coin frontal droit et permute circulairement 
+          les autres dans le sens direct vu d'en bas *)
+					exe [b; a; b'; p'; b; a'; b'; p]
+				and permuter' () =
+					(* laisse fixe le coin frontal droit et permute circulairement 
+          les autres dans le sens indirect vu d'en bas *)
+					exe [p'; b; a; b'; p; b; a'; b']
+				in
+					let chercher_un_coin_bien_place () =
+						let i = ref 0 in
+							while !i < 4 && fst (pos0 [|1; 1; - 1|]) <> [|1; 1; - 1|] do
+								exe [h0];
+								incr i
+							done;
+							!i
+					in
+						let j = chercher_un_coin_bien_place () in
+							
+							if j = 4 (* aucun coin bien placé *) then (
+									permuter ();
+									let _ = chercher_un_coin_bien_place () in ()
+								)
+							else ();
+							
+							let v, _ = pos0 [|- 1; - 1; - 1|] in match vect v with
+									| (1, - 1, - 1) -> permuter ()
+									| (- 1, 1, - 1) -> permuter' ()
+									| (- 1, - 1, - 1) -> ()
+									| _ -> raise Placer_les_coins
+			
+			
+			and orienter_les_coins () =
+				let faire_tourner () =
+					(* fait tourner les coins frontaux inférieurs sur eux-mêmes: 
+          le coin gauche dans le sens direct, le coin droit en sens inverse *)
+					exe [p'; b'; p; b'; p'; b; b; p];
+					exe [a; b; a'; b; a; b; b; a']
+				and
+				faire_tourner' () =
+					(* fait tourner les coins frontaux inférieurs sur eux-mêmes:
+          le coin droit dans le sens direct, le coin gauche en sens inverse *)
+					exe [a; b; b; a'; b'; a; b'; a'];
+					exe [p'; b'; b'; p; b; p'; b; p]
+				in
+					let orienter_frontal_inferieur_droit () =
+						let _, m = pos0 [|1; 1; - 1|] in
+							let v = m.(2) in
+								match vect v with
+									| (0, 0, 1) -> ()
+									| (- 1, 0, 0) -> faire_tourner' ()
+									| (0, - 1, 0) -> faire_tourner ()
+									| _ -> raise Orienter_les_coins
+					in
+						for i = 0 to 2 do
+							orienter_frontal_inferieur_droit ();
+							exe [h0']
+						done
+			
+			in
+				orienter_les_angles ();
+				placer_les_angles ();
+				placer_les_coins ();
+				orienter_les_coins ();
+		
+		
+		in
+			cube.liste_ops1 := [];
+			let matrice_contexte = cube.context1.matrice in
+				try
+					niveau_superieur ();
+					niveau_median ();
+					niveau_inferieur ();
+					cube.context1.matrice <- matrice_contexte;
+					cube.dessine1 ();
+					!(cube.liste_ops1)
+				with
+					| Orienter_les_coins ->
+								print_string "erreur dans orienter_les_coins\n"; !(cube.liste_ops1)
+					| Placer_les_coins ->
+								print_string "erreur dans placer_les_coins\n"; !(cube.liste_ops1)
+					| Placer_les_angles ->
+								print_string "erreur dans placer_les_angles\n"; !(cube.liste_ops1)
+					| Orienter_les_angles ->
+								print_string "erreur dans orienter_les_angles\n"; !(cube.liste_ops1)
+;;
+
+(* mélange du cube *)
+let melanger cube =
+	let (OPS (a, d, h), OPS (a', d', h'), OPS (p, g, b), OPS (p', g', b')) = cube.op_externes1
+	and s = vect_of_list (random_list (liste 12))
+	and v = make_vect 12 (fun () -> ()) in
+		v.(s.(0)) <- a; v.(1) <- d; v.(2) <- h; v.(s.(3)) <- a'; v.(s.(4)) <- d'; v.(s.(5)) <- h';
+		v.(s.(6)) <- p; v.(s.(7)) <- g; v.(s.(8)) <- b; v.(s.(9)) <- p'; v.(s.(10)) <- g'; v.(s.(11)) <- b';
+		let t = make_vect 30 (fun () -> ()) in
+			for i = 0 to 29 do
+				t.(i) <- v.(random__int 12);
+			done;
+			exe (list_of_vect t)
+;;
+
+(* cube muet invisible dans l'état 'mv1'  orienté de façon standard *)
+(* utilisé par la fonction 'est_rubik' *)
+let nouveau_cube_muet mv1 =
+	nouveau_cube mv1 {matrice = id} (fun _ _ -> ()) false
+;;
+
+(* cube invisible dans l'état 'mv1' orienté de façon standard *)
+(* écrivant les mouvements de ses faces - quarts de tours - *)
+(* et les renvoyant sous forme de liste *)
+let nouveau_cube_verbeux mv1 =
+	nouveau_cube mv1 {matrice = id} (fun _ _ -> ()) true
+;;
+
+(* cube avec affichage graphique dans l'état 'mv1' orienté de façon standard *)
+(* suppose l'ouverture préalable de la fenêtre graphique pour fonctionner *)
+let nouveau_cube_graphique mv1 =
+	nouveau_cube mv1 {matrice = id} dessine_cube true
+;;
+
+(*- fin de Rubik's cube virtuel *)
+
+
+(* test d'appartenance d'un mouvement au sous-groupe de Rubik R *)
+(* fondé sur la résolution par niveaux *)
+let est_rubik mv1 =
+	let mouvement = {mv1 = mv1} in
+		let _ = resoudre_le_cube (nouveau_cube_muet mouvement) true
+		in
+			mouvement.mv1 = e
+;;
+
+
+(* EXEMPLES *)
+
+let mv1 = mv1_rubik_r ();;
+est_dans_R mv1;;
+est_rubik mv1;;
+
+(*- superflip -*)
+
+let superflip =
+	let cb = nouveau_cube_muet {mv1 = e} in
+		let (OPS (a, d, h), OPS (a', d', h'), OPS (p, g, b), OPS (p', g', b')) = cb.op_externes1 in
+			exe [d'; h; h; p; g'; a; h'; p; b; a; h; b'; g; b; b; a'; d; p'; b; a'; h'; p'; h; b'];
+			map (fun (x, y) -> if est_angle x || est_coin x then x, y else x, id) cb.mouvement1.mv1
+;;
+
+let superflip1 =
+	let demi_tour v = (* s'applique aux angles 'v' uniquement *)
+		v /::/ v /+/ idm
+	in
+		mv1_of_fun (fun x -> if est_angle x then demi_tour x else id)
+;;
+
+let superflip2 = nouveau_mv1 (fun x -> x) (fun x -> x) (fun x -> 1) (fun x -> 0) (fun x -> 0);;
+
+superflip1 = superflip;;
+superflip2 = superflip;;
+
+(*- fin de superflip -*)
+
+
+(*- superflip-four-spot -*)
+
+let superflip_four_spot = (* Thomas Rokicki 2014 *)
+	let cb = nouveau_cube_muet {mv1 = e} in
+		let (OPS (a, d, h), OPS (a', d', h'), OPS (p, g, b), OPS (p', g', b')) = cb.op_externes1 in
+			exe [h; h; a; h; h; d'; g; a; a; h; a'; p'; d; g; h; h; d; h; b'; d; g'; b; d'; g'; b; b];
+			map (fun (x, y) -> if est_angle x || est_coin x then x, y else x, id) cb.mouvement1.mv1
+;;
+
+let superflip_four_spot1 =
+	let demi_tour v = (* s'applique aux angles 'v' uniquement *)
+		v /::/ v /+/ idm
+	and dt = diag (- 1) (- 1) 1
+	in
+		mv1_of_fun (
+			fun x -> if est_angle x then demi_tour x /./ dt
+							else if est_coin x then dt
+							else id
+		)
+;;
+
+superflip_four_spot1 = superflip_four_spot;;
+
+(*- fin de superflip-four-spot -*)
+
+
+let cube = nouveau_cube_graphique {mv1 = superflip_four_spot};;
+
+boucle1 cube
+(
+	fun () -> cube.mouvement1.mv1 <- mv1_rubik_r (); cube.dessine1 ()
+)
+(
+	fun () -> let l = resoudre_le_cube cube false in
+						(printf__printf "\nnombre de mouvements: %d\n" (list_length l));
+						print_newline ()
+)
+(
+	fun () -> let l = resoudre_le_cube cube true in
+						(printf__printf "\nnombre de mouvements: %d\n" (list_length l));
+						print_newline ()
+)
+;;
+
+let cube = nouveau_cube_verbeux {mv1 = superflip_four_spot};;
+resoudre_le_cube cube true;;
+
+(*-------------------------------------------------------------------------------------------------------------------------*)
+
+(* Pour utiliser directement ce qui suit, interrompre la boucle ci-dessus et procéder par lignes entières.
+   Sélectionner et envoyer ensemble les 6 lignes suivantes (let cube = ...) ...
+
+let cube = nouveau_cube_graphique {mv1 = mv1};;
+graphics__open_graph " 612x612";;
+melanger cube;;
+cube.dessine1();;
+let (OPS (a0, d0, h0), OPS(a0', d0', h0')) = cube.op_globales1;;
+let (OPS (a, d, h), OPS(a', d', h'), OPS(p, g, b), OPS(p', g', b')) = cube.op_externes1;;
+let (OPS (orange, vert, blanc), OPS(orange', vert', blanc'), OPS(rouge, bleu, jaune), OPS(rouge', bleu', jaune')) = cube.op_internes1;;
+
+... puis exécuter une par une certaines des commandes qui suivent :
+(sélectionner une ligne ne comportant aucune marque de commentaire et l'envoyer)
+
+
+a0();;
+a0'();;
+
+d0();;
+d0'();;
+
+h0();;
+h0'();;
+
+
+a();;
+a'();;
+
+p();;
+p'();;
+
+d();;
+d'();;
+
+g();;
+g'();;
+
+h();;
+h'();;
+
+b();;
+b'();;
+
+
+orange();;
+orange'();;
+
+rouge();;
+rouge'();;
+
+vert();;
+vert'();;
+
+bleu();;
+bleu'();;
+
+blanc();;
+blanc'();;
+
+jaune();;
+jaune'();;
+
+*)
+
+
+(*----------------- Quelques formules utilisées pour résoudre le cube --------------------*)
+
+(*
+
+  (* NIVEAU SUPÉRIEUR face haute, blanche en principe *)
+
+  (* placement du coin supérieur frontal droit à partir d'en dessous: face blanche *)      
+  (* vers le bas : [a,b']b[d a'] *)
+exe [a;b';a';b;b;d;a';d';a];;
+  (* mouvement inverse *)
+exe (rev[a';b;a;b;b;d';a;d;a']);;
+
+  (* placement du coin supérieur frontal droit à partir de : face blanche frontale *)
+  (* avec autre face correcte *)
+exe [d;a';d';a];;
+  (* mouvement inverse *)
+exe [a';d;a;d'];;
+
+  (* placement du coin supérieur frontal droit à partir de : face blanche à droite *)
+  (* avec autre face correcte *)
+exe [a';d;a;d'];;
+
+
+  (* NIVEAU MÉDIAN *)
+
+  (* montée des angles *)
+  
+  (* [b,a][b',d'] montée vers la gauche *)
+exe [b;a;b';a';b';d';b;d];;
+  (* mouvement inverse *)
+exe (rev [b';a';b;a;b;d;b';d']);;
+
+  (* [b',d'][b,a] montée vers la droite *)
+exe [b';d';b;d;b;a;b';a'];;
+  (* mouvement inverse *)
+exe (rev [b;d;b';d';b';a';b;a]);;
+
+
+  (* NIVEAU INFÉRIEUR (les précédents déjà faits) *)
+
+  (* ORIENTER LES ANGLES *)
+
+  (* aucune face jaune d'angle bien orientée *)
+  (* d.[b,a].b *)
+exe [d;b;a;b';a';d';b;d;a;b;a';b';d'];;
+  (* mouvement inverse *)
+exe (rev [d';b';a';b;a;d;b';d';a';b';a;b;d]);;
+
+  (* deux faces jaunes à se suivre bien orientées: gauche et arrière *)
+  (* d.[b,a] *)
+exe [d;b;a;b';a';d'];;
+  (* mouvement inverse *)
+exe (rev [d';b';a';b;a;d]);;
+
+  (* deux faces jaunes alignées avec le centre: face et arrière *)
+  (* d.[a,b] *)
+exe [d;a;b;a';b';d'];;
+  (* mouvement inverse *)
+exe (rev [d';a';b';a;b;d]);;
+
+  (* PERMUTER LES ANGLES *)
+
+  (* laisse fixe l'angle inférieur arrière et permute circulairement les trois autres *)
+  (* (db).[b,d'] *)
+exe [d;b;b;d';b';d;b';d'];;
+  (* mouvement inverse *)
+exe (rev [d';b';b';d;b;d';b;d]);;
+
+  (* échange des angles arrière et droit *)
+  (* (db).[b,d']b' *)
+exe [d;b;b;d';b';d;b';d';b'];;
+  (* mouvement inverse *)
+exe (rev [d';b';b';d;b;d';b;d;b]);;
+
+  (* PERMUTER LES COINS *)
+
+  (* laisse fixe le coin frontal droit et permute circulairement les trois autres : *)
+  (* [p' b.a] *)
+exe [p';b;a;b';p;b;a';b'];;
+  (* mouvement inverse *)
+exe (rev [p;b';a';b;p';b';a;b]);;
+
+  (* ORIENTER LES COINS *)
+
+  (* fait tourner les coins frontaux sur eux-mêmes: le coin gauche *)
+  (* dans le sens des aiguilles d'une montre le coin droit en sens inverse *)
+  (* (ab).[b,a'] (p'b').[b',p] *)
+
+exe [a;b;b;a';b';a;b';a'];;
+exe [p';b';b';p;b;p';b;p];;
+  (* mouvement inverse *)
+exe [p';b';p;b';p';b;b;p];;
+exe [a;b;a';b;a;b;b;a'];;
+
+*)

@@ -1,1 +1,1 @@
-Les exemples de ce répertoire sont issus des exemples fournis sur le site http://caml.inria.fr.
+Les exemples de ce rŽpertoire sont issus des exemples fournis sur le site http://caml.inria.fr.

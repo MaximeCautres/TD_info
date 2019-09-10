@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="generator" content="hevea 2.18">
-<link rel="stylesheet" type="text/css" href="manual.css">
-<title>Chapter&#XA0;32&#XA0;&#XA0;The graphics library</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"><link rel="stylesheet" type="text/css" href="manual.css">
+<title>Chapter 30  The graphics library</title>
 </head>
 <body>
 <a href="libthreads.html"><img src="previous_motif.gif" alt="Previous"></a>
 <a href="index.html"><img src="contents_motif.gif" alt="Up"></a>
 <a href="libdynlink.html"><img src="next_motif.gif" alt="Next"></a>
 <hr>
-<h1 class="chapter" id="sec558">Chapter&#XA0;32&#XA0;&#XA0;The graphics library</h1>
+<h1 class="chapter" id="sec560">Chapter 30  The graphics library</h1>
 <p>The <span class="c003">graphics</span> library provides a set of portable drawing primitives.
 Drawing takes place
-in a separate window that is created when <span class="c003">Graphics.open_graph</span> is called.</p><blockquote class="quote"><span class="c007">Unix:</span>&#XA0;&#XA0;
+in a separate window that is created when <span class="c003">Graphics.open_graph</span> is called.</p><blockquote class="quote"><span class="c007">Unix:</span>  
 This library is implemented under the X11 windows system. 
 Programs that use the <span class="c003">graphics</span> library must be linked as follows:
 <pre>
@@ -47,7 +49,7 @@ by 100 pixels tall, at location (50,0)
 </dd><dt class="dt-description"><span class="c006">Graphics.open_graph ""</span></dt><dd class="dd-description">
 connects to the default display and creates a window with the default
 geometry.
-</dd></dl></blockquote><blockquote class="quote"><span class="c007">Windows:</span>&#XA0;&#XA0;
+</dd></dl></blockquote><blockquote class="quote"><span class="c007">Windows:</span>  
 This library is available both for standalone compiled programs and
 under the toplevel application <span class="c003">ocamlwin.exe</span>. For the latter, this
 library must be loaded in-core by typing

@@ -1,5 +1,3 @@
-(* Utiliser une distribution Caml Light complète *)
-
 let (camllex, camlyacc, camllibr) =
   let run cmd f = sys__system_command (cmd ^ " " ^ f)
   in

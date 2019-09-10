@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="generator" content="hevea 2.18">
-<link rel="stylesheet" type="text/css" href="manual.css">
-<title>Chapter&#XA0;31&#XA0;&#XA0;The threads library</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"><link rel="stylesheet" type="text/css" href="manual.css">
+<title>Chapter 29  The threads library</title>
 </head>
 <body>
 <a href="libstr.html"><img src="previous_motif.gif" alt="Previous"></a>
 <a href="index.html"><img src="contents_motif.gif" alt="Up"></a>
 <a href="libgraph.html"><img src="next_motif.gif" alt="Next"></a>
 <hr>
-<h1 class="chapter" id="sec557">Chapter&#XA0;31&#XA0;&#XA0;The threads library</h1>
+<h1 class="chapter" id="sec559">Chapter 29  The threads library</h1>
 <p>
-<a id="c:threads"></a></p><p>The <span class="c003">threads</span> library allows concurrent programming in OCaml.
+<a id="c:threads"></a></p><p><span class="c013">Warning:</span> the <span class="c003">threads</span> library is deprecated since version
+4.08.0 of OCaml. Please switch to system threads, which have the same
+API. Lightweight threads with VM-level scheduling are provided by
+third-party libraries such as Lwt, but with a different API.</p><p>The <span class="c003">threads</span> library allows concurrent programming in OCaml.
 It provides multiple threads of control (also called lightweight
 processes) that execute concurrently in the same memory space. Threads
 communicate by in-place modification of shared data structures, or by
@@ -35,17 +40,17 @@ bytecode programs. It cannot be used with native-code programs.
 </li></ul><p>
 Programs that use system threads must be linked as follows:
 </p><pre>
-        ocamlc -thread <span class="c009">other options</span> unix.cma threads.cma <span class="c009">other files</span>
-        ocamlopt -thread <span class="c009">other options</span> unix.cmxa threads.cmxa <span class="c009">other files</span>
+        ocamlc -I +threads <span class="c009">other options</span> unix.cma threads.cma <span class="c009">other files</span>
+        ocamlopt -I +threads <span class="c009">other options</span> unix.cmxa threads.cmxa <span class="c009">other files</span>
 </pre><p>
 Compilation units that use the <span class="c003">threads</span> library must also be compiled with
-the <span class="c003">-thread</span> option (see chapter&#XA0;<a href="comp.html#c%3Acamlc">9</a>).</p><p>Programs that use VM-level threads must be compiled with the <span class="c003">-vmthread</span>
-option to <span class="c003">ocamlc</span> (see chapter&#XA0;<a href="comp.html#c%3Acamlc">9</a>), and be linked as follows:
+the <span class="c003">-I +threads</span> option (see chapter <a href="comp.html#c%3Acamlc">9</a>).</p><p>Programs that use VM-level threads must be compiled with the <span class="c003">-vmthread</span>
+option to <span class="c003">ocamlc</span> (see chapter <a href="comp.html#c%3Acamlc">9</a>), and be linked as follows:
 </p><pre>
         ocamlc -vmthread <span class="c009">other options</span> threads.cma <span class="c009">other files</span>
 </pre><p>
 Compilation units that use <span class="c003">threads</span> library must also be compiled with
-the <span class="c003">-vmthread</span> option (see chapter&#XA0;<a href="comp.html#c%3Acamlc">9</a>).</p><ul class="ftoc2"><li class="li-links">
+the <span class="c003">-vmthread</span> option (see chapter <a href="comp.html#c%3Acamlc">9</a>).</p><ul class="ftoc2"><li class="li-links">
 <a href="libref/Thread.html">Module <span class="c003">Thread</span>: lightweight threads</a>
 </li><li class="li-links"><a href="libref/Mutex.html">Module <span class="c003">Mutex</span>: locks for mutual exclusion</a>
 </li><li class="li-links"><a href="libref/Condition.html">Module <span class="c003">Condition</span>: condition variables to synchronize between threads</a>

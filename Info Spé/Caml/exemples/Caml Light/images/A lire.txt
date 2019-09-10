@@ -1,1 +1,1 @@
-Ouvrir cree-image.ml avant affiche-image.ml !
+Utiliser 'cree-image.ml' pour créer le fichier image 'image' avant d'utiliser 'affiche-image.ml'!

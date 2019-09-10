@@ -15,6 +15,7 @@ compile "parser.ml";;
 compile "calculette.ml";;
 ocamllibr "calculette.cma lexer.cmo parser.cmo calculette.cmo";;
 
+#directory ".";;
 #load "calculette.cma";;
 
 (7 + 5) * - 8 / 4

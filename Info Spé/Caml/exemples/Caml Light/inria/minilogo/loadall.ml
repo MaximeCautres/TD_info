@@ -17,9 +17,9 @@ load_object "logo.zo";;
 #open "logo";;
 
 (*
-pour carré :c répète 4 [av :c td 90].
-      pour multi_carré :c :n répète :n [carré :c td 10].
-      ve multi_carré 80 10 .
+pour carr :c rpte 4 [av :c td 90].
+      pour multi_carr :c :n rpte :n [carr :c td 10].
+      ve multi_carr 80 10 .
 pour spirale :d :a :i :n
        si :n >= 0 [av :d td :a spirale (:d + :i) :a :i (:n - 1)]
         [stop].
@@ -42,10 +42,10 @@ ve spirala
 *)
 
 boucle()
-(* l'instruction "boucle" précédente ayant lancé l'interpréteur
+(* l'instruction "boucle" prcdente ayant lanc l'interprteur
    minilogo, il suffit de cliquer sur le bouton "send" pour
-   exécuter le programme minilogo suivant; cliquer sur le bouton
-   "interrupt" pour arrêter la boucle *)
+   excuter le programme minilogo suivant; cliquer sur le bouton
+   "interrupt" pour arrter la boucle *)
 ;;
 
 pour spirala :d :a :i :n

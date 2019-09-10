@@ -2,6 +2,7 @@
 #load "unix.cma";;
 open Unix;;
 chdir "exemples/OCaml/inria/hanoi";;
+#directory ".";;
 #use "grahanoi-fra.ml";;
 print_string "Pour lancer: jeu <nombre de disques>;;"; print_newline();;
 

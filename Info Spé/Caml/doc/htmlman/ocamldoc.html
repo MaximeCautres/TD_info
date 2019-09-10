@@ -1,43 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="generator" content="hevea 2.18">
-<link rel="stylesheet" type="text/css" href="manual.css">
-<title>Chapter&#XA0;16&#XA0;&#XA0;The documentation generator (ocamldoc)</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"><link rel="stylesheet" type="text/css" href="manual.css">
+<title>Chapter 15  The documentation generator (ocamldoc)</title>
 </head>
 <body>
 <a href="browser.html"><img src="previous_motif.gif" alt="Previous"></a>
 <a href="index.html"><img src="contents_motif.gif" alt="Up"></a>
 <a href="debugger.html"><img src="next_motif.gif" alt="Next"></a>
 <hr>
-<h1 class="chapter" id="sec336">Chapter&#XA0;16&#XA0;&#XA0;The documentation generator (ocamldoc)</h1>
+<h1 class="chapter" id="sec341">Chapter 15  The documentation generator (ocamldoc)</h1>
 <ul>
-<li><a href="ocamldoc.html#sec337">16.1&#XA0;&#XA0;Usage</a>
-</li><li><a href="ocamldoc.html#sec349">16.2&#XA0;&#XA0;Syntax of documentation comments</a>
-</li><li><a href="ocamldoc.html#sec364">16.3&#XA0;&#XA0;Custom generators</a>
-</li><li><a href="ocamldoc.html#sec369">16.4&#XA0;&#XA0;Adding command line options</a>
+<li><a href="ocamldoc.html#sec342">15.1  Usage</a>
+</li><li><a href="ocamldoc.html#sec354">15.2  Syntax of documentation comments</a>
+</li><li><a href="ocamldoc.html#sec369">15.3  Custom generators</a>
+</li><li><a href="ocamldoc.html#sec374">15.4  Adding command line options</a>
 </li></ul>
 <p> <a id="c:ocamldoc"></a>
-
 </p><p>This chapter describes OCamldoc, a tool that generates documentation from
 special comments embedded in source files. The comments used by OCamldoc
-are of the form <span class="c003">(**</span>&#X2026;<span class="c003">*)</span> and follow the format described
-in section <a href="#s%3Aocamldoc-comments">16.2</a>.</p><p>OCamldoc can produce documentation in various formats: HTML, L<sup>A</sup>T<sub>E</sub>X,
+are of the form <span class="c003">(**</span>…<span class="c003">*)</span> and follow the format described
+in section <a href="#s%3Aocamldoc-comments">15.2</a>.</p><p>OCamldoc can produce documentation in various formats: HTML, L<sup>A</sup>T<sub>E</sub>X,
 TeXinfo, Unix man pages, and <span class="c003">dot</span> dependency graphs. Moreover,
 users can add their own custom generators, as explained in
-section <a href="#s%3Aocamldoc-custom-generators">16.3</a>.</p><p>In this chapter, we use the word <em>element</em> to refer to any of the
+section <a href="#s%3Aocamldoc-custom-generators">15.3</a>.</p><p>In this chapter, we use the word <em>element</em> to refer to any of the
 following parts of an OCaml source file: a type declaration, a value,
 a module, an exception, a module type, a type constructor, a record
 field, a class, a class type, a class method, a class value or a class
 inheritance clause.</p>
-<h2 class="section" id="sec337">16.1&#XA0;&#XA0;Usage</h2>
+<h2 class="section" id="sec342">15.1  Usage</h2>
 <p> <a id="s:ocamldoc-usage"></a></p>
-<h3 class="subsection" id="sec338">16.1.1&#XA0;&#XA0;Invocation</h3>
+<h3 class="subsection" id="sec343">15.1.1  Invocation</h3>
 <p>OCamldoc is invoked via the command <span class="c003">ocamldoc</span>, as follows:
 </p><pre>
         ocamldoc <span class="c009">options sourcefiles</span>
-</pre><h4 class="subsubsection" id="sec339">Options for choosing the output format</h4>
+</pre><h4 class="subsubsection" id="sec344">Options for choosing the output format</h4>
 <p>The following options determine the format for the generated
 documentation.</p><dl class="description"><dt class="dt-description">
 <span class="c006">-html</span></dt><dd class="dd-description">
@@ -61,12 +62,12 @@ are stored in the current directory, or in the directory specified
 with the <span class="c006">-d</span> option.</dd><dt class="dt-description"><span class="c006">-dot</span></dt><dd class="dd-description">
 Generate a dependency graph for the toplevel modules, in a format suitable
 for displaying and processing by <span class="c003">dot</span>. The <span class="c003">dot</span> tool is available from
-<a href="http://www.research.att.com/sw/tools/graphviz/"><span class="c003">http://www.research.att.com/sw/tools/graphviz/</span></a>.
+<a href="https://graphviz.org/"><span class="c003">https://graphviz.org/</span></a>.
 The textual representation of the graph is written to the file
 <span class="c003">ocamldoc.out</span>, or to the file specified with the <span class="c006">-o</span> option.
 Use <span class="c003">dot ocamldoc.out</span> to display it.</dd><dt class="dt-description"><span class="c013"><span class="c003">-g</span> <span class="c009">file.cm[o,a,xs]</span></span></dt><dd class="dd-description">
 Dynamically load the given file, which defines a custom documentation
-generator. See section <a href="#s%3Aocamldoc-compilation-and-usage">16.4.1</a>. This
+generator. See section <a href="#s%3Aocamldoc-compilation-and-usage">15.4.1</a>. This
 option is supported by the <span class="c003">ocamldoc</span> command (to load <span class="c003">.cmo</span> and <span class="c003">.cma</span> files)
 and by its native-code version <span class="c003">ocamldoc.opt</span> (to load <span class="c003">.cmxs</span> files).
 If the given file is a simple one and does not exist in
@@ -74,14 +75,14 @@ the current directory, then ocamldoc looks for it in the custom
 generators default directory, and in the directories specified with
 optional <span class="c003">-i</span> options.</dd><dt class="dt-description"><span class="c006">-customdir</span></dt><dd class="dd-description">
 Display the custom generators default directory.</dd><dt class="dt-description"><span class="c013"><span class="c003">-i</span> <span class="c009">directory</span></span></dt><dd class="dd-description">
-Add the given directory to the path where to look for custom generators.</dd></dl><h4 class="subsubsection" id="sec340">General options</h4>
+Add the given directory to the path where to look for custom generators.</dd></dl><h4 class="subsubsection" id="sec345">General options</h4>
 <dl class="description"><dt class="dt-description"><span class="c013"><span class="c003">-d</span> <span class="c009">dir</span></span></dt><dd class="dd-description">
 Generate files in directory <span class="c009">dir</span>, rather than the current directory.</dd><dt class="dt-description"><span class="c013"><span class="c003">-dump</span> <span class="c009">file</span></span></dt><dd class="dd-description">
 Dump collected information into <span class="c009">file</span>. This information can be
 read with the <span class="c003">-load</span> option in a subsequent invocation of <span class="c003">ocamldoc</span>.</dd><dt class="dt-description"><span class="c013"><span class="c003">-hide</span> <span class="c009">modules</span></span></dt><dd class="dd-description">
 Hide the given complete module names in the generated documentation.
 <span class="c009">modules</span> is a list of complete module names separated
-by &#X2019;<span class="c003">,</span>&#X2019;, without blanks. For instance: <span class="c003">Pervasives,M2.M3</span>.</dd><dt class="dt-description"><span class="c006">-inv-merge-ml-mli</span></dt><dd class="dd-description">
+by ’<span class="c003">,</span>’, without blanks. For instance: <span class="c003">Pervasives,M2.M3</span>.</dd><dt class="dt-description"><span class="c006">-inv-merge-ml-mli</span></dt><dd class="dd-description">
 Reverse the precedence of implementations and interfaces when merging.
 All elements
 in implementation files are kept, and the <span class="c006">-m</span> option
@@ -92,7 +93,7 @@ when available.</dd><dt class="dt-description"><span class="c013"><span class="c
 Load information from <span class="c009">file</span>, which has been produced by
 <span class="c003">ocamldoc -dump</span>. Several <span class="c003">-load</span> options can be given.</dd><dt class="dt-description"><span class="c013"><span class="c003">-m</span> <span class="c009">flags</span></span></dt><dd class="dd-description">
 Specify merge options between interfaces and implementations.
-(see section <a href="#s%3Aocamldoc-merge">16.1.2</a> for details).
+(see section <a href="#s%3Aocamldoc-merge">15.1.2</a> for details).
 <span class="c009">flags</span> can be one or several of the following characters:
 <dl class="description"><dt class="dt-description">
 <span class="c006">d</span></dt><dd class="dd-description"> merge description
@@ -107,9 +108,9 @@ Specify merge options between interfaces and implementations.
 </dd><dt class="dt-description"><span class="c006">r</span></dt><dd class="dd-description"> merge <span class="c003">@return</span>
 </dd><dt class="dt-description"><span class="c006">A</span></dt><dd class="dd-description"> merge everything
 </dd></dl></dd><dt class="dt-description"><span class="c006">-no-custom-tags</span></dt><dd class="dd-description">
-Do not allow custom @-tags (see section <a href="#s%3Aocamldoc-tags">16.2.5</a>).</dd><dt class="dt-description"><span class="c006">-no-stop</span></dt><dd class="dd-description">
+Do not allow custom @-tags (see section <a href="#s%3Aocamldoc-tags">15.2.5</a>).</dd><dt class="dt-description"><span class="c006">-no-stop</span></dt><dd class="dd-description">
 Keep elements placed after/between the <span class="c003">(**/**)</span> special comment(s)
-(see section <a href="#s%3Aocamldoc-comments">16.2</a>).</dd><dt class="dt-description"><span class="c013"><span class="c003">-o</span> <span class="c009">file</span></span></dt><dd class="dd-description">
+(see section <a href="#s%3Aocamldoc-comments">15.2</a>).</dd><dt class="dt-description"><span class="c013"><span class="c003">-o</span> <span class="c009">file</span></span></dt><dd class="dd-description">
 Output the generated documentation to <span class="c009">file</span> instead of <span class="c003">ocamldoc.out</span>.
 This option is meaningful only in conjunction with the
 <span class="c006">-latex</span>, <span class="c006">-texi</span>, or <span class="c006">-dot</span> options.</dd><dt class="dt-description"><span class="c013"><span class="c003">-pp</span> <span class="c009">command</span></span></dt><dd class="dd-description">
@@ -121,7 +122,7 @@ extension is not <span class="c003">.mli</span>.</dd><dt class="dt-description">
 Process the file <span class="c009">filename</span> as a text file, even if its
 extension is not <span class="c003">.txt</span>.</dd><dt class="dt-description"><span class="c006">-sort</span></dt><dd class="dd-description">
 Sort the list of top-level modules before generating the documentation.</dd><dt class="dt-description"><span class="c006">-stars</span></dt><dd class="dd-description">
-Remove blank characters until the first asterisk (&#X2019;<span class="c003">*</span>&#X2019;) in each
+Remove blank characters until the first asterisk (’<span class="c003">*</span>’) in each
 line of comments.</dd><dt class="dt-description"><span class="c013"><span class="c003">-t</span> <span class="c009">title</span></span></dt><dd class="dd-description">
 Use <span class="c009">title</span> as the title for the generated documentation.</dd><dt class="dt-description"><span class="c013"><span class="c003">-intro</span> <span class="c009">file</span></span></dt><dd class="dd-description">
 Use content of <span class="c009">file</span> as ocamldoc text to use as introduction (HTML,
@@ -133,14 +134,14 @@ Print short version number and exit.</dd><dt class="dt-description"><span class=
 Treat Ocamldoc warnings as errors.</dd><dt class="dt-description"><span class="c006">-hide-warnings</span></dt><dd class="dd-description">
 Do not print OCamldoc warnings.</dd><dt class="dt-description"><span class="c013"><span class="c003">-help</span> or <span class="c003">--help</span></span></dt><dd class="dd-description">
 Display a short usage summary and exit.
-</dd></dl><h4 class="subsubsection" id="sec341">Type-checking options</h4>
+</dd></dl><h4 class="subsubsection" id="sec346">Type-checking options</h4>
 <p>OCamldoc calls the OCaml type-checker to obtain type
 information. The following options impact the type-checking phase.
 They have the same meaning as for the <span class="c003">ocamlc</span> and <span class="c003">ocamlopt</span> commands.</p><dl class="description"><dt class="dt-description"><span class="c013"><span class="c003">-I</span> <span class="c009">directory</span></span></dt><dd class="dd-description">
 Add <span class="c009">directory</span> to the list of directories search for compiled
 interface files (<span class="c003">.cmi</span> files).</dd><dt class="dt-description"><span class="c006">-nolabels</span></dt><dd class="dd-description">
 Ignore non-optional labels in types.</dd><dt class="dt-description"><span class="c006">-rectypes</span></dt><dd class="dd-description">
-Allow arbitrary recursive types. (See the <span class="c003">-rectypes</span> option to <span class="c003">ocamlc</span>.)</dd></dl><h4 class="subsubsection" id="sec342">Options for generating HTML pages</h4>
+Allow arbitrary recursive types. (See the <span class="c003">-rectypes</span> option to <span class="c003">ocamlc</span>.)</dd></dl><h4 class="subsubsection" id="sec347">Options for generating HTML pages</h4>
 <p>The following options apply in conjunction with the <span class="c003">-html</span> option:</p><dl class="description"><dt class="dt-description">
 <span class="c006">-all-params</span></dt><dd class="dd-description">
 Display the complete list of parameters for functions and methods.</dd><dt class="dt-description"><span class="c013"><span class="c003">-charset</span> <span class="c009">charset</span></span></dt><dd class="dd-description">
@@ -158,7 +159,7 @@ module M : functor (A:Module) -&gt; functor (B:Module2) -&gt; sig .. end
 is displayed as:
 <pre>
 module M (A:Module) (B:Module2) : sig .. end
-</pre></dd></dl><h4 class="subsubsection" id="sec343">Options for generating L<sup>A</sup>T<sub>E</sub>X files</h4>
+</pre></dd></dl><h4 class="subsubsection" id="sec348">Options for generating L<sup>A</sup>T<sub>E</sub>X files</h4>
 <p>The following options apply in conjunction with the <span class="c003">-latex</span> option:</p><dl class="description"><dt class="dt-description">
 <span class="c013"><span class="c003">-latex-value-prefix</span> <span class="c009">prefix</span></span></dt><dd class="dd-description">
 Give a prefix to use for the labels of the values in the generated
@@ -182,7 +183,7 @@ Do not generate a table of contents.</dd><dt class="dt-description"><span class=
 Suppress trailer in generated documentation.</dd><dt class="dt-description"><span class="c006">-sepfiles</span></dt><dd class="dd-description">
 Generate one <span class="c003">.tex</span> file per toplevel module, instead of the global
 <span class="c003">ocamldoc.out</span> file.
-</dd></dl><h4 class="subsubsection" id="sec344">Options for generating TeXinfo files</h4>
+</dd></dl><h4 class="subsubsection" id="sec349">Options for generating TeXinfo files</h4>
 <p>The following options apply in conjunction with the <span class="c003">-texi</span> option:</p><dl class="description"><dt class="dt-description">
 <span class="c006">-esc8</span></dt><dd class="dd-description">
 Escape accented characters in Info files.</dd><dt class="dt-description"><span class="c006">-info-entry</span></dt><dd class="dd-description">
@@ -191,7 +192,7 @@ Specify section of Info directory.</dd><dt class="dt-description"><span class="c
 Suppress header in generated documentation.</dd><dt class="dt-description"><span class="c006">-noindex</span></dt><dd class="dd-description">
 Do not build index for Info files.</dd><dt class="dt-description"><span class="c006">-notrailer</span></dt><dd class="dd-description">
 Suppress trailer in generated documentation.
-</dd></dl><h4 class="subsubsection" id="sec345">Options for generating <span class="c003">dot</span> graphs</h4>
+</dd></dl><h4 class="subsubsection" id="sec350">Options for generating <span class="c003">dot</span> graphs</h4>
 <p>The following options apply in conjunction with the <span class="c003">-dot</span> option:</p><dl class="description"><dt class="dt-description">
 <span class="c013"><span class="c003">-dot-colors</span> <span class="c009">colors</span></span></dt><dd class="dd-description">
 Specify the colors to use in the generated <span class="c003">dot</span> code.
@@ -199,7 +200,7 @@ When generating module dependencies, <span class="c003">ocamldoc</span> uses dif
 for modules, depending on the directories in which they reside.
 When generating types dependencies, <span class="c003">ocamldoc</span> uses different colors
 for types, depending on the modules in which they are defined.
-<span class="c009">colors</span> is a list of color names separated by &#X2019;<span class="c003">,</span>&#X2019;, as
+<span class="c009">colors</span> is a list of color names separated by ’<span class="c003">,</span>’, as
 in <span class="c003">Red,Blue,Green</span>. The available colors are the ones supported by
 the <span class="c003">dot</span> tool.</dd><dt class="dt-description"><span class="c006">-dot-include-all</span></dt><dd class="dd-description">
 Include all modules in the <span class="c003">dot</span> output, not only modules given
@@ -209,15 +210,15 @@ outputting the <span class="c003">dot</span> code. This can be useful if there a
 a lot of transitive dependencies that clutter the graph.</dd><dt class="dt-description"><span class="c006">-dot-types</span></dt><dd class="dd-description">
 Output <span class="c003">dot</span> code describing the type dependency graph instead of
 the module dependency graph.
-</dd></dl><h4 class="subsubsection" id="sec346">Options for generating man files</h4>
+</dd></dl><h4 class="subsubsection" id="sec351">Options for generating man files</h4>
 <p>The following options apply in conjunction with the <span class="c003">-man</span> option:</p><dl class="description"><dt class="dt-description">
 <span class="c006">-man-mini</span></dt><dd class="dd-description">
 Generate man pages only for modules, module types, classes and class
 types, instead of pages for all elements.</dd><dt class="dt-description"><span class="c013"><span class="c003">-man-suffix</span> <span class="c009">suffix</span></span></dt><dd class="dd-description">
-Set the suffix used for generated man filenames. Default is &#X2019;<span class="c003">3o</span>&#X2019;,
+Set the suffix used for generated man filenames. Default is ’<span class="c003">3o</span>’,
 as in <span class="c003">List.3o</span>.</dd><dt class="dt-description"><span class="c013"><span class="c003">-man-section</span> <span class="c009">section</span></span></dt><dd class="dd-description">
-Set the section number used for generated man filenames. Default is &#X2019;<span class="c003">3</span>&#X2019;.</dd></dl>
-<h3 class="subsection" id="sec347">16.1.2&#XA0;&#XA0;Merging of module information</h3>
+Set the section number used for generated man filenames. Default is ’<span class="c003">3</span>’.</dd></dl>
+<h3 class="subsection" id="sec352">15.1.2  Merging of module information</h3>
 <p>
 <a id="s:ocamldoc-merge"></a></p><p>Information on a module can be extracted either from the <span class="c003">.mli</span> or <span class="c003">.ml</span>
 file, or both, depending on the files given on the command line.
@@ -237,7 +238,7 @@ If a description is present in the <span class="c003">.ml</span> file and not in
 <span class="c003">.mli</span> file, the <span class="c003">.ml</span> description is kept.
 In either case, all the information given in the <span class="c003">.mli</span> file is kept.
 </li></ul>
-<h3 class="subsection" id="sec348">16.1.3&#XA0;&#XA0;Coding rules</h3>
+<h3 class="subsection" id="sec353">15.1.3  Coding rules</h3>
 <p>
 <a id="s:ocamldoc-rules"></a>
 The following rules must be respected in order to avoid name clashes
@@ -254,36 +255,46 @@ exceptions with the same name.
 </li><li class="li-itemize">Values defined in tuple, as in <span class="c003">let (x,y,z) = (1,2,3)</span>
 are not kept by OCamldoc.
 </li><li class="li-itemize">Avoid the following construction:
-<pre>open Foo (* which has a module Bar with a value x *)
-module Foo =
-  struct
-    module Bar =
-      struct
-        let x = 1
-      end
-  end
-  let dummy = Bar.x
-</pre>In this case, OCamldoc will associate <span class="c003">Bar.x</span> to the <span class="c003">x</span> of module
+
+
+<div class="caml-example verbatim">
+
+<pre><div class="caml-input"> open Foo (* which has a module Bar with a value x *)
+ module Foo =
+   struct
+     module Bar =
+       struct
+         let x = 1
+       end
+   end
+   let dummy = Bar.x
+</div>
+</pre>
+
+
+</div>
+
+In this case, OCamldoc will associate <span class="c003">Bar.x</span> to the <span class="c003">x</span> of module
 <span class="c003">Foo</span> defined just above, instead of to the <span class="c003">Bar.x</span> defined in the
 opened module <span class="c003">Foo</span>.
 </li></ul>
-<h2 class="section" id="sec349">16.2&#XA0;&#XA0;Syntax of documentation comments</h2>
+<h2 class="section" id="sec354">15.2  Syntax of documentation comments</h2>
 <p>
 <a id="s:ocamldoc-comments"></a></p><p>Comments containing documentation material are called <em>special
 comments</em> and are written between <span class="c003">(**</span> and <span class="c003">*)</span>. Special comments
 must start exactly with <span class="c003">(**</span>. Comments beginning with <span class="c003">(</span> and more
 than two <span class="c003">*</span> are ignored.</p>
-<h3 class="subsection" id="sec350">16.2.1&#XA0;&#XA0;Placement of documentation comments</h3>
+<h3 class="subsection" id="sec355">15.2.1  Placement of documentation comments</h3>
 <p>
 OCamldoc can associate comments to some elements of the language
 encountered in the source files. The association is made according to
 the locations of comments with respect to the language elements. The
 locations of comments in <span class="c003">.mli</span> and <span class="c003">.ml</span> files are different.</p>
-<h4 class="subsubsection" id="sec351">Comments in <span class="c003">.mli</span> files</h4>
+<h4 class="subsubsection" id="sec356">Comments in <span class="c003">.mli</span> files</h4>
 <p>
 A special comment is associated to an element if it is placed before or
 after the element.<br>
-A special comment before an element is associated to this element if&#XA0;:
+A special comment before an element is associated to this element if :
 </p><ul class="itemize"><li class="li-itemize">
 There is no blank line or another special comment between the special
 comment and the element. However, a regular comment can occur between
@@ -296,117 +307,123 @@ element.</p><p>There are two exceptions: for constructors and record fields in
 type definitions, the associated comment can only be placed after the
 constructor or field definition, without blank lines or other comments
 between them. The special comment for a constructor
-with another constructor following must be placed before the &#X2019;<span class="c003">|</span>&#X2019;
+with another constructor following must be placed before the ’<span class="c003">|</span>’
 character separating the two constructors.</p><p>The following sample interface file <span class="c003">foo.mli</span> illustrates the
-placement rules for comments in <span class="c003">.mli</span> files.</p><pre>(** The first special comment of the file is the comment associated
-    with the whole module.*)
+placement rules for comments in <span class="c003">.mli</span> files.</p><div class="caml-example signature">
+
+<pre><div class="caml-input"> (** The first special comment of the file is the comment associated
+     with the whole module.*)
 
 
-(** Special comments can be placed between elements and are kept
-    by the OCamldoc tool, but are not associated to any element.
-    @-tags in these comments are ignored.*)
+ (** Special comments can be placed between elements and are kept
+     by the OCamldoc tool, but are not associated to any element.
+     @-tags in these comments are ignored.*)
 
-(*******************************************************************)
-(** Comments like the one above, with more than two asterisks,
-    are ignored. *)
+ (*******************************************************************)
+ (** Comments like the one above, with more than two asterisks,
+     are ignored. *)
 
-(** The comment for function f. *)
-val f : int -&gt; int -&gt; int
-(** The continuation of the comment for function f. *)
+ (** The comment for function f. *)
+ val f : int -&gt; int -&gt; int
+ (** The continuation of the comment for function f. *)
 
-(** Comment for exception My_exception, even with a simple comment
-    between the special comment and the exception.*)
-(* Hello, I'm a simple comment :-) *)
-exception My_exception of (int -&gt; int) * int
+ (** Comment for exception My_exception, even with a simple comment
+     between the special comment and the exception.*)
+ (* Hello, I'm a simple comment :-) *)
+ exception My_exception of (int -&gt; int) * int
 
-(** Comment for type weather  *)
-type weather =
-| Rain of int (** The comment for constructor Rain *)
-| Sun (** The comment for constructor Sun *)
+ (** Comment for type weather  *)
+ type weather =
+ | Rain of int (** The comment for constructor Rain *)
+ | Sun (** The comment for constructor Sun *)
 
-(** Comment for type weather2  *)
-type weather2 =
-| Rain of int (** The comment for constructor Rain *)
-| Sun (** The comment for constructor Sun *)
-(** I can continue the comment for type weather2 here
-  because there is already a comment associated to the last constructor.*)
+ (** Comment for type weather2  *)
+ type weather2 =
+ | Rain of int (** The comment for constructor Rain *)
+ | Sun (** The comment for constructor Sun *)
+ (** I can continue the comment for type weather2 here
+   because there is already a comment associated to the last constructor.*)
 
-(** The comment for type my_record *)
-type my_record = {
-    val foo : int ;    (** Comment for field foo *)
-    val bar : string ; (** Comment for field bar *)
-  }
-  (** Continuation of comment for type my_record *)
+ (** The comment for type my_record *)
+ type my_record = {
+     foo : int ;    (** Comment for field foo *)
+     bar : string ; (** Comment for field bar *)
+   }
+   (** Continuation of comment for type my_record *)
 
-(** Comment for foo *)
-val foo : string
-(** This comment is associated to foo and not to bar. *)
-val bar : string
-(** This comment is associated to bar. *)
+ (** Comment for foo *)
+ val foo : string
+ (** This comment is associated to foo and not to bar. *)
+ val bar : string
+ (** This comment is associated to bar. *)
 
-(** The comment for class my_class *)
-class my_class :
-  object
-    (** A comment to describe inheritance from cl *)
-    inherit cl
+ (** The comment for class my_class *)
+ class my_class :
+   object
+     (** A comment to describe inheritance from cl *)
+     inherit cl
 
-    (** The comment for attribute tutu *)
-    val mutable tutu : string
+     (** The comment for attribute tutu *)
+     val mutable tutu : string
 
-    (** The comment for attribute toto. *)
-    val toto : int
+     (** The comment for attribute toto. *)
+     val toto : int
 
-    (** This comment is not attached to titi since
-        there is a blank line before titi, but is kept
-        as a comment in the class. *)
+     (** This comment is not attached to titi since
+         there is a blank line before titi, but is kept
+         as a comment in the class. *)
 
-    val titi : string
+     val titi : string
 
-    (** Comment for method toto *)
-    method toto : string
+     (** Comment for method toto *)
+     method toto : string
 
-    (** Comment for method m *)
-    method m : float -&gt; int
-  end
+     (** Comment for method m *)
+     method m : float -&gt; int
+   end
 
-(** The comment for the class type my_class_type *)
-class type my_class_type =
-  object
-    (** The comment for variable x. *)
-    val mutable x : int
+ (** The comment for the class type my_class_type *)
+ class type my_class_type =
+   object
+     (** The comment for variable x. *)
+     val mutable x : int
 
-    (** The commend for method m. *)
-    method m : int -&gt; int
-end
+     (** The comment for method m. *)
+     method m : int -&gt; int
+ end
 
-(** The comment for module Foo *)
-module Foo =
-  struct
-    (** The comment for x *)
-    val x : int
+ (** The comment for module Foo *)
+ module Foo :
+   sig
+     (** The comment for x *)
+     val x : int
 
-    (** A special comment that is kept but not associated to any element *)
-  end
+     (** A special comment that is kept but not associated to any element *)
+   end
 
-(** The comment for module type my_module_type. *)
-module type my_module_type =
-  sig
-    (** The comment for value x. *)
-    val x : int
+ (** The comment for module type my_module_type. *)
+ module type my_module_type =
+   sig
+     (** The comment for value x. *)
+     val x : int
 
-    (** The comment for module M. *)
-    module M =
-      struct
-        (** The comment for value y. *)
-        val y : int
+     (** The comment for module M. *)
+     module M :
+       sig
+         (** The comment for value y. *)
+         val y : int
 
-        (* ... *)
-      end
+         (* ... *)
+       end
 
-  end
+   end
 
+</div>
 </pre>
-<h4 class="subsubsection" id="sec352">Comments in <span class="c003">.ml</span> files</h4>
+
+
+</div>
+<h4 class="subsubsection" id="sec357">Comments in <span class="c003">.ml</span> files</h4>
 <p>A special comment is associated to an element if it is placed before
 the element and there is no blank line between the comment and the
 element. Meanwhile, there can be a simple comment between the special
@@ -414,112 +431,125 @@ comment and the element. There are two exceptions, for
 constructors and record fields in type definitions, whose associated
 comment must be placed after the constructor or field definition,
 without blank line between them. The special comment for a constructor
-with another constructor following must be placed before the &#X2019;<span class="c003">|</span>&#X2019;
+with another constructor following must be placed before the ’<span class="c003">|</span>’
 character separating the two constructors.</p><p>The following example of file <span class="c003">toto.ml</span> shows where to place comments
-in a <span class="c003">.ml</span> file.</p><pre>(** The first special comment of the file is the comment associated
-    to the whole module. *)
+in a <span class="c003">.ml</span> file.</p><div class="caml-example verbatim">
 
-(** The comment for function f *)
-let f x y = x + y
+<pre><div class="caml-input"> (** The first special comment of the file is the comment associated
+     to the whole module. *)
 
-(** This comment is not attached to any element since there is another
-    special comment just before the next element. *)
+ (** The comment for function f *)
+ let f x y = x + y
 
-(** Comment for exception My_exception, even with a simple comment
-    between the special comment and the exception.*)
-(* A simple comment. *)
-exception My_exception of (int -&gt; int) * int
+ (** This comment is not attached to any element since there is another
+     special comment just before the next element. *)
 
-(** Comment for type weather  *)
-type weather =
-| Rain of int (** The comment for constructor Rain *)
-| Sun (** The comment for constructor Sun *)
+ (** Comment for exception My_exception, even with a simple comment
+     between the special comment and the exception.*)
+ (* A simple comment. *)
+ exception My_exception of (int -&gt; int) * int
 
-(** The comment for type my_record *)
-type my_record = {
-    val foo : int ;    (** Comment for field foo *)
-    val bar : string ; (** Comment for field bar *)
-  }
+ (** Comment for type weather  *)
+ type weather =
+ | Rain of int (** The comment for constructor Rain *)
+ | Sun (** The comment for constructor Sun *)
 
-(** The comment for class my_class *)
-class my_class =
-    object
-      (** A comment to describe inheritance from cl *)
-      inherit cl
+ (** The comment for type my_record *)
+ type my_record = {
+     foo : int ;    (** Comment for field foo *)
+     bar : string ; (** Comment for field bar *)
+   }
 
-      (** The comment for the instance variable tutu *)
-      val mutable tutu = "tutu"
-      (** The comment for toto *)
-      val toto = 1
-      val titi = "titi"
-      (** Comment for method toto *)
-      method toto = tutu ^ "!"
-      (** Comment for method m *)
-      method m (f : float) = 1
-    end
+ (** The comment for class my_class *)
+ class my_class =
+     object
+       (** A comment to describe inheritance from cl *)
+       inherit cl
 
-(** The comment for class type my_class_type *)
-class type my_class_type =
-  object
-    (** The comment for the instance variable x. *)
-    val mutable x : int
-    (** The commend for method m. *)
-    method m : int -&gt; int
-  end
+       (** The comment for the instance variable tutu *)
+       val mutable tutu = "tutu"
+       (** The comment for toto *)
+       val toto = 1
+       val titi = "titi"
+       (** Comment for method toto *)
+       method toto = tutu ^ "!"
+       (** Comment for method m *)
+       method m (f : float) = 1
+     end
 
-(** The comment for module Foo *)
-module Foo =
-  struct
-    (** The comment for x *)
-    val x : int
-    (** A special comment in the class, but not associated to any element. *)
-  end
+ (** The comment for class type my_class_type *)
+ class type my_class_type =
+   object
+     (** The comment for the instance variable x. *)
+     val mutable x : int
+     (** The comment for method m. *)
+     method m : int -&gt; int
+   end
 
-(** The comment for module type my_module_type. *)
-module type my_module_type =
-  sig
-    (* Comment for value x. *)
-    val x : int
-    (* ... *)
-  end
+ (** The comment for module Foo *)
+ module Foo =
+   struct
+     (** The comment for x *)
+     let x = 0
+     (** A special comment in the class, but not associated to any element. *)
+   end
+
+ (** The comment for module type my_module_type. *)
+ module type my_module_type =
+   sig
+     (* Comment for value x. *)
+     val x : int
+     (* ... *)
+   end
+</div>
 </pre>
-<h3 class="subsection" id="sec353">16.2.2&#XA0;&#XA0;The Stop special comment</h3>
+
+
+</div>
+<h3 class="subsection" id="sec358">15.2.2  The Stop special comment</h3>
 <p>
 The special comment <span class="c003">(**/**)</span> tells OCamldoc to discard
 elements placed after this comment, up to the end of the current
 class, class type, module or module type, or up to the next stop comment.
 For instance:
-</p><pre>class type foo =
-  object
-    (** comment for method m *)
-    method m : string
 
-    (**/**)
 
-    (** This method won't appear in the documentation *)
-    method bar : int
-  end
+</p><div class="caml-example signature">
 
-(** This value appears in the documentation, since the Stop special comment
-    in the class does not affect the parent module of the class.*)
-val foo : string
+<pre><div class="caml-input"> class type foo =
+   object
+     (** comment for method m *)
+     method m : string
 
-(**/**)
-(** The value bar does not appear in the documentation.*)
-val bar : string
-(**/**)
+     (**/**)
 
-(** The type t appears since in the documentation since the previous stop comment
-toggled off the "no documentation mode". *)
-type t = string
-</pre><p>
-The <span class="c006">-no-stop</span> option to <span class="c003">ocamldoc</span> causes the Stop special
+     (** This method won't appear in the documentation *)
+     method bar : int
+   end
+
+ (** This value appears in the documentation, since the Stop special comment
+     in the class does not affect the parent module of the class.*)
+ val foo : string
+
+ (**/**)
+ (** The value bar does not appear in the documentation.*)
+ val bar : string
+ (**/**)
+
+ (** The type t appears since in the documentation since the previous stop comment
+ toggled off the "no documentation mode". *)
+ type t = string
+</div>
+</pre>
+
+
+</div><p>The <span class="c006">-no-stop</span> option to <span class="c003">ocamldoc</span> causes the Stop special
 comments to be ignored.</p>
-<h3 class="subsection" id="sec354">16.2.3&#XA0;&#XA0;Syntax of documentation comments</h3>
-<p>The inside of documentation comments <span class="c003">(**</span>&#X2026;<span class="c003">*)</span> consists of
+<h3 class="subsection" id="sec359">15.2.3  Syntax of documentation comments</h3>
+<p>The inside of documentation comments <span class="c003">(**</span>…<span class="c003">*)</span> consists of
 free-form text with optional formatting annotations, followed by
 optional <em>tags</em> giving more specific information about parameters,
-version, authors, &#X2026; The tags are distinguished by a leading <span class="c003">@</span>
+version, authors, … The tags are distinguished by a leading <span class="c003">@</span>
 character. Thus, a documentation comment has the following shape:
 </p><pre>(** The comment begins with a description, which is text formatted
    according to the rules described in the next section.
@@ -532,63 +562,63 @@ relevant to the documented element are simply ignored. For instance,
 all tags are ignored when documenting type constructors, record
 fields, and class inheritance clauses. Similarly, a <span class="c003">@param</span> tag on a
 class instance variable is ignored.</p><p>At last, <span class="c003">(**)</span> is the empty documentation comment.</p>
-<h3 class="subsection" id="sec355">16.2.4&#XA0;&#XA0;Text formatting</h3>
+<h3 class="subsection" id="sec360">15.2.4  Text formatting</h3>
 <p>Here is the BNF grammar for the simple markup language used to format
-text descriptions.</p><table class="display dcenter"><tr class="c019"><td class="dcell"><table class="c001 cellpading0"><tr><td class="c018">
-<a class="syntax" id="text"><span class="c010">text</span></a></td><td class="c015">::=</td><td class="c017">&#XA0;{<a class="syntax" href="#text-element"><span class="c010">text-element</span></a>}<sup>+</sup>
-&#XA0;</td></tr>
+text descriptions.</p><div class="syntax"><table class="display dcenter"><tr class="c019"><td class="dcell"><table class="c001 cellpading0"><tr><td class="c018">
+<a class="syntax" id="text"><span class="c010">text</span></a></td><td class="c015">::=</td><td class="c017"> {<a class="syntax" href="#text-element"><span class="c010">text-element</span></a>}<sup>+</sup>
+ </td></tr>
 <tr><td class="c018">&nbsp;</td></tr>
 </table></td></tr>
-</table><table class="c001 cellpading0"><tr><td class="c018">
+</table></div><div class="syntaxleft"><table class="c001 cellpading0"><tr><td class="c018">
 <a class="syntax" id="text-element"><span class="c010">text-element</span></a></td><td class="c015">::=</td></tr>
-</table><table class="c001 cellpading0"><tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c004">{</span> { <span class="c004">0</span> &#X2026; <span class="c004">9</span> }<sup>+</sup> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">format <a class="syntax" href="#text"><span class="c010">text</span></a> as a section header;
+</table></div><table class="c001 cellpading0"><tr><td class="c024">∣ </td><td class="c023"> <span class="c004">{</span> { <span class="c004">0</span> … <span class="c004">9</span> }<sup>+</sup> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">format <a class="syntax" href="#text"><span class="c010">text</span></a> as a section header;
 the integer following <span class="c003">{</span> indicates the sectioning level. </td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c004">{</span> { <span class="c004">0</span> &#X2026; <span class="c004">9</span> }<sup>+</sup> <span class="c004">:</span>  <span class="c010">label</span>  <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020"> same, but also associate the name <span class="c010">label</span> to the current point.
+<tr><td class="c024">∣ </td><td class="c023"> <span class="c004">{</span> { <span class="c004">0</span> … <span class="c004">9</span> }<sup>+</sup> <span class="c004">:</span>  <span class="c010">label</span>  <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020"> same, but also associate the name <span class="c010">label</span> to the current point.
 This point can be referenced by its fully-qualified label in a
 <span class="c003">{!</span> command, just like any other element. </td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c004">{b</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">set <a class="syntax" href="#text"><span class="c010">text</span></a> in bold. </td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c004">{i</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">set <a class="syntax" href="#text"><span class="c010">text</span></a> in italic. </td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c004">{e</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">emphasize <a class="syntax" href="#text"><span class="c010">text</span></a>. </td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c004">{C</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">center <a class="syntax" href="#text"><span class="c010">text</span></a>. </td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c004">{L</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">left align <a class="syntax" href="#text"><span class="c010">text</span></a>. </td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c004">{R</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">right align <a class="syntax" href="#text"><span class="c010">text</span></a>. </td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c004">{ul</span> <a class="syntax" href="#list"><span class="c010">list</span></a> <span class="c004">}</span> </td><td class="c020">build a list. </td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c004">{ol</span> <a class="syntax" href="#list"><span class="c010">list</span></a> <span class="c004">}</span> </td><td class="c020">build an enumerated list. </td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c002"><span class="c003">{{:</span> <span class="c010">string</span> <span class="c003">}</span></span> &#XA0;<a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">put a link to the given address
+<tr><td class="c024">∣ </td><td class="c023"> <span class="c004">{b</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">set <a class="syntax" href="#text"><span class="c010">text</span></a> in bold. </td></tr>
+<tr><td class="c024">∣ </td><td class="c023"> <span class="c004">{i</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">set <a class="syntax" href="#text"><span class="c010">text</span></a> in italic. </td></tr>
+<tr><td class="c024">∣ </td><td class="c023"> <span class="c004">{e</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">emphasize <a class="syntax" href="#text"><span class="c010">text</span></a>. </td></tr>
+<tr><td class="c024">∣ </td><td class="c023"> <span class="c004">{C</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">center <a class="syntax" href="#text"><span class="c010">text</span></a>. </td></tr>
+<tr><td class="c024">∣ </td><td class="c023"> <span class="c004">{L</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">left align <a class="syntax" href="#text"><span class="c010">text</span></a>. </td></tr>
+<tr><td class="c024">∣ </td><td class="c023"> <span class="c004">{R</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">right align <a class="syntax" href="#text"><span class="c010">text</span></a>. </td></tr>
+<tr><td class="c024">∣ </td><td class="c023"> <span class="c004">{ul</span> <a class="syntax" href="#list"><span class="c010">list</span></a> <span class="c004">}</span> </td><td class="c020">build a list. </td></tr>
+<tr><td class="c024">∣ </td><td class="c023"> <span class="c004">{ol</span> <a class="syntax" href="#list"><span class="c010">list</span></a> <span class="c004">}</span> </td><td class="c020">build an enumerated list. </td></tr>
+<tr><td class="c024">∣ </td><td class="c023"> <span class="c002"><span class="c003">{{:</span> <span class="c010">string</span> <span class="c003">}</span></span>  <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">put a link to the given address
 (given as <span class="c010">string</span>) on the given <a class="syntax" href="#text"><span class="c010">text</span></a>. </td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c002"><span class="c003">[</span> <span class="c010">string</span> <span class="c003">]</span></span> </td><td class="c020">set the given <span class="c010">string</span> in source code style. </td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c002"><span class="c003">{[</span> <span class="c010">string</span> <span class="c003">]}</span></span> </td><td class="c020">set the given <span class="c010">string</span> in preformatted
+<tr><td class="c024">∣ </td><td class="c023"> <span class="c002"><span class="c003">[</span> <span class="c010">string</span> <span class="c003">]</span></span> </td><td class="c020">set the given <span class="c010">string</span> in source code style. </td></tr>
+<tr><td class="c024">∣ </td><td class="c023"> <span class="c002"><span class="c003">{[</span> <span class="c010">string</span> <span class="c003">]}</span></span> </td><td class="c020">set the given <span class="c010">string</span> in preformatted
 				source code style.</td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c002"><span class="c003">{v</span> <span class="c010">string</span> <span class="c003">v}</span></span> </td><td class="c020">set the given <span class="c010">string</span> in verbatim style. </td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c002"><span class="c003">{%</span> <span class="c010">string</span> <span class="c003">%}</span></span> </td><td class="c020">target-specific content
+<tr><td class="c024">∣ </td><td class="c023"> <span class="c002"><span class="c003">{v</span> <span class="c010">string</span> <span class="c003">v}</span></span> </td><td class="c020">set the given <span class="c010">string</span> in verbatim style. </td></tr>
+<tr><td class="c024">∣ </td><td class="c023"> <span class="c002"><span class="c003">{%</span> <span class="c010">string</span> <span class="c003">%}</span></span> </td><td class="c020">target-specific content
 (L<sup>A</sup>T<sub>E</sub>X code by default, see details
-in <a href="#sss%3Atarget-specific-syntax">16.2.4.4</a>) </td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c002"><span class="c003">{!</span> <span class="c010">string</span> <span class="c003">}</span></span> </td><td class="c020">insert a cross-reference to an element
-(see section <a href="#sss%3Acrossref">16.2.4.2</a> for the syntax of cross-references).</td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c004">{!modules:</span> <span class="c010">string</span> &#XA0;<span class="c010">string</span> ... <span class="c004">}</span> </td><td class="c020">insert an index table
+in <a href="#sss%3Atarget-specific-syntax">15.2.4.4</a>) </td></tr>
+<tr><td class="c024">∣ </td><td class="c023"> <span class="c002"><span class="c003">{!</span> <span class="c010">string</span> <span class="c003">}</span></span> </td><td class="c020">insert a cross-reference to an element
+(see section <a href="#sss%3Acrossref">15.2.4.2</a> for the syntax of cross-references).</td></tr>
+<tr><td class="c024">∣ </td><td class="c023"> <span class="c004">{!modules:</span> <span class="c010">string</span>  <span class="c010">string</span> ... <span class="c004">}</span> </td><td class="c020">insert an index table
 for the given module names. Used in HTML only.</td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c004">{!indexlist}</span> </td><td class="c020">insert a table of links to the various indexes
+<tr><td class="c024">∣ </td><td class="c023"> <span class="c004">{!indexlist}</span> </td><td class="c020">insert a table of links to the various indexes
 (types, values, modules, ...). Used in HTML only.</td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c004">{^</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">set text in superscript.</td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"> <span class="c004">{_</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">set text in subscript.</td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"><span class="c010">escaped-string</span></td><td class="c020">typeset the given string as is;
-special characters (&#X2019;<span class="c003">{</span>&#X2019;, &#X2019;<span class="c003">}</span>&#X2019;, &#X2019;<span class="c003">[</span>&#X2019;, &#X2019;<span class="c003">]</span>&#X2019; and &#X2019;<span class="c003">@</span>&#X2019;)
-must be	escaped by a &#X2019;<span class="c003">\</span>&#X2019;</td></tr>
-<tr><td class="c024">&#X2223; </td><td class="c023"><span class="c010">blank-line</span></td><td class="c020">force a new line.
+<tr><td class="c024">∣ </td><td class="c023"> <span class="c004">{^</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">set text in superscript.</td></tr>
+<tr><td class="c024">∣ </td><td class="c023"> <span class="c004">{_</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> </td><td class="c020">set text in subscript.</td></tr>
+<tr><td class="c024">∣ </td><td class="c023"><span class="c010">escaped-string</span></td><td class="c020">typeset the given string as is;
+special characters (’<span class="c003">{</span>’, ’<span class="c003">}</span>’, ’<span class="c003">[</span>’, ’<span class="c003">]</span>’ and ’<span class="c003">@</span>’)
+must be	escaped by a ’<span class="c003">\</span>’</td></tr>
+<tr><td class="c024">∣ </td><td class="c023"><span class="c010">blank-line</span></td><td class="c020">force a new line.
 </td></tr>
 </table><p> <br>
 
 </p>
-<h4 class="subsubsection" id="sec356">16.2.4.1&#XA0;&#XA0;List formatting</h4>
-<table class="display dcenter"><tr class="c019"><td class="dcell"><table class="c001 cellpading0"><tr><td class="c018">
+<h4 class="subsubsection" id="sec361">15.2.4.1  List formatting</h4>
+<div class="syntax"><table class="display dcenter"><tr class="c019"><td class="dcell"><table class="c001 cellpading0"><tr><td class="c018">
 <a class="syntax" id="list"><span class="c010">list</span></a></td><td class="c015">::=</td><td class="c017">
-&#XA0;</td></tr>
-<tr><td class="c018">&nbsp;</td><td class="c015">&#X2223;</td><td class="c017">&#XA0;{&#XA0;<span class="c004">{-</span>&#XA0;<a class="syntax" href="#text"><span class="c010">text</span></a>&#XA0;<span class="c004">}</span>&#XA0;}<sup>+</sup>
-&#XA0;</td></tr>
-<tr><td class="c018">&nbsp;</td><td class="c015">&#X2223;</td><td class="c017">&#XA0;{&#XA0;<span class="c004">{li</span>&#XA0;<a class="syntax" href="#text"><span class="c010">text</span></a>&#XA0;<span class="c004">}</span>&#XA0;}<sup>+</sup>
+ </td></tr>
+<tr><td class="c018">&nbsp;</td><td class="c015">∣</td><td class="c017"> { <span class="c004">{-</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> }<sup>+</sup>
+ </td></tr>
+<tr><td class="c018">&nbsp;</td><td class="c015">∣</td><td class="c017"> { <span class="c004">{li</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> }<sup>+</sup>
 </td></tr>
 </table></td></tr>
-</table><p>A shortcut syntax exists for lists and enumerated lists:
+</table></div><p>A shortcut syntax exists for lists and enumerated lists:
 </p><pre>(** Here is a {b list}
 - item 1
 - item 2
@@ -602,10 +632,10 @@ The list is ended by the blank line.*)
 {- item 3}}
 The list is ended by the blank line.*)
 </pre><p>
-The same shortcut is available for enumerated lists, using &#X2019;<span class="c003">+</span>&#X2019;
-instead of &#X2019;<span class="c003">-</span>&#X2019;.
+The same shortcut is available for enumerated lists, using ’<span class="c003">+</span>’
+instead of ’<span class="c003">-</span>’.
 Note that only one list can be defined by this shortcut in nested lists.</p>
-<h4 class="subsubsection" id="sec357">16.2.4.2&#XA0;&#XA0;Cross-reference formatting</h4>
+<h4 class="subsubsection" id="sec362">15.2.4.2  Cross-reference formatting</h4>
 <p>
 <a id="sss:crossref"></a></p><p>Cross-references are fully qualified element names, as in the example
 <span class="c003">{!Foo.Bar.t}</span>. This is an ambiguous reference as it may designate
@@ -630,12 +660,12 @@ designate a type, and <span class="c003">{!val:Foo.Bar.t}</span> a value of the 
 </td></tr>
 </table>
 </div><p>In the case of variant constructors or record field, the constructor
-or field name should be preceded by the name of the correspond type &#X2013;
+or field name should be preceded by the name of the correspond type –
 to avoid the ambiguity of several types having the same constructor
 names. For example, the constructor <span class="c003">Node</span> of the type <span class="c003">tree</span> will be
 referenced as <span class="c003">{!tree.Node}</span> or <span class="c003">{!const:tree.Node}</span>, or possibly
 <span class="c003">{!Mod1.Mod2.tree.Node}</span> from outside the module.</p>
-<h4 class="subsubsection" id="sec358">16.2.4.3&#XA0;&#XA0;First sentence</h4>
+<h4 class="subsubsection" id="sec363">15.2.4.3  First sentence</h4>
 <p>In the description of a value, type, exception, module, module type, class
 or class type, the <em>first sentence</em> is sometimes used in indexes, or
 when just a part of the description is needed. The first sentence
@@ -654,14 +684,14 @@ outside of the following text formatting :
  <span class="c002"><span class="c003">{!</span> <span class="c010">string</span> <span class="c003">}</span></span> ,
  <span class="c004">{^</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> ,
  <span class="c004">{_</span> <a class="syntax" href="#text"><span class="c010">text</span></a> <span class="c004">}</span> .</p>
-<h4 class="subsubsection" id="sec359">16.2.4.4&#XA0;&#XA0;Target-specific formatting</h4>
+<h4 class="subsubsection" id="sec364">15.2.4.4  Target-specific formatting</h4>
 <p>
 <a id="sss:target-specific-syntax"></a></p><p>The content inside <span class="c003">{%foo: ... %}</span> is target-specific and will only be
 interpreted by the backend <span class="c003">foo</span>, and ignored by the others. The
 backends of the distribution are <span class="c003">latex</span>, <span class="c003">html</span>, <span class="c003">texi</span> and <span class="c003">man</span>. If
 no target is specified (syntax <span class="c003">{% ... %}</span>), <span class="c003">latex</span> is chosen by
 default. Custom generators may support their own target prefix.</p>
-<h4 class="subsubsection" id="sec360">16.2.4.5&#XA0;&#XA0;Recognized HTML tags</h4>
+<h4 class="subsubsection" id="sec365">15.2.4.5  Recognized HTML tags</h4>
 <p>
 The HTML tags <span class="c003">&lt;b&gt;..&lt;/b&gt;</span>,
 <span class="c003">&lt;code&gt;..&lt;/code&gt;</span>,
@@ -679,10 +709,10 @@ The HTML tags <span class="c003">&lt;b&gt;..&lt;/b&gt;</span>,
  <span class="c004">{li ..}</span> ,
  <span class="c004">{C ..}</span>  and
 <span class="c003">{[0-9] ..}</span>.</p>
-<h3 class="subsection" id="sec361">16.2.5&#XA0;&#XA0;Documentation tags (@-tags)</h3>
+<h3 class="subsection" id="sec366">15.2.5  Documentation tags (@-tags)</h3>
 <p>
 <a id="s:ocamldoc-tags"></a></p>
-<h4 class="subsubsection" id="sec362">Predefined tags</h4>
+<h4 class="subsubsection" id="sec367">Predefined tags</h4>
 <p>
 The following table gives the list of predefined @-tags, with their
 syntax and meaning.<br>
@@ -695,18 +725,18 @@ There may be several <span class="c003">@author</span> tags for the same element
 deprecated, what to use as a replacement, and possibly the reason
 for deprecation. </td></tr>
 <tr><td class="c021">
- <span class="c004">@param</span> <span class="c010">id</span> &#XA0;<a class="syntax" href="#text"><span class="c010">text</span></a> </td><td class="c021">Associate the given description (<a class="syntax" href="#text"><span class="c010">text</span></a>) to the
+ <span class="c004">@param</span> <span class="c010">id</span>  <a class="syntax" href="#text"><span class="c010">text</span></a> </td><td class="c021">Associate the given description (<a class="syntax" href="#text"><span class="c010">text</span></a>) to the
 given parameter name <span class="c010">id</span>. This tag is used for functions,
 methods, classes and functors. </td></tr>
 <tr><td class="c021">
- <span class="c004">@raise</span> <span class="c010">Exc</span> &#XA0;<a class="syntax" href="#text"><span class="c010">text</span></a> </td><td class="c021">Explain that the element may raise
+ <span class="c004">@raise</span> <span class="c010">Exc</span>  <a class="syntax" href="#text"><span class="c010">text</span></a> </td><td class="c021">Explain that the element may raise
 the exception <span class="c010">Exc</span>. </td></tr>
 <tr><td class="c021">
  <span class="c004">@return</span> <a class="syntax" href="#text"><span class="c010">text</span></a> </td><td class="c021">Describe the return value and
 its possible values. This tag is used for functions
 and methods. </td></tr>
 <tr><td class="c021">
- <span class="c002"><span class="c003">@see</span> <span class="c003">&lt;</span> <span class="c010">URL</span> <span class="c003">&gt;</span></span> &#XA0;<a class="syntax" href="#text"><span class="c010">text</span></a> </td><td class="c021">Add a reference to the <span class="c010">URL</span>
+ <span class="c002"><span class="c003">@see</span> <span class="c003">&lt;</span> <span class="c010">URL</span> <span class="c003">&gt;</span></span>  <a class="syntax" href="#text"><span class="c010">text</span></a> </td><td class="c021">Add a reference to the <span class="c010">URL</span>
 with the given <a class="syntax" href="#text"><span class="c010">text</span></a> as comment. </td></tr>
 <tr><td class="c021">
  <span class="c002"><span class="c003">@see</span> <span class="c003">'</span><span class="c010">filename</span><span class="c003">'</span></span> <a class="syntax" href="#text"><span class="c010">text</span></a> </td><td class="c021">Add a reference to the given file name
@@ -723,7 +753,7 @@ to the given <span class="c010">version</span> in order to document compatibilit
 <tr><td class="c021">
  <span class="c004">@version</span> <span class="c010">string</span> </td><td class="c021">The version number for the element. </td></tr>
 </table>
-<h4 class="subsubsection" id="sec363">Custom tags</h4>
+<h4 class="subsubsection" id="sec368">Custom tags</h4>
 <p>
 <a id="s:ocamldoc-custom-tags"></a>
 You can use custom tags in the documentation comments, but they will
@@ -735,8 +765,8 @@ comment, as in:
 *)
 </pre><p>
 To handle custom tags, you need to define a custom generator,
-as explained in section <a href="#s%3Aocamldoc-handling-custom-tags">16.3.2</a>.</p>
-<h2 class="section" id="sec364">16.3&#XA0;&#XA0;Custom generators</h2>
+as explained in section <a href="#s%3Aocamldoc-handling-custom-tags">15.3.2</a>.</p>
+<h2 class="section" id="sec369">15.3  Custom generators</h2>
 <p>
 <a id="s:ocamldoc-custom-generators"></a></p><p>OCamldoc operates in two steps:
 </p><ol class="enumerate" type=1><li class="li-enumerate">
@@ -751,31 +781,31 @@ the <span class="c003">Odoc_info</span> module, which gives access to all the ty
 representing the elements found in the given modules, with their associated
 description.</p><p>The files you can use to define custom generators are installed in the
 <span class="c003">ocamldoc</span> sub-directory of the OCaml standard library.</p>
-<h3 class="subsection" id="sec365">16.3.1&#XA0;&#XA0;The generator modules</h3>
+<h3 class="subsection" id="sec370">15.3.1  The generator modules</h3>
 <p>
 The type of a generator module depends on the kind of generated documentation.
 Here is the list of generator module types, with the name of the generator
-class in the module&#XA0;:
+class in the module :
 </p><ul class="itemize"><li class="li-itemize">
-for HTML&#XA0;: <span class="c003">Odoc_html.Html_generator</span> (class <span class="c003">html</span>),
-</li><li class="li-itemize">for L<sup>A</sup>T<sub>E</sub>X&#XA0;: <span class="c003">Odoc_latex.Latex_generator</span> (class <span class="c003">latex</span>),
-</li><li class="li-itemize">for TeXinfo&#XA0;: <span class="c003">Odoc_texi.Texi_generator</span> (class <span class="c003">texi</span>),
-</li><li class="li-itemize">for man pages&#XA0;: <span class="c003">Odoc_man.Man_generator</span> (class <span class="c003">man</span>),
-</li><li class="li-itemize">for graphviz (dot)&#XA0;: <span class="c003">Odoc_dot.Dot_generator</span> (class <span class="c003">dot</span>),
-</li><li class="li-itemize">for other kinds&#XA0;: <span class="c003">Odoc_gen.Base</span> (class <span class="c003">generator</span>).
+for HTML : <span class="c003">Odoc_html.Html_generator</span> (class <span class="c003">html</span>),
+</li><li class="li-itemize">for L<sup>A</sup>T<sub>E</sub>X : <span class="c003">Odoc_latex.Latex_generator</span> (class <span class="c003">latex</span>),
+</li><li class="li-itemize">for TeXinfo : <span class="c003">Odoc_texi.Texi_generator</span> (class <span class="c003">texi</span>),
+</li><li class="li-itemize">for man pages : <span class="c003">Odoc_man.Man_generator</span> (class <span class="c003">man</span>),
+</li><li class="li-itemize">for graphviz (dot) : <span class="c003">Odoc_dot.Dot_generator</span> (class <span class="c003">dot</span>),
+</li><li class="li-itemize">for other kinds : <span class="c003">Odoc_gen.Base</span> (class <span class="c003">generator</span>).
 </li></ul><p>
 That is, to define a new generator, one must implement a module with
 the expected signature, and with the given generator class, providing
 the <span class="c003">generate</span> method as entry point to make the generator generates
-documentation for a given list of modules&#XA0;:</p><pre>        method generate : Odoc_info.Module.t_module list -&gt; unit
+documentation for a given list of modules :</p><pre>        method generate : Odoc_info.Module.t_module list -&gt; unit
 </pre><p>
 This method will be called with the list of analysed and possibly
 merged <span class="c003">Odoc_info.t_module</span> structures.</p><p>It is recommended to inherit from the current generator of the same
 kind as the one you want to define. Doing so, it is possible to
-load various custom generators to combine improvements brought by each one.</p><p>This is done using first class modules (see chapter <a href="extn.html#s-first-class-modules">8.9</a>).</p><p>The easiest way to define a custom generator is the following this example,
-here extending the current HTML generator. We don&#X2019;t have to know if this is
+load various custom generators to combine improvements brought by each one.</p><p>This is done using first class modules (see chapter <a href="manual028.html#s-first-class-modules">8.6</a>).</p><p>The easiest way to define a custom generator is the following this example,
+here extending the current HTML generator. We don’t have to know if this is
 the original HTML generator defined in ocamldoc or if it has been extended
-already by a previously loaded custom generator&#XA0;:</p><pre>module Generator (G : Odoc_html.Html_generator) =
+already by a previously loaded custom generator :</p><pre>module Generator (G : Odoc_html.Html_generator) =
 struct
   class html =
     object(self)
@@ -794,19 +824,19 @@ let _ = Odoc_args.extend_html_generator (module Generator : Odoc_gen.Html_functo
 </pre><p>
 To know which methods to override and/or which methods are available,
 have a look at the different base implementations, depending on the
-kind of generator you are extending&#XA0;:
+kind of generator you are extending :
 
 </p><ul class="itemize"><li class="li-itemize">
-for HTML&#XA0;: <a href="https://github.com/ocaml/ocaml/blob/4.06/ocamldoc/odoc_html.ml"><span class="c003">odoc_html.ml</span></a>,
-</li><li class="li-itemize">for L<sup>A</sup>T<sub>E</sub>X&#XA0;: <a href="https://github.com/ocaml/ocaml/blob/4.06/ocamldoc/odoc_latex.ml"><span class="c003">odoc_latex.ml</span></a>,
-</li><li class="li-itemize">for TeXinfo&#XA0;: <a href="https://github.com/ocaml/ocaml/blob/4.06/ocamldoc/odoc_texi.ml"><span class="c003">odoc_texi.ml</span></a>,
-</li><li class="li-itemize">for man pages&#XA0;: <a href="https://github.com/ocaml/ocaml/blob/4.06/ocamldoc/odoc_man.ml"><span class="c003">odoc_man.ml</span></a>,
-</li><li class="li-itemize">for graphviz (dot)&#XA0;: <a href="https://github.com/ocaml/ocaml/blob/4.06/ocamldoc/odoc_dot.ml"><span class="c003">odoc_dot.ml</span></a>.
+for HTML : <a href="https://github.com/ocaml/ocaml/blob/4.08/ocamldoc/odoc_html.ml"><span class="c003">odoc_html.ml</span></a>,
+</li><li class="li-itemize">for L<sup>A</sup>T<sub>E</sub>X : <a href="https://github.com/ocaml/ocaml/blob/4.08/ocamldoc/odoc_latex.ml"><span class="c003">odoc_latex.ml</span></a>,
+</li><li class="li-itemize">for TeXinfo : <a href="https://github.com/ocaml/ocaml/blob/4.08/ocamldoc/odoc_texi.ml"><span class="c003">odoc_texi.ml</span></a>,
+</li><li class="li-itemize">for man pages : <a href="https://github.com/ocaml/ocaml/blob/4.08/ocamldoc/odoc_man.ml"><span class="c003">odoc_man.ml</span></a>,
+</li><li class="li-itemize">for graphviz (dot) : <a href="https://github.com/ocaml/ocaml/blob/4.08/ocamldoc/odoc_dot.ml"><span class="c003">odoc_dot.ml</span></a>.
 </li></ul>
-<h3 class="subsection" id="sec366">16.3.2&#XA0;&#XA0;Handling custom tags</h3>
+<h3 class="subsection" id="sec371">15.3.2  Handling custom tags</h3>
 <p>
 <a id="s:ocamldoc-handling-custom-tags"></a></p><p>Making a custom generator handle custom tags (see
-<a href="#s%3Aocamldoc-custom-tags">16.2.5</a>) is very simple.</p><h4 class="subsubsection" id="sec367">For HTML</h4>
+<a href="#s%3Aocamldoc-custom-tags">15.2.5</a>) is very simple.</p><h4 class="subsubsection" id="sec372">For HTML</h4>
 <p>
 Here is how to develop a HTML generator handling your custom tags.</p><p>The class <span class="c003">Odoc_html.Generator.html</span> inherits
 from the class <span class="c003">Odoc_html.info</span>, containing a field <span class="c003">tag_functions</span> which is a
@@ -833,10 +863,10 @@ Another method of the class <span class="c003">Odoc_html.info</span> will look f
 function associated to a custom tag and apply it to the text given to
 the tag. If no function is associated to a custom tag, then the method
 prints a warning message on <span class="c003">stderr</span>.</p>
-<h4 class="subsubsection" id="sec368">For other generators</h4>
+<h4 class="subsubsection" id="sec373">For other generators</h4>
 <p>
 You can act the same way for other kinds of generators.</p>
-<h2 class="section" id="sec369">16.4&#XA0;&#XA0;Adding command line options</h2>
+<h2 class="section" id="sec374">15.4  Adding command line options</h2>
 <p>
 The command line analysis is performed after loading the module containing the
 documentation generator, thus allowing command line options to be added to the
@@ -844,17 +874,17 @@ list of existing ones. Adding an option can be done with the function
 </p><pre>        Odoc_args.add_option : string * Arg.spec * string -&gt; unit
 </pre><p>Note: Existing command line options can be redefined using
 this function.</p>
-<h3 class="subsection" id="sec370">16.4.1&#XA0;&#XA0;Compilation and usage</h3>
+<h3 class="subsection" id="sec375">15.4.1  Compilation and usage</h3>
 <p>
 <a id="s:ocamldoc-compilation-and-usage"></a></p>
-<h4 class="subsubsection" id="sec371">Defining a custom generator class in one file</h4>
+<h4 class="subsubsection" id="sec376">Defining a custom generator class in one file</h4>
 <p>
 Let <span class="c003">custom.ml</span> be the file defining a new generator class.
-Compilation of <span class="c003">custom.ml</span> can be performed by the following command&#XA0;:
+Compilation of <span class="c003">custom.ml</span> can be performed by the following command :
 </p><pre>
         ocamlc -I +ocamldoc -c custom.ml
 </pre><p>
-The file <span class="c003">custom.cmo</span> is created and can be used this way&#XA0;:
+The file <span class="c003">custom.cmo</span> is created and can be used this way :
 </p><pre>
         ocamldoc -g custom.cmo <span class="c009">other-options source-files</span>
 </pre><p>
@@ -862,13 +892,13 @@ Options selecting a built-in generator to <span class="c003">ocamldoc</span>, su
 <span class="c003">-html</span>, have no effect if a custom generator of the same kind is provided using
 <span class="c003">-g</span>. If the kinds do not match, the selected built-in generator is used and the
 custom one is ignored.</p>
-<h4 class="subsubsection" id="sec372">Defining a custom generator class in several files</h4>
+<h4 class="subsubsection" id="sec377">Defining a custom generator class in several files</h4>
 <p>
 It is possible to define a generator class in several modules, which
 are defined in several files <span class="c009">file</span><sub>1</sub><span class="c003">.ml</span>[<span class="c003">i</span>],
 <span class="c009">file</span><sub>2</sub><span class="c003">.ml</span>[<span class="c003">i</span>], ..., <span class="c009">file</span><sub><span class="c009">n</span></sub><span class="c003">.ml</span>[<span class="c003">i</span>]. A <span class="c003">.cma</span>
 library file must be created, including all these files.</p><p>The following commands create the <span class="c003">custom.cma</span> file from files
-<span class="c009">file</span><sub>1</sub><span class="c003">.ml</span>[<span class="c003">i</span>], ..., <span class="c009">file</span><sub><span class="c009">n</span></sub><span class="c003">.ml</span>[<span class="c003">i</span>]&#XA0;:
+<span class="c009">file</span><sub>1</sub><span class="c003">.ml</span>[<span class="c003">i</span>], ..., <span class="c009">file</span><sub><span class="c009">n</span></sub><span class="c003">.ml</span>[<span class="c003">i</span>] :
 </p><pre>
 ocamlc -I +ocamldoc -c <span class="c009">file</span><sub>1</sub>.ml[i]
 ocamlc -I +ocamldoc -c <span class="c009">file</span><sub>2</sub>.ml[i]

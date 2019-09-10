@@ -6,7 +6,7 @@ set_window_title "Очи чëрные";;
 let x = ref 285;;
 moveto 5 !x;;
 
-let base = "exemples/Ocaml/unicode/";;
+let base = "exemples/OCaml/unicode/";;
 
 let f = open_in (base ^ "yeux noirs.txt")
 in

@@ -1,1 +1,1 @@
-Ouvrir loadall.ml avec WinCaml.
+Ouvrir loadall.ml avec MacCaml.

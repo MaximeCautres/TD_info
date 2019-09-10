@@ -1,32 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="generator" content="hevea 2.18">
-<link rel="stylesheet" type="text/css" href="manual.css">
-<title>Chapter&#XA0;9&#XA0;&#XA0;Batch compilation (ocamlc)</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"><link rel="stylesheet" type="text/css" href="manual.css">
+<title>Chapter 9  Batch compilation (ocamlc)</title>
 </head>
 <body>
 <a href="extn.html"><img src="previous_motif.gif" alt="Previous"></a>
 <a href="index.html"><img src="contents_motif.gif" alt="Up"></a>
 <a href="toplevel.html"><img src="next_motif.gif" alt="Next"></a>
 <hr>
-<h1 class="chapter" id="sec279">Chapter&#XA0;9&#XA0;&#XA0;Batch compilation (ocamlc)</h1>
+<h1 class="chapter" id="sec286">Chapter 9  Batch compilation (ocamlc)</h1>
 <ul>
-<li><a href="comp.html#sec280">9.1&#XA0;&#XA0;Overview of the compiler</a>
-</li><li><a href="comp.html#sec281">9.2&#XA0;&#XA0;Options</a>
-</li><li><a href="comp.html#sec283">9.3&#XA0;&#XA0;Modules and the file system</a>
-</li><li><a href="comp.html#sec284">9.4&#XA0;&#XA0;Common errors</a>
-</li><li><a href="comp.html#sec285">9.5&#XA0;&#XA0;Warning reference</a>
+<li><a href="comp.html#sec287">9.1  Overview of the compiler</a>
+</li><li><a href="comp.html#sec288">9.2  Options</a>
+</li><li><a href="comp.html#sec290">9.3  Modules and the file system</a>
+</li><li><a href="comp.html#sec291">9.4  Common errors</a>
+</li><li><a href="comp.html#sec292">9.5  Warning reference</a>
 </li></ul>
 <p> <a id="c:camlc"></a>
-
 </p><p>This chapter describes the OCaml batch compiler <span class="c003">ocamlc</span>,
 which compiles OCaml source files to bytecode object files and links
 these object files to produce standalone bytecode executable files.
 These executable files are then run by the bytecode interpreter
 <span class="c003">ocamlrun</span>.</p>
-<h2 class="section" id="sec280">9.1&#XA0;&#XA0;Overview of the compiler</h2>
+<h2 class="section" id="sec287">9.1  Overview of the compiler</h2>
 <p>The <span class="c003">ocamlc</span> command has a command-line interface similar to the one of
 most C compilers. It accepts several types of arguments and processes them
 sequentially, after all options have been processed:</p><ul class="itemize"><li class="li-itemize">
@@ -77,18 +78,18 @@ that can be executed by the OCaml bytecode interpreter:
 the command named <span class="c003">ocamlrun</span>. If <span class="c003">a.out</span> is the name of the file
 produced by the linking phase, the command
 </p><pre>
-        ocamlrun a.out <span class="c009">arg</span><sub>1</sub> <span class="c009">arg</span><sub>2</sub> &#X2026; <span class="c009">arg</span><sub><span class="c009">n</span></sub>
+        ocamlrun a.out <span class="c009">arg</span><sub>1</sub> <span class="c009">arg</span><sub>2</sub> … <span class="c009">arg</span><sub><span class="c009">n</span></sub>
 </pre><p>
 executes the compiled code contained in <span class="c003">a.out</span>, passing it as
 arguments the character strings <span class="c009">arg</span><sub>1</sub> to <span class="c009">arg</span><sub><span class="c009">n</span></sub>.
-(See chapter&#XA0;<a href="runtime.html#c%3Aruntime">11</a> for more details.)</p><p>On most systems, the file produced by the linking
+(See chapter <a href="runtime.html#c%3Aruntime">11</a> for more details.)</p><p>On most systems, the file produced by the linking
 phase can be run directly, as in:
 </p><pre>
-        ./a.out <span class="c009">arg</span><sub>1</sub> <span class="c009">arg</span><sub>2</sub> &#X2026; <span class="c009">arg</span><sub><span class="c009">n</span></sub>
+        ./a.out <span class="c009">arg</span><sub>1</sub> <span class="c009">arg</span><sub>2</sub> … <span class="c009">arg</span><sub><span class="c009">n</span></sub>
 </pre><p>
 The produced file has the executable bit set, and it manages to launch
 the bytecode interpreter by itself.</p>
-<h2 class="section" id="sec281">9.2&#XA0;&#XA0;Options</h2>
+<h2 class="section" id="sec288">9.2  Options</h2>
 <p><a id="s:comp-options"></a></p><p>The following command-line options are recognized by <span class="c003">ocamlc</span>.
 The options <span class="c003">-pack</span>, <span class="c003">-a</span>, <span class="c003">-c</span> and <span class="c003">-output-obj</span> are mutually exclusive.
 </p><dl class="description"><dt class="dt-description">
@@ -113,7 +114,8 @@ interactively.
 </dd><dt class="dt-description"><span class="c013"><span class="c003">-args</span> <span class="c009">filename</span></span></dt><dd class="dd-description">
 Read additional newline-terminated command line arguments from <span class="c009">filename</span>.
 </dd><dt class="dt-description"><span class="c013"><span class="c003">-args0</span> <span class="c009">filename</span></span></dt><dd class="dd-description">
-Read additional null character terminated command line arguments from <span class="c009">filename</span>.
+Read additional null character terminated command line arguments from
+<span class="c009">filename</span>.
 </dd><dt class="dt-description"><span class="c006">-bin-annot</span></dt><dd class="dd-description">
 Dump detailed information about the compilation (types, bindings,
 tail-calls, etc) in binary format. The information for file <span class="c009">src</span><span class="c003">.ml</span>
@@ -130,50 +132,67 @@ executable file is produced. This option is useful to
 compile modules separately.
 </dd><dt class="dt-description"><span class="c013"><span class="c003">-cc</span> <span class="c009">ccomp</span></span></dt><dd class="dd-description">
 Use <span class="c009">ccomp</span> as the C linker 
-when linking in &#X201C;custom runtime&#X201D; mode (see the <span class="c003">-custom</span> option)
+when linking in “custom runtime” mode (see the <span class="c003">-custom</span> option)
 and as the C compiler for compiling <span class="c003">.c</span> source files.
 </dd><dt class="dt-description"><span class="c013"><span class="c003">-cclib</span> <span class="c003">-l</span><span class="c009">libname</span></span></dt><dd class="dd-description">
 Pass the <span class="c003">-l</span><span class="c009">libname</span> option to the C linker
-when linking in &#X201C;custom runtime&#X201D; mode (see the <span class="c003">-custom</span> option).
+when linking in “custom runtime” mode (see the <span class="c003">-custom</span> option).
 This causes the given C library to be linked with the program.
 </dd><dt class="dt-description"><span class="c013"><span class="c003">-ccopt</span> <span class="c009">option</span></span></dt><dd class="dd-description">
 Pass the given option to the C compiler and linker.
-When linking in &#X201C;custom runtime&#X201D; mode, for instance<span class="c003">-ccopt -L</span><span class="c009">dir</span> causes the C linker to search for C libraries in
+When linking in “custom runtime” mode, for instance<span class="c003">-ccopt -L</span><span class="c009">dir</span> causes the C linker to search for C libraries in
 directory <span class="c009">dir</span>.(See the <span class="c003">-custom</span> option.)
 </dd><dt class="dt-description"><span class="c013"><span class="c003">-color</span> <span class="c009">mode</span></span></dt><dd class="dd-description">
 Enable or disable colors in compiler messages (especially warnings and errors).
 The following modes are supported:
 <dl class="description"><dt class="dt-description">
-<span class="c006">auto</span></dt><dd class="dd-description"> use heuristics to enable colors only if the output supports them (an ANSI-compatible tty terminal);
+<span class="c006">auto</span></dt><dd class="dd-description"> use heuristics to enable colors only if the output supports them
+(an ANSI-compatible tty terminal);
 </dd><dt class="dt-description"><span class="c006">always</span></dt><dd class="dd-description"> enable colors unconditionally;
 </dd><dt class="dt-description"><span class="c006">never</span></dt><dd class="dd-description"> disable color output.
 </dd></dl>
-The default setting is &#X2019;auto&#X2019;, and the current heuristic
+The default setting is ’auto’, and the current heuristic
 checks that the <span class="c003">TERM</span> environment variable exists and is
-not empty or <span class="c003">dumb</span>, and that &#X2019;isatty(stderr)&#X2019; holds.<p>The environment variable <span class="c003">OCAML_COLOR</span> is considered if <span class="c003">-color</span> is not
+not empty or <span class="c003">dumb</span>, and that ’isatty(stderr)’ holds.<p>The environment variable <span class="c003">OCAML_COLOR</span> is considered if <span class="c003">-color</span> is not
 provided. Its values are auto/always/never as above.
+</p></dd><dt class="dt-description"><span class="c013"><span class="c003">-error-style</span> <span class="c009">mode</span></span></dt><dd class="dd-description">
+Control the way error messages and warnings are printed.
+The following modes are supported:
+<dl class="description"><dt class="dt-description">
+<span class="c006">short</span></dt><dd class="dd-description"> only print the error and its location;
+</dd><dt class="dt-description"><span class="c006">contextual</span></dt><dd class="dd-description"> like <span class="c003">short</span>, but also display the source code snippet
+corresponding to the location of the error.
+</dd></dl>
+The default setting is <span class="c003">contextual</span>.<p>The environment variable <span class="c003">OCAML_ERROR_STYLE</span> is considered if <span class="c003">-error-style</span> is
+not provided. Its values are short/contextual as above.
 </p></dd><dt class="dt-description"><span class="c006">-compat-32</span></dt><dd class="dd-description">
 Check that the generated bytecode executable can run on 32-bit
 platforms and signal an error if it cannot. This is useful when
 compiling bytecode on a 64-bit machine.
 </dd><dt class="dt-description"><span class="c006">-config</span></dt><dd class="dd-description">
 Print the version number of <span class="c003">ocamlc</span> and a detailed
-summary of its configuration, then exit.</dd><dt class="dt-description"><span class="c006">-custom</span></dt><dd class="dd-description">
-Link in &#X201C;custom runtime&#X201D; mode. In the default linking mode, the
+summary of its configuration, then exit.
+</dd><dt class="dt-description"><span class="c013"><span class="c003">-config-var</span> <span class="c009">var</span></span></dt><dd class="dd-description">
+Print the value of a specific configuration variable from the
+<span class="c003">-config</span> output, then exit. If the variable does not exist, the exit
+code is non-zero. This option is only available since OCaml 4.08,
+so script authors should have a fallback for older versions.
+</dd><dt class="dt-description"><span class="c006">-custom</span></dt><dd class="dd-description">
+Link in “custom runtime” mode. In the default linking mode, the
 linker produces bytecode that is intended to be executed with the
 shared runtime system, <span class="c003">ocamlrun</span>. In the custom runtime mode, the
 linker produces an output file that contains both the runtime system
 and the bytecode for the program. The resulting file is larger, but it
 can be executed directly, even if the <span class="c003">ocamlrun</span> command is not
-installed. Moreover, the &#X201C;custom runtime&#X201D; mode enables static
+installed. Moreover, the “custom runtime” mode enables static
 linking of OCaml code with user-defined C functions, as described in
-chapter&#XA0;<a href="intfc.html#c%3Aintf-c">20</a>.
-<blockquote class="quote"><span class="c007">Unix:</span>&#XA0;&#XA0;
+chapter <a href="intfc.html#c%3Aintf-c">19</a>.
+<blockquote class="quote"><span class="c007">Unix:</span>  
 Never use the <span class="c003">strip</span> command on executables produced by <span class="c003">ocamlc -custom</span>,
 this would remove the bytecode part of the executable.
 </blockquote>
-<blockquote class="quote"><span class="c007">Unix:</span>&#XA0;&#XA0;
-Security warning: never set the &#X201C;setuid&#X201D; or &#X201C;setgid&#X201D; bits on executables
+<blockquote class="quote"><span class="c007">Unix:</span>  
+Security warning: never set the “setuid” or “setgid” bits on executables
 produced by <span class="c003">ocamlc -custom</span>, this would make them vulnerable to attacks.
 </blockquote>
 </dd><dt class="dt-description"><span class="c013"><span class="c003">-depend</span> <span class="c009">ocamldep-args</span></span></dt><dd class="dd-description">
@@ -189,7 +208,7 @@ C libraries. At link-time, shared libraries are searched in the
 standard search path (the one corresponding to the <span class="c003">-I</span> option).
 The <span class="c003">-dllpath</span> option simply stores <span class="c009">dir</span> in the produced
 executable file, where <span class="c003">ocamlrun</span> can find it and use it as
-described in section&#XA0;<a href="runtime.html#s-ocamlrun-dllpath">11.3</a>.
+described in section <a href="runtime.html#s-ocamlrun-dllpath">11.3</a>.
 </dd><dt class="dt-description"><span class="c013"><span class="c003">-for-pack</span> <span class="c009">module-path</span></span></dt><dd class="dd-description">
 Generate an object file (<span class="c003">.cmo</span>)
 that can later be included
@@ -204,9 +223,9 @@ names.
 </dd><dt class="dt-description"><span class="c006">-g</span></dt><dd class="dd-description">
 Add debugging information while compiling and linking. This option is
 required in order to be able to debug the program with <span class="c003">ocamldebug</span>
-(see chapter&#XA0;<a href="debugger.html#c%3Adebugger">17</a>), and to produce stack backtraces when
+(see chapter <a href="debugger.html#c%3Adebugger">16</a>), and to produce stack backtraces when
 the program terminates on an uncaught exception (see
-section&#XA0;<a href="runtime.html#ocamlrun-options">11.2</a>).
+section <a href="runtime.html#ocamlrun-options">11.2</a>).
 </dd><dt class="dt-description"><span class="c006">-i</span></dt><dd class="dd-description">
 Cause the compiler to print all defined names (with their inferred
 types or their definitions) when compiling an implementation (<span class="c003">.ml</span>
@@ -252,10 +271,16 @@ incorporating the C object files and libraries given on the command
 line. This custom runtime system can be used later to execute
 bytecode executables produced with the
 <span class="c003">ocamlc -use-runtime</span> <span class="c009">runtime-name</span> option.
-See section&#XA0;<a href="intfc.html#s%3Acustom-runtime">20.1.6</a> for more information.
+See section <a href="intfc.html#s%3Acustom-runtime">19.1.6</a> for more information.
+</dd><dt class="dt-description"><span class="c006">-match-context-rows</span></dt><dd class="dd-description">
+Set the number of rows of context used for optimization during
+pattern matching compilation. The default value is 32. Lower values
+cause faster compilation, but less optimized code. This advanced
+option is meant for use in the event that a pattern-match-heavy
+program leads to significant increases in compilation time.
 </dd><dt class="dt-description"><span class="c006">-no-alias-deps</span></dt><dd class="dd-description">
 Do not record dependencies for module aliases. See
-section&#XA0;<a href="extn.html#s%3Amodule-alias">8.12</a> for more information.
+section <a href="manual031.html#s%3Amodule-alias">8.9</a> for more information.
 </dd><dt class="dt-description"><span class="c006">-no-app-funct</span></dt><dd class="dd-description">
 Deactivates the applicative behaviour of functors. With this option,
 each functor application generates new types in its result and
@@ -307,7 +332,7 @@ cross-module optimization information.</p><p>Using this option may degrade the q
 reduces compilation time, both on clean and incremental
 builds. Indeed, with the native compiler, when the implementation of
 a compilation unit changes, all the units that depend on it may need
-to be recompiled &#X2013; because the cross-module information may have
+to be recompiled – because the cross-module information may have
 changed. If the compilation unit whose implementation changed was
 compiled with <span class="c003">-opaque</span>, no such recompilation needs to occur. This
 option can thus be used, for example, to get faster edit-compile-test
@@ -322,11 +347,11 @@ were added at the top of each file.
 Cause the linker to produce a C object file instead of
 a bytecode executable file.
 This is useful to wrap OCaml code as a C library,
-callable from any C program. See chapter&#XA0;<a href="intfc.html#c%3Aintf-c">20</a>,
-section&#XA0;<a href="intfc.html#s%3Aembedded-code">20.7.5</a>. The name of the output object file
+callable from any C program. See chapter <a href="intfc.html#c%3Aintf-c">19</a>,
+section <a href="intfc.html#s%3Aembedded-code">19.7.5</a>. The name of the output object file
 must be set with the <span class="c003">-o</span> option.
-This option can also be used to produce a C source file (<span class="c003">.c</span> extension) or
-a compiled shared/dynamic library (<span class="c003">.so</span> extension, <span class="c003">.dll</span> under Windows).
+This option can also be used to produce a C source file (<span class="c003">.c</span> extension)
+or a compiled shared/dynamic library (<span class="c003">.so</span> extension, <span class="c003">.dll</span> under Windows).
 </dd><dt class="dt-description"><span class="c006">-pack</span></dt><dd class="dd-description">
 Build a bytecode object file (<span class="c003">.cmo</span> file) and its associated compiled
 interface (<span class="c003">.cmi</span>) that combines the object
@@ -342,10 +367,10 @@ of the program.
 </dd><dt class="dt-description"><span class="c013"><span class="c003">-plugin</span> <span class="c009">plugin</span></span></dt><dd class="dd-description">
 Dynamically load the code of the given <span class="c009">plugin</span>
 (a <span class="c003">.cmo</span>, <span class="c003">.cma</span> or <span class="c003">.cmxs</span> file) in the compiler. <span class="c009">plugin</span> must exist in
-the same kind of code as the compiler (<span class="c003">ocamlc.byte</span> must load bytecode
-plugins, while <span class="c003">ocamlc.opt</span> must load native code plugins), and
-extension adaptation is done automatically for <span class="c003">.cma</span> files (to <span class="c003">.cmxs</span> files
-if the compiler is compiled in native code).
+the same kind of code as the compiler (<span class="c003">ocamlc.byte</span> must load
+bytecode plugins, while <span class="c003">ocamlc.opt</span> must load native code plugins),
+and extension adaptation is done automatically for <span class="c003">.cma</span> files (to <span class="c003">.cmxs</span>
+files if the compiler is compiled in native code).
 </dd><dt class="dt-description"><span class="c013"><span class="c003">-pp</span> <span class="c009">command</span></span></dt><dd class="dd-description">
 Cause the compiler to call the given <span class="c009">command</span> as a preprocessor
 for each source file. The output of <span class="c009">command</span> is redirected to
@@ -354,7 +379,8 @@ errors, the intermediate file is deleted afterwards.
 </dd><dt class="dt-description"><span class="c013"><span class="c003">-ppx</span> <span class="c009">command</span></span></dt><dd class="dd-description">
 After parsing, pipe the abstract syntax tree through the preprocessor
 <span class="c009">command</span>. The module <span class="c003">Ast_mapper</span>, described in
-chapter&#XA0;<a href="parsing.html#c%3Aparsinglib">27</a>: <a href="libref/Ast_mapper.html"> <span class="c003">Ast_mapper</span> </a>
+chapter <a href="parsing.html#c%3Aparsinglib">25</a>:
+<a href="libref/Ast_mapper.html"> <span class="c003">Ast_mapper</span> </a>
 ,
 implements the external interface of a preprocessor.</dd><dt class="dt-description"><span class="c006">-principal</span></dt><dd class="dd-description">
 Check information path during type-checking, to make sure that all
@@ -376,22 +402,21 @@ only if the OCaml compiler was configured with option
 <span class="c003">-with-debug-runtime</span>. This suffix gives the debug version of the
 runtime, which is useful for debugging pointer problems in low-level
 code such as C stubs.
+</dd><dt class="dt-description"><span class="c013"><span class="c003">-stop-after</span> <span class="c009">pass</span></span></dt><dd class="dd-description">
+Stop compilation after the given compilation pass. The currently
+supported passes are: <span class="c003">parsing</span>, <span class="c003">typing</span>.
 </dd><dt class="dt-description"><span class="c006">-safe-string</span></dt><dd class="dd-description">
 Enforce the separation between types <span class="c003">string</span> and <span class="c003">bytes</span>,
-thereby making strings read-only. This will become the default in
-a future version of OCaml.</dd><dt class="dt-description"><span class="c006">-short-paths</span></dt><dd class="dd-description">
+thereby making strings read-only. This is the default.</dd><dt class="dt-description"><span class="c006">-short-paths</span></dt><dd class="dd-description">
 When a type is visible under several module-paths, use the shortest
-one when printing the type&#X2019;s name in inferred interfaces and error and
+one when printing the type’s name in inferred interfaces and error and
 warning messages. Identifier names starting with an underscore <span class="c003">_</span> or
 containing double underscores <span class="c003">__</span> incur a penalty of +10 when computing
 their length.</dd><dt class="dt-description"><span class="c006">-strict-sequence</span></dt><dd class="dd-description">
 Force the left-hand part of each sequence to have type unit.</dd><dt class="dt-description"><span class="c006">-strict-formats</span></dt><dd class="dd-description">
 Reject invalid formats that were accepted in legacy format
 implementations. You should use this flag to detect and fix such
-invalid formats, as they will be rejected by future OCaml versions.</dd><dt class="dt-description"><span class="c006">-thread</span></dt><dd class="dd-description">
-Compile or link multithreaded programs, in combination with the
-system <span class="c003">threads</span> library described in chapter&#XA0;<a href="libthreads.html#c%3Athreads">31</a>.
-</dd><dt class="dt-description"><span class="c006">-unboxed-types</span></dt><dd class="dd-description">
+invalid formats, as they will be rejected by future OCaml versions.</dd><dt class="dt-description"><span class="c006">-unboxed-types</span></dt><dd class="dd-description">
 When a type is unboxable (i.e. a record with a single argument or a
 concrete datatype with a single constructor of one argument) it will
 be unboxed unless annotated with <span class="c003">[@@ocaml.boxed]</span>.
@@ -408,14 +433,13 @@ and modulus operations. With <span class="c003">-unsafe</span>, an integer divis
 (or modulus) by zero can halt the program or continue with an
 unspecified result instead of raising a <span class="c003">Division_by_zero</span> exception.
 </dd><dt class="dt-description"><span class="c006">-unsafe-string</span></dt><dd class="dd-description">
-Identify the types <span class="c003">string</span> and <span class="c003">bytes</span>,
-thereby making strings writable. For reasons of backward compatibility,
-this is the default setting for the moment, but this will change in a future
-version of OCaml.</dd><dt class="dt-description"><span class="c013"><span class="c003">-use-runtime</span> <span class="c009">runtime-name</span></span></dt><dd class="dd-description">
+Identify the types <span class="c003">string</span> and <span class="c003">bytes</span>, thereby making strings writable.
+This is intended for compatibility with old source code and should not
+be used with new software.</dd><dt class="dt-description"><span class="c013"><span class="c003">-use-runtime</span> <span class="c009">runtime-name</span></span></dt><dd class="dd-description">
 Generate a bytecode executable file that can be executed on the custom
 runtime system <span class="c009">runtime-name</span>, built earlier with
 <span class="c003">ocamlc -make-runtime</span> <span class="c009">runtime-name</span>.
-See section&#XA0;<a href="intfc.html#s%3Acustom-runtime">20.1.6</a> for more information.
+See section <a href="intfc.html#s%3Acustom-runtime">19.1.6</a> for more information.
 </dd><dt class="dt-description"><span class="c006">-v</span></dt><dd class="dd-description">
 Print the version number of the compiler and the location of the
 standard library directory, then exit.</dd><dt class="dt-description"><span class="c006">-verbose</span></dt><dd class="dd-description">
@@ -423,8 +447,9 @@ Print all external commands before they are executed,
 
 in particular invocations of the C compiler and linker in <span class="c003">-custom</span> mode.
 Useful to debug C library problems.</dd><dt class="dt-description"><span class="c006">-vmthread</span></dt><dd class="dd-description">
-Compile or link multithreaded programs, in combination with the
-VM-level <span class="c003">threads</span> library described in chapter&#XA0;<a href="libthreads.html#c%3Athreads">31</a>.
+Deprecated since OCaml 4.08.0. Compile or link multithreaded programs,
+in combination with the VM-level <span class="c003">threads</span> library described in
+chapter <a href="libthreads.html#c%3Athreads">29</a>.
 </dd><dt class="dt-description"><span class="c013"><span class="c003">-version</span> or <span class="c003">-vnum</span></span></dt><dd class="dd-description">
 Print the version number of the compiler in short form (e.g. <span class="c003">3.11.0</span>),
 then exit.
@@ -433,7 +458,7 @@ Enable, disable, or mark as fatal the warnings specified by the argument
 <span class="c009">warning-list</span>.
 Each warning can be <em>enabled</em> or <em>disabled</em>, and each warning
 can be <em>fatal</em> or <em>non-fatal</em>.
-If a warning is disabled, it isn&#X2019;t displayed and doesn&#X2019;t affect
+If a warning is disabled, it isn’t displayed and doesn’t affect
 compilation in any way (even if it is fatal). If a warning is
 enabled, it is displayed normally by the compiler whenever the source
 code triggers it. If it is enabled and fatal, the compiler will also
@@ -463,7 +488,7 @@ that are currently defined are ignored. The warnings are as follows.
 </p><dl class="description"><dt class="dt-description">
 <span class="c013">1</span></dt><dd class="dd-description"> Suspicious-looking start-of-comment mark.
 </dd><dt class="dt-description"><span class="c013">2</span></dt><dd class="dd-description"> Suspicious-looking end-of-comment mark.
-</dd><dt class="dt-description"><span class="c013">3</span></dt><dd class="dd-description"> Deprecated feature.
+</dd><dt class="dt-description"><span class="c013">3</span></dt><dd class="dd-description"> Deprecated synonym for the ’deprecated’ alert
 </dd><dt class="dt-description"><span class="c013">4</span></dt><dd class="dd-description"> Fragile pattern matching: matching that will remain complete even
 if additional constructors are added to one of the variant types
 matched.
@@ -473,7 +498,7 @@ type and is ignored.
 </dd><dt class="dt-description"><span class="c013">7</span></dt><dd class="dd-description"> Method overridden.
 </dd><dt class="dt-description"><span class="c013">8</span></dt><dd class="dd-description"> Partial match: missing cases in pattern-matching.
 </dd><dt class="dt-description"><span class="c013">9</span></dt><dd class="dd-description"> Missing fields in a record pattern.
-</dd><dt class="dt-description"><span class="c013">10</span></dt><dd class="dd-description"> Expression on the left-hand side of a sequence that doesn&#X2019;t have type
+</dd><dt class="dt-description"><span class="c013">10</span></dt><dd class="dd-description"> Expression on the left-hand side of a sequence that doesn’t have type
 <span class="c003">unit</span> (and that is not a function, see warning number 5).
 </dd><dt class="dt-description"><span class="c013">11</span></dt><dd class="dd-description"> Redundant case in a pattern matching (unused match case).
 </dd><dt class="dt-description"><span class="c013">12</span></dt><dd class="dd-description"> Redundant sub-pattern in a pattern-matching.
@@ -491,10 +516,10 @@ type and is ignored.
 </dd><dt class="dt-description"><span class="c013">24</span></dt><dd class="dd-description"> Bad module name: the source file name is not a valid OCaml module name.
 </dd><dt class="dt-description"><span class="c013">25</span></dt><dd class="dd-description"> Deprecated: now part of warning 8.
 </dd><dt class="dt-description"><span class="c013">26</span></dt><dd class="dd-description"> Suspicious unused variable: unused variable that is bound
-with <span class="c003">let</span> or <span class="c003">as</span>, and doesn&#X2019;t start with an underscore (<span class="c003">_</span>)
+with <span class="c003">let</span> or <span class="c003">as</span>, and doesn’t start with an underscore (<span class="c003">_</span>)
 character.
 </dd><dt class="dt-description"><span class="c013">27</span></dt><dd class="dd-description"> Innocuous unused variable: unused variable that is not bound with
-<span class="c003">let</span> nor <span class="c003">as</span>, and doesn&#X2019;t start with an underscore (<span class="c003">_</span>)
+<span class="c003">let</span> nor <span class="c003">as</span>, and doesn’t start with an underscore (<span class="c003">_</span>)
 character.
 </dd><dt class="dt-description"><span class="c013">28</span></dt><dd class="dd-description"> Wildcard pattern given as argument to a constant constructor.
 </dd><dt class="dt-description"><span class="c013">29</span></dt><dd class="dd-description"> Unescaped end-of-line in a string constant (non-portable code).
@@ -532,6 +557,10 @@ mutually recursive types.
 </dd><dt class="dt-description"><span class="c013">60</span></dt><dd class="dd-description"> Unused module declaration
 </dd><dt class="dt-description"><span class="c013">61</span></dt><dd class="dd-description"> Unboxable type in primitive declaration
 </dd><dt class="dt-description"><span class="c013">62</span></dt><dd class="dd-description"> Type constraint on GADT type declaration
+</dd><dt class="dt-description"><span class="c013">63</span></dt><dd class="dd-description"> Erroneous printed signature
+</dd><dt class="dt-description"><span class="c013">64</span></dt><dd class="dd-description"> -unsafe used with a preprocessor returning a syntax tree
+</dd><dt class="dt-description"><span class="c013">65</span></dt><dd class="dd-description"> Type declaration defining a new ’()’ constructor
+</dd><dt class="dt-description"><span class="c013">66</span></dt><dd class="dd-description"> Unused open! statement
 </dd><dt class="dt-description"><span class="c013">A</span></dt><dd class="dd-description"> all warnings
 </dd><dt class="dt-description"><span class="c013">C</span></dt><dd class="dd-description"> warnings 1, 2.
 </dd><dt class="dt-description"><span class="c013">D</span></dt><dd class="dd-description"> Alias for warning 3.
@@ -571,14 +600,19 @@ Process <span class="c009">file</span> as a file name, even if it starts with a 
 character.
 </dd><dt class="dt-description"><span class="c013"><span class="c003">-help</span> or <span class="c003">--help</span></span></dt><dd class="dd-description">
 Display a short usage summary and exit.</dd></dl>
-<h5 class="paragraph" id="sec282">Contextual control of command-line options</h5>
-<p>The compiler command line can be modified &#X201C;from the outside&#X201D;
+<h5 class="paragraph" id="sec289">Contextual control of command-line options</h5>
+<p>The compiler command line can be modified “from the outside”
 with the following mechanisms. These are experimental
 and subject to change. They should be used only for experimental and
 development work, not in released packages.</p><dl class="description"><dt class="dt-description">
 <span class="c006">OCAMLPARAM</span> (environment variable)</dt><dd class="dd-description">
-Arguments that will be inserted before or after the arguments from the
-command line.
+A set of arguments that will be inserted before or after the arguments from
+the command line. Arguments are specified in a comma-separated list
+of <span class="c003">name=value</span> pairs. A <span class="c003">_</span> is used to specify the position of
+the command line arguments, i.e. <span class="c003">a=x,_,b=y</span> means that <span class="c003">a=x</span> should be
+executed before parsing the arguments, and <span class="c003">b=y</span> after. Finally,
+an alternative separator can be specified as the
+first character of the string, within the set <span class="c003">:|; ,</span>.
 </dd><dt class="dt-description"><span class="c006">ocaml_compiler_internal_params</span> (file in the stdlib directory)</dt><dd class="dd-description">
 A mapping of file names to lists of arguments that
 will be added to the command line (and <span class="c003">OCAMLPARAM</span>) arguments.
@@ -587,7 +621,7 @@ Alternative executable to use on native
 Windows for <span class="c003">flexlink</span> instead of the
 configured value. Primarily used for bootstrapping.
 </dd></dl>
-<h2 class="section" id="sec283">9.3&#XA0;&#XA0;Modules and the file system</h2>
+<h2 class="section" id="sec290">9.3  Modules and the file system</h2>
 <p>This short section is intended to clarify the relationship between the
 names of the modules corresponding to compilation units and the names
 of the files that contain their compiled interface and compiled
@@ -613,11 +647,11 @@ of the compilation unit it implements. It is admissible to move them
 to another directory, if their base name is preserved, and the correct
 <span class="c003">-I</span> options are given to the compiler. The compiler will flag an
 error if it loads a <span class="c003">.cmi</span> file that has been renamed.</p><p>Compiled bytecode files (<span class="c003">.cmo</span> files), on the other hand, can be
-freely renamed once created. That&#X2019;s because the linker never attempts
+freely renamed once created. That’s because the linker never attempts
 to find by itself the <span class="c003">.cmo</span> file that implements a module with a
 given name: it relies instead on the user providing the list of <span class="c003">.cmo</span>
 files by hand.</p>
-<h2 class="section" id="sec284">9.4&#XA0;&#XA0;Common errors</h2>
+<h2 class="section" id="sec291">9.4  Common errors</h2>
 <p> <a id="s:comp-errors"></a></p><p>This section describes and explains the most frequently encountered
 error messages.</p><dl class="description"><dt class="dt-description"><span class="c013">Cannot find file <span class="c009">filename</span></span></dt><dd class="dd-description">
 The named file could not be found in the current directory, nor in the
@@ -630,7 +664,7 @@ module <span class="c009">mod</span>. Fix: compile <span class="c009">mod</span>
 first, to create the compiled interface <span class="c009">mod</span><span class="c003">.cmi</span>.<p>If <span class="c009">filename</span> has the format <span class="c009">mod</span><span class="c003">.cmo</span>, this
 means you are trying to link a bytecode object file that does not
 exist yet. Fix: compile <span class="c009">mod</span><span class="c003">.ml</span> first.</p><p>If your program spans several directories, this error can also appear
-because you haven&#X2019;t specified the directories to look into. Fix: add
+because you haven’t specified the directories to look into. Fix: add
 the correct <span class="c003">-I</span> options to the command line.</p></dd><dt class="dt-description"><span class="c013">Corrupted compiled interface <span class="c009">filename</span></span></dt><dd class="dd-description">
 The compiler produces this error when it tries to read a compiled
 interface file (<span class="c003">.cmi</span> file) that has the wrong structure. This means
@@ -647,7 +681,7 @@ is deduced by looking at how the value of this expression is used in
 the rest of the program. If the two types <span class="c009">t</span><sub>1</sub> and <span class="c009">t</span><sub>2</sub> are not
 compatible, then the error above is produced.<p>In some cases, it is hard to understand why the two types <span class="c009">t</span><sub>1</sub> and
 <span class="c009">t</span><sub>2</sub> are incompatible. For instance, the compiler can report that
-&#X201C;expression of type <span class="c003">foo</span> cannot be used with type <span class="c003">foo</span>&#X201D;, and it
+“expression of type <span class="c003">foo</span> cannot be used with type <span class="c003">foo</span>”, and it
 really seems that the two types <span class="c003">foo</span> are compatible. This is not
 always true. Two type constructors can have the same name, but
 actually represent different types. This can happen if a type
@@ -656,10 +690,10 @@ constructor is redefined. Example:
         let f = function A -&gt; 0 | B -&gt; 1
         type foo = C | D
         f C
-</pre><p>This result in the error message &#X201C;expression <span class="c003">C</span> of type <span class="c003">foo</span> cannot
-be used with type <span class="c003">foo</span>&#X201D;.</p></dd><dt class="dt-description"><span class="c013">The type of this expression, <span class="c009">t</span>, contains type variables
+</pre><p>This result in the error message “expression <span class="c003">C</span> of type <span class="c003">foo</span> cannot
+be used with type <span class="c003">foo</span>”.</p></dd><dt class="dt-description"><span class="c013">The type of this expression, <span class="c009">t</span>, contains type variables
 that cannot be generalized</span></dt><dd class="dd-description">
-Type variables (<span class="c003">'a</span>, <span class="c003">'b</span>, &#X2026;) in a type <span class="c009">t</span> can be in either
+Type variables (<span class="c003">'a</span>, <span class="c003">'b</span>, …) in a type <span class="c009">t</span> can be in either
 of two states: generalized (which means that the type <span class="c009">t</span> is valid
 for all possible instantiations of the variables) and not generalized
 (which means that the type <span class="c009">t</span> is valid only for one instantiation
@@ -669,7 +703,7 @@ possible in the type of <span class="c009">expr</span>. However, this leads to u
 (a well-typed program can crash) in conjunction with polymorphic
 mutable data structures. To avoid this, generalization is performed at
 <span class="c003">let</span> bindings only if the bound expression <span class="c009">expr</span> belongs to the
-class of &#X201C;syntactic values&#X201D;, which includes constants, identifiers,
+class of “syntactic values”, which includes constants, identifiers,
 functions, tuples of syntactic values, etc. In all other cases (for
 instance, <span class="c009">expr</span> is a function application), a polymorphic mutable
 could have been created and generalization is therefore turned off for
@@ -689,10 +723,10 @@ are two ways to fix this error:
 Add a type constraint or a <span class="c003">.mli</span> file to give a monomorphic
 type (without type variables) to <span class="c009">name</span>. For instance, instead of
 writing
-<pre>    let sort_int_list = Sort.list (&lt;)
+<pre>    let sort_int_list = List.sort Stdlib.compare
     (* inferred type 'a list -&gt; 'a list, with 'a not generalized *)
 </pre>write
-<pre>    let sort_int_list = (Sort.list (&lt;) : int list -&gt; int list);;
+<pre>    let sort_int_list = (List.sort Stdlib.compare : int list -&gt; int list);;
 </pre></li><li class="li-itemize">If you really need <span class="c009">name</span> to have a polymorphic type, turn
 its defining expression into a function by adding an extra parameter.
 For instance, instead of writing
@@ -734,14 +768,14 @@ mod2.ml:    let g y = ... Mod1.f ...
 </pre></li></ul></dd><dt class="dt-description"><span class="c013">The external function <span class="c009">f</span> is not available</span></dt><dd class="dd-description">
 This error appears when trying to link code that calls external
 functions written in C. As explained in
-chapter&#XA0;<a href="intfc.html#c%3Aintf-c">20</a>, such code must be linked with C libraries that
+chapter <a href="intfc.html#c%3Aintf-c">19</a>, such code must be linked with C libraries that
 implement the required <span class="c009">f</span> C function. If the C libraries in
 question are not shared libraries (DLLs), the code must be linked in
-&#X201C;custom runtime&#X201D; mode. Fix: add the required C libraries to the
+“custom runtime” mode. Fix: add the required C libraries to the
 command line, and possibly the <span class="c003">-custom</span> option.</dd></dl>
-<h2 class="section" id="sec285">9.5&#XA0;&#XA0;Warning reference</h2>
+<h2 class="section" id="sec292">9.5  Warning reference</h2>
 <p> <a id="s:comp-warnings"></a></p><p>This section describes and explains in detail some warnings:</p>
-<h3 class="subsection" id="sec286">9.5.1&#XA0;&#XA0;Warning 9: missing fields in a record pattern</h3>
+<h3 class="subsection" id="sec293">9.5.1  Warning 9: missing fields in a record pattern</h3>
 <p>When pattern matching on records, it can be useful to match only few
 fields of a record. Eliding fields can be done either implicitly
 or explicitly by ending the record pattern with <span class="c003">; _</span>.
@@ -755,7 +789,7 @@ after the addition of new fields to a record type.</p><pre>type 'a point = {x='a
 let dx { x } = x (* implicit field elision: trigger warning 9 *)
 let dy { y; _ } = y (* explicit field elision: do not trigger warning 9 *)
 </pre>
-<h3 class="subsection" id="sec287">9.5.2&#XA0;&#XA0;Warning 52: fragile constant pattern</h3>
+<h3 class="subsection" id="sec294">9.5.2  Warning 52: fragile constant pattern</h3>
 <p>
 <a id="ss:warn52"></a></p><p>Some constructors, such as the exception constructors <span class="c003">Failure</span> and
 <span class="c003">Invalid_argument</span>, take as parameter a <span class="c003">string</span> value holding
@@ -776,7 +810,7 @@ string, but only in the case in which library authors expressed
 their intent to possibly change the constructor parameter value in
 the future, by using the attribute <span class="c003">ocaml.warn_on_literal_pattern</span>
 (see the manual section on builtin attributes in
-<a href="extn.html#ss%3Abuiltin-attributes">8.16.1</a>):
+<a href="manual035.html#ss%3Abuiltin-attributes">8.13.1</a>):
 </p><pre>  type t =
     | Foo of string [@ocaml.warn_on_literal_pattern]
     | Bar of string
@@ -797,7 +831,10 @@ the future, by using the attribute <span class="c003">ocaml.warn_on_literal_patt
 </pre><p>
 In particular, all built-in exceptions with a string argument have
 this attribute set: <span class="c003">Invalid_argument</span>, <span class="c003">Failure</span>, <span class="c003">Sys_error</span> will
-all raise this warning if you match for a specific string argument.</p><p>If your code raises this warning, you should <em>not</em> change the
+all raise this warning if you match for a specific string argument.</p><p>Additionally, built-in exceptions with a structured argument that
+includes a string also have the attribute set: <span class="c003">Assert_failure</span> and
+<span class="c003">Match_failure</span> will raise the warning for a pattern that uses a
+literal string to match the first element of their tuple argument.</p><p>If your code raises this warning, you should <em>not</em> change the
 way you test for the specific string to avoid the warning (for
 example using a string equality inside the right-hand-side instead
 of a literal pattern), as your code would remain fragile. You should
@@ -815,7 +852,7 @@ those several cases.</p><p>For example,
   | Failure "int_of_string" -&gt; (0, true)
   | Failure "bool_of_string" -&gt; (-1, false)
 </pre><p> should be rewritten into more atomic tests. For example,
-using the <span class="c003">exception</span> patterns documented in Section&#XA0;<a href="extn.html#s%3Aexception-match">8.19</a>,
+using the <span class="c003">exception</span> patterns documented in Section <a href="patterns.html#s%3Aexception-match">7.6</a>,
 one can write:
 </p><pre>match int_of_string count_str with
   | exception (Failure _) -&gt; (0, true)
@@ -829,9 +866,9 @@ The only case where that transformation is not possible is if a given
 function call may raise distinct exceptions with the same constructor
 but different string values. In this case, you will have to check for
 specific string values. This is dangerous API design and it should be
-discouraged: it&#X2019;s better to define more precise exception constructors
+discouraged: it’s better to define more precise exception constructors
 than store useful information in strings.</p>
-<h3 class="subsection" id="sec288">9.5.3&#XA0;&#XA0;Warning 57: Ambiguous or-pattern variables under guard</h3>
+<h3 class="subsection" id="sec295">9.5.3  Warning 57: Ambiguous or-pattern variables under guard</h3>
 <p>
 <a id="ss:warn57"></a></p><p>The semantics of or-patterns in OCaml is specified with
 a left-to-right bias: a value <span class="c009">v</span> matches the pattern <span class="c009">p</span> <span class="c003">|</span> <span class="c009">q</span>
@@ -840,18 +877,18 @@ the environment captured by the match is the environment captured by
 <span class="c009">p</span>, never the one captured by <span class="c009">q</span>.</p><p>While this property is generally intuitive, there is at least one specific
 case where a different semantics might be expected.
 Consider a pattern followed by a when-guard:
-<span class="c003">|</span>&#XA0;<span class="c009">p</span>&#XA0;<span class="c003">when</span>&#XA0;<span class="c009">g</span>&#XA0;<span class="c003">-&gt;</span>&#XA0;<span class="c009">e</span>, for example:
+<span class="c003">|</span> <span class="c009">p</span> <span class="c003">when</span> <span class="c009">g</span> <span class="c003">-&gt;</span> <span class="c009">e</span>, for example:
 </p><pre>     | ((Const x, _) | (_, Const x)) when is_neutral x -&gt; branch
 </pre><p> The semantics is clear:
 match the scrutinee against the pattern, if it matches, test the guard,
 and if the guard passes, take the branch.
-In particular, consider the input <span class="c003">(Const</span>&#XA0;<span class="c009">a</span><span class="c003">, Const</span>&#XA0;<span class="c009">b</span><span class="c003">)</span>, where
-<span class="c009">a</span> fails the test <span class="c003">is_neutral</span>&#XA0;<span class="c009">a</span>, while <span class="c009">b</span> passes the test
-<span class="c003">is_neutral</span>&#XA0;<span class="c009">b</span>. With the left-to-right semantics, the clause above is
-<em>not</em> taken by its input: matching <span class="c003">(Const</span>&#XA0;<span class="c009">a</span><span class="c003">, Const</span>&#XA0;<span class="c009">b</span><span class="c003">)</span>
+In particular, consider the input <span class="c003">(Const</span> <span class="c009">a</span><span class="c003">, Const</span> <span class="c009">b</span><span class="c003">)</span>, where
+<span class="c009">a</span> fails the test <span class="c003">is_neutral</span> <span class="c009">a</span>, while <span class="c009">b</span> passes the test
+<span class="c003">is_neutral</span> <span class="c009">b</span>. With the left-to-right semantics, the clause above is
+<em>not</em> taken by its input: matching <span class="c003">(Const</span> <span class="c009">a</span><span class="c003">, Const</span> <span class="c009">b</span><span class="c003">)</span>
 against the or-pattern succeeds in the left branch, it returns the
-environment <span class="c009">x</span>&#XA0;<span class="c003">-&gt;</span>&#XA0;<span class="c009">a</span>, and then the guard
-<span class="c003">is_neutral</span>&#XA0;<span class="c009">a</span> is tested and fails, the branch is not taken.</p><p>However, another semantics may be considered more natural here:
+environment <span class="c009">x</span> <span class="c003">-&gt;</span> <span class="c009">a</span>, and then the guard
+<span class="c003">is_neutral</span> <span class="c009">a</span> is tested and fails, the branch is not taken.</p><p>However, another semantics may be considered more natural here:
 any pair that has one side passing the test will take the branch. With this
 semantics the previous code fragment would be equivalent to
 </p><pre>     | (Const x, _) when is_neutral x -&gt; branch
@@ -859,7 +896,7 @@ semantics the previous code fragment would be equivalent to
 </pre><p> This is <em>not</em> the semantics adopted by OCaml.</p><p>Warning 57 is dedicated to these confusing cases where the
 specified left-to-right semantics is not equivalent to a non-deterministic
 semantics (any branch can be taken) relatively to a specific guard.
-More precisely, it warns when guard uses &#X201C;ambiguous&#X201D; variables, that are bound
+More precisely, it warns when guard uses “ambiguous” variables, that are bound
 to different parts of the scrutinees by different sides of a or-pattern.
 
 </p>

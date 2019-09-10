@@ -20,7 +20,7 @@ if Sys.file_exists "exemples/OCaml/big_vect" then
    )
 ;;
 
-
+#directory ".";;
 #load "big_vect.cmo";;
 
 

@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="generator" content="hevea 2.18">
-<link rel="stylesheet" type="text/css" href="manual.css">
-<title>Chapter&#XA0;24&#XA0;&#XA0;Compiler plugins</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"><link rel="stylesheet" type="text/css" href="manual.css">
+<title>Chapter 22  Compiler plugins</title>
 </head>
 <body>
 <a href="afl-fuzz.html"><img src="previous_motif.gif" alt="Previous"></a>
 <a href="index.html"><img src="contents_motif.gif" alt="Up"></a>
 <a href="core.html"><img src="next_motif.gif" alt="Next"></a>
 <hr>
-<h1 class="chapter" id="c:plugins">Chapter&#XA0;24&#XA0;&#XA0;Compiler plugins</h1>
+<h1 class="chapter" id="c:plugins">Chapter 22  Compiler plugins</h1>
 <ul>
-<li><a href="plugins.html#sec542">24.1&#XA0;&#XA0;Overview</a>
-</li><li><a href="plugins.html#sec543">24.2&#XA0;&#XA0;Basic example</a>
+<li><a href="plugins.html#sec544">22.1  Overview</a>
+</li><li><a href="plugins.html#sec545">22.2  Basic example</a>
 </li></ul>
 
-<h2 class="section" id="sec542">24.1&#XA0;&#XA0;Overview</h2>
+<h2 class="section" id="sec544">22.1  Overview</h2>
 <p>Starting from OCaml 4.03, it is possible to extend the native and bytecode compilers
 with plugins using the <span class="c003">-plugin</span> command line option of both tools.
 This possibility is also available for <span class="c003">ocamldep</span> for OCaml version ulterior to 4.05.
@@ -42,7 +44,7 @@ A plugin can also add new options to a tool through the
 <a href="libref/Clflags.html"><span class="c003">Clflags</span> module</a>
 ).</p><p>Plugins are dynamically loaded and need to be compiled in the same mode (i.e.
 native or bytecode) that the tool they extend.</p>
-<h2 class="section" id="sec543">24.2&#XA0;&#XA0;Basic example</h2>
+<h2 class="section" id="sec545">22.2  Basic example</h2>
 <p>As an illustration, we shall build a simple <span class="c003">Hello world</span> plugin that adds
 a simple statement <span class="c003">print_endline "Hello from:$sourcefile"</span> to a compiled file.</p><p>The simplest way to implement this feature is to modify the abstract syntax
 tree. We will therefore add an hooks to the <span class="c003">Pparse.ImplementationHooks</span>.

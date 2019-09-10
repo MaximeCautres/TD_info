@@ -1,19 +1,45 @@
 #load "graphics.cma";;
 open Graphics;;
+
 #use "exemples/OCaml/Mandelbrot.oml";;
 let sz = size_x();;
 let image = get_image 0 0 sz sz;;
-(* let im = dump_image image;; *)
 clear_graph();;
+
 #use "exemples/OCaml/tores.oml";;
 let sz = size_x();;
 let image1 = get_image 0 0 sz sz;;
-(* let im1 = dump_image image1;; *)
 close_graph();;
-(*
-clear_graph();;
-resize_window (2*sz) (2*sz);;
-*)
+
+let save_as_dumped path dumpedimage =
+let canal_out = open_out_bin path
+    in
+      output_value canal_out dumpedimage;
+      close_out canal_out;
+;;
+
+let save_as_ppm path dumpedimage =
+  let f = open_out_bin (path ^ ".ppm") in
+    output_string f "P6";
+    output_char f '\n';
+    let w = Array.length (dumpedimage.(0)) and h = Array.length dumpedimage in
+      output_string f (string_of_int w ^ " " ^ string_of_int h);
+      output_char f '\n';
+      output_string f "255";
+      output_char f '\n';
+      for i = 0 to h - 1 do
+        for j = 0 to w - 1 do
+           let b = dumpedimage.(i).(j) in
+            let g = b lsr 8 in
+              let r = g lsr 8 in
+                output_byte f r;
+                output_byte f g;
+                output_byte f b;
+        done;
+      done;
+      close_out f
+;;
+
 let str = string_of_int (2 * sz)
 in
   open_graph (" " ^ str ^ "x" ^ str);
@@ -21,16 +47,9 @@ in
   draw_image image1 sz 0;
   draw_image image1 0 sz;
   draw_image image sz sz;
-  (*
-  draw_image (make_image im) 0 0;;
-  draw_image (make_image im1) sz 0;;
-  draw_image (make_image im1) 0 sz;;
-  draw_image (make_image im) sz sz;;
-  *)
   let v = dump_image (get_image 0 0 (2 * sz) (2 * sz))
+  in let path = "exemples/OCaml/images/image"
   in
-    let canal_out = open_out_bin "exemples/OCaml/images/image"
-    in
-      output_value canal_out v;
-      close_out canal_out
+    save_as_dumped path v;
+    save_as_ppm path  v;    
 ;;

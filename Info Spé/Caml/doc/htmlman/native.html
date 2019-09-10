@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="generator" content="hevea 2.18">
-<link rel="stylesheet" type="text/css" href="manual.css">
-<title>Chapter&#XA0;12&#XA0;&#XA0;Native-code compilation (ocamlopt)</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"><link rel="stylesheet" type="text/css" href="manual.css">
+<title>Chapter 12  Native-code compilation (ocamlopt)</title>
 </head>
 <body>
 <a href="runtime.html"><img src="previous_motif.gif" alt="Previous"></a>
 <a href="index.html"><img src="contents_motif.gif" alt="Up"></a>
 <a href="lexyacc.html"><img src="next_motif.gif" alt="Next"></a>
 <hr>
-<h1 class="chapter" id="sec302">Chapter&#XA0;12&#XA0;&#XA0;Native-code compilation (ocamlopt)</h1>
+<h1 class="chapter" id="sec309">Chapter 12  Native-code compilation (ocamlopt)</h1>
 <ul>
-<li><a href="native.html#sec303">12.1&#XA0;&#XA0;Overview of the compiler</a>
-</li><li><a href="native.html#sec304">12.2&#XA0;&#XA0;Options</a>
-</li><li><a href="native.html#sec308">12.3&#XA0;&#XA0;Common errors</a>
-</li><li><a href="native.html#sec309">12.4&#XA0;&#XA0;Running executables produced by ocamlopt</a>
-</li><li><a href="native.html#sec310">12.5&#XA0;&#XA0;Compatibility with the bytecode compiler</a>
+<li><a href="native.html#sec310">12.1  Overview of the compiler</a>
+</li><li><a href="native.html#sec311">12.2  Options</a>
+</li><li><a href="native.html#sec315">12.3  Common errors</a>
+</li><li><a href="native.html#sec316">12.4  Running executables produced by ocamlopt</a>
+</li><li><a href="native.html#sec317">12.5  Compatibility with the bytecode compiler</a>
 </li></ul>
 <p> <a id="c:nativecomp"></a>
-
 </p><p>This chapter describes the OCaml high-performance
 native-code compiler <span class="c003">ocamlopt</span>, which compiles OCaml source files to
 native code object files and links these object files to produce
@@ -34,7 +35,7 @@ with bytecode object files produced by <span class="c003">ocamlc</span>: a progr
 compiled entirely with <span class="c003">ocamlopt</span> or entirely with <span class="c003">ocamlc</span>. Native-code
 object files produced by <span class="c003">ocamlopt</span> cannot be loaded in the toplevel
 system <span class="c003">ocaml</span>.</p>
-<h2 class="section" id="sec303">12.1&#XA0;&#XA0;Overview of the compiler</h2>
+<h2 class="section" id="sec310">12.1  Overview of the compiler</h2>
 <p>The <span class="c003">ocamlopt</span> command has a command-line interface very close to that
 of <span class="c003">ocamlc</span>. It accepts the same types of arguments, and processes them
 sequentially, after all options have been processed:</p><ul class="itemize"><li class="li-itemize">
@@ -55,7 +56,7 @@ should always be referred to under the name <span class="c009">x</span><span cla
 a <span class="c003">.o</span> or <span class="c003">.obj</span> file, <span class="c003">ocamlopt</span> assumes that it contains code compiled from C,
 not from OCaml).<p>The implementation is checked against the interface file <span class="c009">x</span><span class="c003">.mli</span>
 (if it exists) as described in the manual for <span class="c003">ocamlc</span>
-(chapter&#XA0;<a href="comp.html#c%3Acamlc">9</a>).</p></li><li class="li-itemize">Arguments ending in <span class="c003">.cmx</span> are taken to be compiled object code. These
+(chapter <a href="comp.html#c%3Acamlc">9</a>).</p></li><li class="li-itemize">Arguments ending in <span class="c003">.cmx</span> are taken to be compiled object code. These
 files are linked together, along with the object files obtained
 by compiling <span class="c003">.ml</span> arguments (if any), and the OCaml standard
 library, to produce a native-code executable program. The order in
@@ -75,7 +76,7 @@ a <span class="c003">.o</span>/<span class="c003">.obj</span> object file. This 
 under Windows) are assumed to be C object files and
 libraries. They are linked with the program.</li></ul><p>The output of the linking phase is a regular Unix or Windows
 executable file. It does not need <span class="c003">ocamlrun</span> to run.</p>
-<h2 class="section" id="sec304">12.2&#XA0;&#XA0;Options</h2>
+<h2 class="section" id="sec311">12.2  Options</h2>
 <p>The following command-line options are recognized by <span class="c003">ocamlopt</span>.
 The options <span class="c003">-pack</span>, <span class="c003">-a</span>, <span class="c003">-shared</span>, <span class="c003">-c</span> and <span class="c003">-output-obj</span> are mutually
 exclusive.</p><dl class="description"><dt class="dt-description">
@@ -100,7 +101,8 @@ interactively.
 </dd><dt class="dt-description"><span class="c013"><span class="c003">-args</span> <span class="c009">filename</span></span></dt><dd class="dd-description">
 Read additional newline-terminated command line arguments from <span class="c009">filename</span>.
 </dd><dt class="dt-description"><span class="c013"><span class="c003">-args0</span> <span class="c009">filename</span></span></dt><dd class="dd-description">
-Read additional null character terminated command line arguments from <span class="c009">filename</span>.
+Read additional null character terminated command line arguments from
+<span class="c009">filename</span>.
 </dd><dt class="dt-description"><span class="c006">-bin-annot</span></dt><dd class="dd-description">
 Dump detailed information about the compilation (types, bindings,
 tail-calls, etc) in binary format. The information for file <span class="c009">src</span><span class="c003">.ml</span>
@@ -131,21 +133,38 @@ directory <span class="c009">dir</span>.
 Enable or disable colors in compiler messages (especially warnings and errors).
 The following modes are supported:
 <dl class="description"><dt class="dt-description">
-<span class="c006">auto</span></dt><dd class="dd-description"> use heuristics to enable colors only if the output supports them (an ANSI-compatible tty terminal);
+<span class="c006">auto</span></dt><dd class="dd-description"> use heuristics to enable colors only if the output supports them
+(an ANSI-compatible tty terminal);
 </dd><dt class="dt-description"><span class="c006">always</span></dt><dd class="dd-description"> enable colors unconditionally;
 </dd><dt class="dt-description"><span class="c006">never</span></dt><dd class="dd-description"> disable color output.
 </dd></dl>
-The default setting is &#X2019;auto&#X2019;, and the current heuristic
+The default setting is ’auto’, and the current heuristic
 checks that the <span class="c003">TERM</span> environment variable exists and is
-not empty or <span class="c003">dumb</span>, and that &#X2019;isatty(stderr)&#X2019; holds.<p>The environment variable <span class="c003">OCAML_COLOR</span> is considered if <span class="c003">-color</span> is not
+not empty or <span class="c003">dumb</span>, and that ’isatty(stderr)’ holds.<p>The environment variable <span class="c003">OCAML_COLOR</span> is considered if <span class="c003">-color</span> is not
 provided. Its values are auto/always/never as above.
+</p></dd><dt class="dt-description"><span class="c013"><span class="c003">-error-style</span> <span class="c009">mode</span></span></dt><dd class="dd-description">
+Control the way error messages and warnings are printed.
+The following modes are supported:
+<dl class="description"><dt class="dt-description">
+<span class="c006">short</span></dt><dd class="dd-description"> only print the error and its location;
+</dd><dt class="dt-description"><span class="c006">contextual</span></dt><dd class="dd-description"> like <span class="c003">short</span>, but also display the source code snippet
+corresponding to the location of the error.
+</dd></dl>
+The default setting is <span class="c003">contextual</span>.<p>The environment variable <span class="c003">OCAML_ERROR_STYLE</span> is considered if <span class="c003">-error-style</span> is
+not provided. Its values are short/contextual as above.
 </p></dd><dt class="dt-description"><span class="c006">-compact</span></dt><dd class="dd-description">
 Optimize the produced code for space rather than for time. This
 results in slightly smaller but slightly slower programs. The default is to
 optimize for speed.
 </dd><dt class="dt-description"><span class="c006">-config</span></dt><dd class="dd-description">
 Print the version number of <span class="c003">ocamlopt</span> and a detailed
-summary of its configuration, then exit.</dd><dt class="dt-description"><span class="c013"><span class="c003">-depend</span> <span class="c009">ocamldep-args</span></span></dt><dd class="dd-description">
+summary of its configuration, then exit.
+</dd><dt class="dt-description"><span class="c013"><span class="c003">-config-var</span> <span class="c009">var</span></span></dt><dd class="dd-description">
+Print the value of a specific configuration variable from the
+<span class="c003">-config</span> output, then exit. If the variable does not exist, the exit
+code is non-zero. This option is only available since OCaml 4.08,
+so script authors should have a fallback for older versions.
+</dd><dt class="dt-description"><span class="c013"><span class="c003">-depend</span> <span class="c009">ocamldep-args</span></span></dt><dd class="dd-description">
 Compute dependencies, as the <span class="c003">ocamldep</span> command would do. The remaining
 arguments are interpreted as if they were given to the <span class="c003">ocamldep</span> command.
 </dd><dt class="dt-description"><span class="c013"><span class="c003">-for-pack</span> <span class="c009">module-path</span></span></dt><dd class="dd-description">
@@ -163,7 +182,7 @@ names.
 Add debugging information while compiling and linking. This option is
 required in order to  produce stack backtraces when
 the program terminates on an uncaught exception (see
-section&#XA0;<a href="runtime.html#ocamlrun-options">11.2</a>).
+section <a href="runtime.html#ocamlrun-options">11.2</a>).
 </dd><dt class="dt-description"><span class="c006">-i</span></dt><dd class="dd-description">
 Cause the compiler to print all defined names (with their inferred
 types or their definitions) when compiling an implementation (<span class="c003">.ml</span>
@@ -212,9 +231,20 @@ subsequent links of programs involving that library to link all the
 modules contained in the library. When compiling a module (option
 <span class="c003">-c</span>), setting the <span class="c003">-linkall</span> option ensures that this module will
 always be linked if it is put in a library and this library is linked.
+</dd><dt class="dt-description"><span class="c006">-linscan</span></dt><dd class="dd-description">
+Use linear scan register allocation. Compiling with this allocator is faster
+than with the usual graph coloring allocator, sometimes quite drastically so for
+long functions and modules. On the other hand, the generated code can be a bit
+slower.
+</dd><dt class="dt-description"><span class="c006">-match-context-rows</span></dt><dd class="dd-description">
+Set the number of rows of context used for optimization during
+pattern matching compilation. The default value is 32. Lower values
+cause faster compilation, but less optimized code. This advanced
+option is meant for use in the event that a pattern-match-heavy
+program leads to significant increases in compilation time.
 </dd><dt class="dt-description"><span class="c006">-no-alias-deps</span></dt><dd class="dd-description">
 Do not record dependencies for module aliases. See
-section&#XA0;<a href="extn.html#s%3Amodule-alias">8.12</a> for more information.
+section <a href="manual031.html#s%3Amodule-alias">8.9</a> for more information.
 </dd><dt class="dt-description"><span class="c006">-no-app-funct</span></dt><dd class="dd-description">
 Deactivates the applicative behaviour of functors. With this option,
 each functor application generates new types in its result and
@@ -235,7 +265,7 @@ that is never dynlinked.
 </dd><dt class="dt-description"><span class="c006">-nolabels</span></dt><dd class="dd-description">
 Ignore non-optional labels in types. Labels cannot be used in
 applications, and parameter order becomes strict.</dd><dt class="dt-description"><span class="c006">-nostdlib</span></dt><dd class="dd-description">
-Do not automatically add the standard library directory the list of
+Do not automatically add the standard library directory to the list of
 directories searched for compiled interface files (<span class="c003">.cmi</span>), compiled
 object code files (<span class="c003">.cmx</span>), and libraries (<span class="c003">.cmxa</span>). See also option
 <span class="c003">-I</span>.
@@ -267,7 +297,7 @@ cross-module optimization information.</p><p>Using this option may degrade the q
 reduces compilation time, both on clean and incremental
 builds. Indeed, with the native compiler, when the implementation of
 a compilation unit changes, all the units that depend on it may need
-to be recompiled &#X2013; because the cross-module information may have
+to be recompiled – because the cross-module information may have
 changed. If the compilation unit whose implementation changed was
 compiled with <span class="c003">-opaque</span>, no such recompilation needs to occur. This
 option can thus be used, for example, to get faster edit-compile-test
@@ -282,22 +312,22 @@ were added at the top of each file.
 Cause the linker to produce a C object file instead of
 an executable file.
 This is useful to wrap OCaml code as a C library,
-callable from any C program. See chapter&#XA0;<a href="intfc.html#c%3Aintf-c">20</a>,
-section&#XA0;<a href="intfc.html#s%3Aembedded-code">20.7.5</a>. The name of the output object file
+callable from any C program. See chapter <a href="intfc.html#c%3Aintf-c">19</a>,
+section <a href="intfc.html#s%3Aembedded-code">19.7.5</a>. The name of the output object file
 must be set with the <span class="c003">-o</span> option.
 This option can also be used to produce a  compiled shared/dynamic library (<span class="c003">.so</span> extension, <span class="c003">.dll</span> under Windows).
 </dd><dt class="dt-description"><span class="c006">-p</span></dt><dd class="dd-description">
 Generate extra code to write profile information when the program is
 executed. The profile information can then be examined with the
-analysis program <span class="c003">gprof</span>. (See chapter&#XA0;<a href="profil.html#c%3Aprofiler">18</a> for more
+analysis program <span class="c003">gprof</span>. (See chapter <a href="profil.html#c%3Aprofiler">17</a> for more
 information on profiling.) The <span class="c003">-p</span> option must be given both at
 compile-time and at link-time. Linking object files not compiled with
-<span class="c003">-p</span> is possible, but results in less precise profiling.<blockquote class="quote"><span class="c007">Unix:</span>&#XA0;&#XA0; See the Unix manual page for <span class="c003">gprof(1)</span> for more
+<span class="c003">-p</span> is possible, but results in less precise profiling.<blockquote class="quote"><span class="c007">Unix:</span>   See the Unix manual page for <span class="c003">gprof(1)</span> for more
 information about the profiles.<p>Full support for <span class="c003">gprof</span> is only available for certain platforms
 (currently: Intel x86 32 and 64 bits under Linux, BSD and MacOS X).
 On other platforms, the <span class="c003">-p</span> option will result in a less precise
 profile (no call graph information, only a time profile).
-</p></blockquote><blockquote class="quote"><span class="c007">Windows:</span>&#XA0;&#XA0;
+</p></blockquote><blockquote class="quote"><span class="c007">Windows:</span>  
 The <span class="c003">-p</span> option does not work under Windows.
 </blockquote></dd><dt class="dt-description"><span class="c006">-pack</span></dt><dd class="dd-description">
 Build an object file (<span class="c003">.cmx</span> and <span class="c003">.o</span>/<span class="c003">.obj</span> files) and its associated compiled
@@ -324,10 +354,10 @@ and <span class="c003">P.B</span>.
 </p></dd><dt class="dt-description"><span class="c013"><span class="c003">-plugin</span> <span class="c009">plugin</span></span></dt><dd class="dd-description">
 Dynamically load the code of the given <span class="c009">plugin</span>
 (a <span class="c003">.cmo</span>, <span class="c003">.cma</span> or <span class="c003">.cmxs</span> file) in the compiler. <span class="c009">plugin</span> must exist in
-the same kind of code as the compiler (<span class="c003">ocamlopt.byte</span> must load bytecode
-plugins, while <span class="c003">ocamlopt.opt</span> must load native code plugins), and
-extension adaptation is done automatically for <span class="c003">.cma</span> files (to <span class="c003">.cmxs</span> files
-if the compiler is compiled in native code).
+the same kind of code as the compiler (<span class="c003">ocamlopt.byte</span> must load
+bytecode plugins, while <span class="c003">ocamlopt.opt</span> must load native code plugins),
+and extension adaptation is done automatically for <span class="c003">.cma</span> files (to <span class="c003">.cmxs</span>
+files if the compiler is compiled in native code).
 </dd><dt class="dt-description"><span class="c013"><span class="c003">-pp</span> <span class="c009">command</span></span></dt><dd class="dd-description">
 Cause the compiler to call the given <span class="c009">command</span> as a preprocessor
 for each source file. The output of <span class="c009">command</span> is redirected to
@@ -336,7 +366,8 @@ errors, the intermediate file is deleted afterwards.
 </dd><dt class="dt-description"><span class="c013"><span class="c003">-ppx</span> <span class="c009">command</span></span></dt><dd class="dd-description">
 After parsing, pipe the abstract syntax tree through the preprocessor
 <span class="c009">command</span>. The module <span class="c003">Ast_mapper</span>, described in
-chapter&#XA0;<a href="parsing.html#c%3Aparsinglib">27</a>: <a href="libref/Ast_mapper.html"> <span class="c003">Ast_mapper</span> </a>
+chapter <a href="parsing.html#c%3Aparsinglib">25</a>:
+<a href="libref/Ast_mapper.html"> <span class="c003">Ast_mapper</span> </a>
 ,
 implements the external interface of a preprocessor.</dd><dt class="dt-description"><span class="c006">-principal</span></dt><dd class="dd-description">
 Check information path during type-checking, to make sure that all
@@ -358,6 +389,9 @@ only if the OCaml compiler was configured with option
 <span class="c003">-with-debug-runtime</span>. This suffix gives the debug version of the
 runtime, which is useful for debugging pointer problems in low-level
 code such as C stubs.
+</dd><dt class="dt-description"><span class="c013"><span class="c003">-stop-after</span> <span class="c009">pass</span></span></dt><dd class="dd-description">
+Stop compilation after the given compilation pass. The currently
+supported passes are: <span class="c003">parsing</span>, <span class="c003">typing</span>.
 </dd><dt class="dt-description"><span class="c006">-S</span></dt><dd class="dd-description">
 Keep the assembly code produced during the compilation. The assembly
 code for the source file <span class="c009">x</span><span class="c003">.ml</span> is saved in the file <span class="c009">x</span><span class="c003">.s</span>.
@@ -374,20 +408,16 @@ apply to the way the extra native objects have been compiled (under
 Linux AMD 64, they must contain only position-independent code).
 </dd><dt class="dt-description"><span class="c006">-safe-string</span></dt><dd class="dd-description">
 Enforce the separation between types <span class="c003">string</span> and <span class="c003">bytes</span>,
-thereby making strings read-only. This will become the default in
-a future version of OCaml.</dd><dt class="dt-description"><span class="c006">-short-paths</span></dt><dd class="dd-description">
+thereby making strings read-only. This is the default.</dd><dt class="dt-description"><span class="c006">-short-paths</span></dt><dd class="dd-description">
 When a type is visible under several module-paths, use the shortest
-one when printing the type&#X2019;s name in inferred interfaces and error and
+one when printing the type’s name in inferred interfaces and error and
 warning messages. Identifier names starting with an underscore <span class="c003">_</span> or
 containing double underscores <span class="c003">__</span> incur a penalty of +10 when computing
 their length.</dd><dt class="dt-description"><span class="c006">-strict-sequence</span></dt><dd class="dd-description">
 Force the left-hand part of each sequence to have type unit.</dd><dt class="dt-description"><span class="c006">-strict-formats</span></dt><dd class="dd-description">
 Reject invalid formats that were accepted in legacy format
 implementations. You should use this flag to detect and fix such
-invalid formats, as they will be rejected by future OCaml versions.</dd><dt class="dt-description"><span class="c006">-thread</span></dt><dd class="dd-description">
-Compile or link multithreaded programs, in combination with the
-system <span class="c003">threads</span> library described in chapter&#XA0;<a href="libthreads.html#c%3Athreads">31</a>.
-</dd><dt class="dt-description"><span class="c006">-unboxed-types</span></dt><dd class="dd-description">
+invalid formats, as they will be rejected by future OCaml versions.</dd><dt class="dt-description"><span class="c006">-unboxed-types</span></dt><dd class="dd-description">
 When a type is unboxable (i.e. a record with a single argument or a
 concrete datatype with a single constructor of one argument) it will
 be unboxed unless annotated with <span class="c003">[@@ocaml.boxed]</span>.
@@ -404,10 +434,9 @@ and modulus operations. With <span class="c003">-unsafe</span>, an integer divis
 (or modulus) by zero can halt the program or continue with an
 unspecified result instead of raising a <span class="c003">Division_by_zero</span> exception.
 </dd><dt class="dt-description"><span class="c006">-unsafe-string</span></dt><dd class="dd-description">
-Identify the types <span class="c003">string</span> and <span class="c003">bytes</span>,
-thereby making strings writable. For reasons of backward compatibility,
-this is the default setting for the moment, but this will change in a future
-version of OCaml.</dd><dt class="dt-description"><span class="c006">-v</span></dt><dd class="dd-description">
+Identify the types <span class="c003">string</span> and <span class="c003">bytes</span>, thereby making strings writable.
+This is intended for compatibility with old source code and should not
+be used with new software.</dd><dt class="dt-description"><span class="c006">-v</span></dt><dd class="dd-description">
 Print the version number of the compiler and the location of the
 standard library directory, then exit.</dd><dt class="dt-description"><span class="c006">-verbose</span></dt><dd class="dd-description">
 Print all external commands before they are executed,
@@ -421,7 +450,7 @@ Enable, disable, or mark as fatal the warnings specified by the argument
 <span class="c009">warning-list</span>.
 Each warning can be <em>enabled</em> or <em>disabled</em>, and each warning
 can be <em>fatal</em> or <em>non-fatal</em>.
-If a warning is disabled, it isn&#X2019;t displayed and doesn&#X2019;t affect
+If a warning is disabled, it isn’t displayed and doesn’t affect
 compilation in any way (even if it is fatal). If a warning is
 enabled, it is displayed normally by the compiler whenever the source
 code triggers it. If it is enabled and fatal, the compiler will also
@@ -451,7 +480,7 @@ that are currently defined are ignored. The warnings are as follows.
 </p><dl class="description"><dt class="dt-description">
 <span class="c013">1</span></dt><dd class="dd-description"> Suspicious-looking start-of-comment mark.
 </dd><dt class="dt-description"><span class="c013">2</span></dt><dd class="dd-description"> Suspicious-looking end-of-comment mark.
-</dd><dt class="dt-description"><span class="c013">3</span></dt><dd class="dd-description"> Deprecated feature.
+</dd><dt class="dt-description"><span class="c013">3</span></dt><dd class="dd-description"> Deprecated synonym for the ’deprecated’ alert
 </dd><dt class="dt-description"><span class="c013">4</span></dt><dd class="dd-description"> Fragile pattern matching: matching that will remain complete even
 if additional constructors are added to one of the variant types
 matched.
@@ -461,7 +490,7 @@ type and is ignored.
 </dd><dt class="dt-description"><span class="c013">7</span></dt><dd class="dd-description"> Method overridden.
 </dd><dt class="dt-description"><span class="c013">8</span></dt><dd class="dd-description"> Partial match: missing cases in pattern-matching.
 </dd><dt class="dt-description"><span class="c013">9</span></dt><dd class="dd-description"> Missing fields in a record pattern.
-</dd><dt class="dt-description"><span class="c013">10</span></dt><dd class="dd-description"> Expression on the left-hand side of a sequence that doesn&#X2019;t have type
+</dd><dt class="dt-description"><span class="c013">10</span></dt><dd class="dd-description"> Expression on the left-hand side of a sequence that doesn’t have type
 <span class="c003">unit</span> (and that is not a function, see warning number 5).
 </dd><dt class="dt-description"><span class="c013">11</span></dt><dd class="dd-description"> Redundant case in a pattern matching (unused match case).
 </dd><dt class="dt-description"><span class="c013">12</span></dt><dd class="dd-description"> Redundant sub-pattern in a pattern-matching.
@@ -479,10 +508,10 @@ type and is ignored.
 </dd><dt class="dt-description"><span class="c013">24</span></dt><dd class="dd-description"> Bad module name: the source file name is not a valid OCaml module name.
 </dd><dt class="dt-description"><span class="c013">25</span></dt><dd class="dd-description"> Deprecated: now part of warning 8.
 </dd><dt class="dt-description"><span class="c013">26</span></dt><dd class="dd-description"> Suspicious unused variable: unused variable that is bound
-with <span class="c003">let</span> or <span class="c003">as</span>, and doesn&#X2019;t start with an underscore (<span class="c003">_</span>)
+with <span class="c003">let</span> or <span class="c003">as</span>, and doesn’t start with an underscore (<span class="c003">_</span>)
 character.
 </dd><dt class="dt-description"><span class="c013">27</span></dt><dd class="dd-description"> Innocuous unused variable: unused variable that is not bound with
-<span class="c003">let</span> nor <span class="c003">as</span>, and doesn&#X2019;t start with an underscore (<span class="c003">_</span>)
+<span class="c003">let</span> nor <span class="c003">as</span>, and doesn’t start with an underscore (<span class="c003">_</span>)
 character.
 </dd><dt class="dt-description"><span class="c013">28</span></dt><dd class="dd-description"> Wildcard pattern given as argument to a constant constructor.
 </dd><dt class="dt-description"><span class="c013">29</span></dt><dd class="dd-description"> Unescaped end-of-line in a string constant (non-portable code).
@@ -520,6 +549,10 @@ mutually recursive types.
 </dd><dt class="dt-description"><span class="c013">60</span></dt><dd class="dd-description"> Unused module declaration
 </dd><dt class="dt-description"><span class="c013">61</span></dt><dd class="dd-description"> Unboxable type in primitive declaration
 </dd><dt class="dt-description"><span class="c013">62</span></dt><dd class="dd-description"> Type constraint on GADT type declaration
+</dd><dt class="dt-description"><span class="c013">63</span></dt><dd class="dd-description"> Erroneous printed signature
+</dd><dt class="dt-description"><span class="c013">64</span></dt><dd class="dd-description"> -unsafe used with a preprocessor returning a syntax tree
+</dd><dt class="dt-description"><span class="c013">65</span></dt><dd class="dd-description"> Type declaration defining a new ’()’ constructor
+</dd><dt class="dt-description"><span class="c013">66</span></dt><dd class="dd-description"> Unused open! statement
 </dd><dt class="dt-description"><span class="c013">A</span></dt><dd class="dd-description"> all warnings
 </dd><dt class="dt-description"><span class="c013">C</span></dt><dd class="dd-description"> warnings 1, 2.
 </dd><dt class="dt-description"><span class="c013">D</span></dt><dd class="dd-description"> Alias for warning 3.
@@ -559,7 +592,7 @@ Process <span class="c009">file</span> as a file name, even if it starts with a 
 character.
 </dd><dt class="dt-description"><span class="c013"><span class="c003">-help</span> or <span class="c003">--help</span></span></dt><dd class="dd-description">
 Display a short usage summary and exit.</dd></dl>
-<h5 class="paragraph" id="sec305">Options for the IA32 architecture</h5>
+<h5 class="paragraph" id="sec312">Options for the IA32 architecture</h5>
 <p>
 The IA32 code generator (Intel Pentium, AMD Athlon) supports the
 following additional option:</p><dl class="description"><dt class="dt-description">
@@ -570,9 +603,9 @@ corresponding library routines. The functions affected are:
 The resulting code runs faster, but the range of supported arguments
 and the precision of the result can be reduced. In particular,
 trigonometric operations <span class="c003">cos</span>, <span class="c003">sin</span>, <span class="c003">tan</span> have their range reduced to
-[&#X2212;2<sup>64</sup>, 2<sup>64</sup>].
+[−2<sup>64</sup>, 2<sup>64</sup>].
 </dd></dl>
-<h5 class="paragraph" id="sec306">Options for the AMD64 architecture</h5>
+<h5 class="paragraph" id="sec313">Options for the AMD64 architecture</h5>
 <p>
 The AMD64 code generator (64-bit versions of Intel Pentium and AMD
 Athlon) supports the following additional options:</p><dl class="description"><dt class="dt-description">
@@ -580,14 +613,19 @@ Athlon) supports the following additional options:</p><dl class="description"><d
 the default.
 </dd><dt class="dt-description"><span class="c006">-fno-PIC</span></dt><dd class="dd-description"> Generate position-dependent machine code.
 </dd></dl>
-<h5 class="paragraph" id="sec307">Contextual control of command-line options</h5>
-<p>The compiler command line can be modified &#X201C;from the outside&#X201D;
+<h5 class="paragraph" id="sec314">Contextual control of command-line options</h5>
+<p>The compiler command line can be modified “from the outside”
 with the following mechanisms. These are experimental
 and subject to change. They should be used only for experimental and
 development work, not in released packages.</p><dl class="description"><dt class="dt-description">
 <span class="c006">OCAMLPARAM</span> (environment variable)</dt><dd class="dd-description">
-Arguments that will be inserted before or after the arguments from the
-command line.
+A set of arguments that will be inserted before or after the arguments from
+the command line. Arguments are specified in a comma-separated list
+of <span class="c003">name=value</span> pairs. A <span class="c003">_</span> is used to specify the position of
+the command line arguments, i.e. <span class="c003">a=x,_,b=y</span> means that <span class="c003">a=x</span> should be
+executed before parsing the arguments, and <span class="c003">b=y</span> after. Finally,
+an alternative separator can be specified as the
+first character of the string, within the set <span class="c003">:|; ,</span>.
 </dd><dt class="dt-description"><span class="c006">ocaml_compiler_internal_params</span> (file in the stdlib directory)</dt><dd class="dd-description">
 A mapping of file names to lists of arguments that
 will be added to the command line (and <span class="c003">OCAMLPARAM</span>) arguments.
@@ -596,10 +634,10 @@ Alternative executable to use on native
 Windows for <span class="c003">flexlink</span> instead of the
 configured value. Primarily used for bootstrapping.
 </dd></dl>
-<h2 class="section" id="sec308">12.3&#XA0;&#XA0;Common errors</h2>
+<h2 class="section" id="sec315">12.3  Common errors</h2>
 <p>The error messages are almost identical to those of <span class="c003">ocamlc</span>.
-See section&#XA0;<a href="comp.html#s%3Acomp-errors">9.4</a>.</p>
-<h2 class="section" id="sec309">12.4&#XA0;&#XA0;Running executables produced by ocamlopt</h2>
+See section <a href="comp.html#s%3Acomp-errors">9.4</a>.</p>
+<h2 class="section" id="sec316">12.4  Running executables produced by ocamlopt</h2>
 <p>Executables generated by <span class="c003">ocamlopt</span> are native, stand-alone executable
 files that can be invoked directly. They do
 not depend on the <span class="c003">ocamlrun</span> bytecode runtime system nor on
@@ -607,14 +645,14 @@ dynamically-loaded C/OCaml stub libraries.</p><p>During execution of an <span cl
 the following environment variables are also consulted:
 </p><dl class="description"><dt class="dt-description">
 <span class="c006">OCAMLRUNPARAM</span></dt><dd class="dd-description"> Same usage as in <span class="c003">ocamlrun</span>
-(see section&#XA0;<a href="runtime.html#ocamlrun-options">11.2</a>), except that option <span class="c003">l</span>
-is ignored (the operating system&#X2019;s stack size limit
+(see section <a href="runtime.html#ocamlrun-options">11.2</a>), except that option <span class="c003">l</span>
+is ignored (the operating system’s stack size limit
 is used instead).
 </dd><dt class="dt-description"><span class="c006">CAMLRUNPARAM</span></dt><dd class="dd-description"> If <span class="c003">OCAMLRUNPARAM</span> is not found in the
 environment, then <span class="c003">CAMLRUNPARAM</span> will be used instead. If
 <span class="c003">CAMLRUNPARAM</span> is not found, then the default values will be used.
 </dd></dl>
-<h2 class="section" id="sec310">12.5&#XA0;&#XA0;Compatibility with the bytecode compiler</h2>
+<h2 class="section" id="sec317">12.5  Compatibility with the bytecode compiler</h2>
 <p>
 <a id="s:compat-native-bytecode"></a></p><p>This section lists the known incompatibilities between the bytecode
 compiler and the native-code compiler. Except on those points, the two
@@ -625,7 +663,7 @@ until the next heap allocation.</li><li class="li-itemize">Stack overflow, typic
 is not always turned into a <span class="c003">Stack_overflow</span> exception like the
 bytecode compiler does. The runtime system makes a best effort to
 trap stack overflows and raise the <span class="c003">Stack_overflow</span> exception, but
-sometimes it fails and a &#X201C;segmentation fault&#X201D; or another system fault
+sometimes it fails and a “segmentation fault” or another system fault
 occurs instead.</li><li class="li-itemize">On ARM and PowerPC processors (32 and 64 bits), fused
 multiply-add (FMA) instructions can be generated for a
 floating-point multiplication followed by a floating-point addition
@@ -639,7 +677,7 @@ precision like the bytecode compiler always does. Floating-point
 results can therefore differ slightly between bytecode and native code.</li><li class="li-itemize">The native-code compiler performs a number of optimizations that
 the bytecode compiler does not perform, especially when the Flambda
 optimizer is active. In particular, the native-code compiler
-identifies and eliminates &#X201C;dead code&#X201D;, i.e. computations that do
+identifies and eliminates “dead code”, i.e. computations that do
 not contribute to the results of the program. For example,
 <pre>        let _ = ignore M.f
 </pre>contains a reference to compilation unit <span class="c003">M</span> when compiled to

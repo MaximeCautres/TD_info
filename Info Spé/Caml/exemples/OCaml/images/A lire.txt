@@ -1,1 +1,1 @@
-Ouvrir cree-image.oml avant affiche-image.oml !
+Utiliser 'cree-image.oml' pour crer le fichier image 'image' avant d'utiliser 'affiche-image.oml'!

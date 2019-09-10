@@ -10,6 +10,7 @@
 (*                                                                     *) 
 (***********************************************************************)
 
+
 #load "graphics.cma";;
 
 Sys.chdir "exemples/OCaml/inria/minilogo";;
@@ -26,13 +27,14 @@ let oc_version =
       int_of_string !s
 ;;
 
+
 compile "crayon.mli";;
 compile "crayon.ml";;
-#load "crayon.cmo";;
+
 compile "langage.mli";;
 compile "langage.ml";;
-#load "langage.cmo";;
-compile "alex.mli";
+
+compile "alex.mli";;
 if oc_version < 4050 then
   compile "alex.ml"
 else (
@@ -40,14 +42,20 @@ else (
   let f = "alex.cmo" in
     if Sys.file_exists f then Sys.remove f;
     Sys.rename ("alex/" ^ f) f
-)
-;;
-#load "alex.cmo";;
+);;
+
 compile "asynt.mli";;
 compile "asynt.ml";;
-#load "asynt.cmo";;
+
 compile "logo.ml";;
+
+#directory ".";;
+#load "crayon.cmo";;
+#load "langage.cmo";;
+#load "alex.cmo";;
+#load "asynt.cmo";;
 #load "logo.cmo";;
+
 open Logo;;
 
 print_string "l'instruction \"boucle\" suivante ayant lancŽ l'interprŽteur

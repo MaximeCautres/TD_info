@@ -27,11 +27,13 @@
 .li-enumerate{margin:1ex 0ex;}
 .dd-description{margin:0ex 0ex 1ex 4ex;}
 .dt-description{margin:0ex;}
+.toc{list-style:none;}
 .footnotetext{margin:0ex; padding:0ex;}
 div.footnotetext P{margin:0px; text-indent:1em;}
 .thefootnotes{text-align:left;margin:0ex;}
 .dt-thefootnotes{margin:0em;}
 .dd-thefootnotes{margin:0em 0em 0em 2em;}
+.footnoterule{margin:1em auto 1em 0px;width:50%;}
 .center{text-align:center;margin-left:auto;margin-right:auto;}
 div table{margin-left:inherit;margin-right:inherit;margin-bottom:2px;margin-top:2px}
 td table{margin:auto;}
@@ -47,29 +49,55 @@ td p{margin:0px;}
 .dcenter{margin:0ex auto;}
 .theorem{text-align:left;margin:1ex auto 1ex 0ex;}
 .part{margin:2ex auto;text-align:center}
-a:link{color:#00A000;text-decoration:underline;}
-a:visited{color:#006000;text-decoration:underline;}
-a:hover{color:black;text-decoration:none;background-color:#7FFF7F}
+a:link{color:#4286f4;text-decoration:underline;}
+a:visited{color:#0d46a3;text-decoration:underline;}
+a:hover{color:black;text-decoration:underline;background-color:subsection}
+@media all{@font-face {
+/* fira-sans-regular - latin */
+font-family: 'Fira Sans';
+font-style: normal;
+font-weight: 400;
+src: url('fonts/fira-sans-v8-latin-regular.eot'); /* IE9 Compat Modes */
+src: local('Fira Sans Regular'), local('FiraSans-Regular'),
+url('fonts/fira-sans-v8-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+url('fonts/fira-sans-v8-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+url('fonts/fira-sans-v8-latin-regular.woff') format('woff'), /* Modern Browsers */
+url('fonts/fira-sans-v8-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+url('fonts/fira-sans-v8-latin-regular.svg#FiraSans') format('svg'); /* Legacy iOS */
+}
+}
+body{max-width:750px;
+width: 85%;
+margin: auto;
+background: #f7f7f7;
+margin-top: 80px;
+font-size: 1rem;
+}
+.maintitle{font-family: "Fira Sans", sans-serif;
+text-align: center;
+}
+h1, h2, h3{font-family: "Fira Sans", sans-serif;
+font-weight: normal;
+border-bottom: 1px solid black;
+}
+pre{font-size: 1rem;
+background: beige;
+border: 1px solid grey;
+padding: 10px;
+overflow-y:auto;
+white-space: pre-wrap;
+}
+p,ul{line-height:1.3em}
+.cellpadding1 tr td{padding:1px 4px}
 div.caml-output{color:maroon;}
-div.caml-input::before{content:"#"; color:black;}
-div.caml-input{color:#006000;}
 div.caml-example pre{margin:2ex 0px;}
+div.caml-example.toplevel div.caml-input::before{content:"#"; color:black;}
+div.caml-example.toplevel div.caml-input{color:#006000;}
+.tableau, .syntax, .syntaxleft{/* same width as body */
+max-width: 750px;
+overflow-y: auto;
+}
 .li-links{margin:0ex 0ex;}
 a.syntax:link{color:maroon;text-decoration:underline}
 a.syntax:visited{color:maroon;text-decoration:underline}
 a.syntax:hover{color:black;text-decoration:none;background-color:#FF6060}
-body{background-color:white}
-a:link{color:#00B200;text-decoration:underline;}
-a:visited{color:#006600;text-decoration:underline;}
-a:hover{color:black;text-decoration:none;background-color:#99FF99}
-.part{padding:1ex;background-color:#00CC00}
-.section{padding:.5ex;background-color:#66FF66}
-.subsection{padding:0.3ex;background-color:#7FFF7F}
-.subsubsection{padding:0.5ex;background-color:#99FF99}
-.paragraph{padding:0.5ex;background-color:#CCFFCC}
-.chapter{padding:0.5ex;background-color:#2DE52D}
-.ffootnoterule{border:none;margin:1em auto 1em 0px;width:50%;background-color:#00CC00}
-.ftoc1{list-style:none;margin:0ex 1ex;padding:0ex 1ex;border-left:1ex solid #00CC00}
-.ftoc2{list-style:none;margin:1ex 1ex;padding:0ex 1ex;border-left:1ex solid #2DE52D}
-.ftoc3{list-style:none;margin:0ex 1ex;padding:0ex 1ex;border-left:1ex solid #66FF66}
-.ftoc4{list-style:none;margin:0ex 1ex;padding:0ex 1ex;border-left:1ex solid #7FFF7F}

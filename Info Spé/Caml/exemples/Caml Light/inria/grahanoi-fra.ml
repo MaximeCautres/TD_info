@@ -84,7 +84,7 @@ let make_disque tige nombre_de_disques i =
       let hwr = (nombre_de_disques - i) * inc in
       2 * hwr in
    let w = wr + 2 * r0 in
-   let cur_bg = get_image 0 0 w (hauteur_bois + 1) in
+   let cur_bg = get_image 0 0 w (hauteur_bois) in
    trace_bois (w / 2) 0;
    let bg = get_image 0 0 w h in
    let c = make_couleur i in
@@ -107,7 +107,7 @@ let tige_pleine i nombre_de_disques =
    t.sommet <- nombre_de_disques - 1;
    t;;
 
-let dépile_disque tige =
+let dpile_disque tige =
    let s = tige.sommet in
    let disque =
       match tige.disques.(s) with
@@ -132,8 +132,8 @@ let empile_disque tige disque =
    draw_image disque.fg disque.x disque.y;
    tige.disques.(tige.sommet) <- Some disque;;
 
-let déplace (nom_départ, départ) (nom_destination, destination) =
-   let disque = dépile_disque départ in
+let dplace (nom_dpart, dpart) (nom_destination, destination) =
+   let disque = dpile_disque dpart in
    empile_disque destination disque;;
 
 let trace_tige t =
@@ -170,16 +170,16 @@ let attend() =
    (* let _ = read_line() in () *)
    (* ignore (read_line ()) *);;
 
-let rec hanoi hauteur départ intermédiaire destination =
+let rec hanoi hauteur dpart intermdiaire destination =
    if hauteur > 0 then
       begin
-         hanoi (hauteur - 1) départ destination intermédiaire;
+         hanoi (hauteur - 1) dpart destination intermdiaire;
          attend();
-         (* Printf.printf "Mouvement de %s ˆ %s\n" (fst départ) (fst destination); *)
-         print_string ("Mouvement de " ^ (fst départ) ^ " à " ^ (fst destination) ^ "; ");
+         (* Printf.printf "Mouvement de %s ˆ %s\n" (fst dpart) (fst destination); *)
+         print_string ("Mouvement de " ^ (fst dpart) ^ " ˆ " ^ (fst destination) ^ "; ");
          flush stdout;
-         déplace départ destination;
-         hanoi (hauteur - 1) intermédiaire départ destination
+         dplace dpart destination;
+         hanoi (hauteur - 1) intermdiaire dpart destination
       end;;
 
 let jeu nombre_de_disques =
@@ -187,7 +187,7 @@ let jeu nombre_de_disques =
    let gauche = ("A", tige_pleine 1 nombre_de_disques)
    and milieu = ("B", tige_vide 2 nombre_de_disques)
    and droite = ("C", tige_vide 3 nombre_de_disques) in
-   imprime_jeu "Les productions Lucas présentent" gauche milieu droite;
+   imprime_jeu "Les productions Lucas prsentent" gauche milieu droite;
    hanoi nombre_de_disques gauche milieu droite;;
 
 (*
@@ -204,6 +204,3 @@ end;;
 *)
 
 jeu 4;;
-
-(*clear_graph();;
-trace_tige ("A", tige_pleine 1 1);;*)

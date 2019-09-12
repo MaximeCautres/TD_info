@@ -55,6 +55,8 @@ let rec supp;;
 let rec creer_abr l = match l with
 	|[] -> V
 	|a::l' -> insere_feuille a (creer_abr l');;
+	
+comment aller vous ? ;;
 
 
 

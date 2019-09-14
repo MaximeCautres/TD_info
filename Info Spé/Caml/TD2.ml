@@ -49,14 +49,27 @@ let rec insere_racine a arbre = match arbre with
 	|V;;
 
 
-let rec supp;;
-
-
+let rec supp e arbre = if trouve e arbre then 
+	let rec find_r_l arbre = match arbre with
+	|C(_,n,V) -> n
+	|C(_,_,d)-> find_r_l d in
+	let rec reconstruct arbre s = match arbre with
+	|V -> V
+	|C(g,n,d)-> if n = s
+					then C(reconstruct g (find_r_l g) ,find_r_l g, d)
+					else C(reconstruct g s, n, reconstruct d s)
+	in reconstruct arbre e
+	else arbre;;
+	
+supp 3 (C(C(V,2,V),1,C(V,3,V)));;
+	
 let rec creer_abr l = match l with
 	|[] -> V
 	|a::l' -> insere_feuille a (creer_abr l');;
-	
-comment aller vous ? ;;
+
+let rec find_r_l arbre = match arbre with
+	|C(_,n,V) -> n
+	|C(_,_,d)-> find_r_l d;;
 
 
 

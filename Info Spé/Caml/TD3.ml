@@ -170,6 +170,21 @@ let construit_arbre phrase =
 	done;
 	w.(0);;
 
-construit_arbre "elle a mal a la main";;
+affiche (construit_arbre "elle a mal a la main");;
 
+type 'a arbre = End of 'a | Cons of 'a arbre * 'a * 'a arbre;;
+
+let table_code abr = 
+	let rec tr abr = match abr with
+		|Feuille(c) -> End(c)		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 

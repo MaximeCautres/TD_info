@@ -114,7 +114,7 @@ let deux_plus_petit_v l =
 
 (*elle est belle mais c'est absolument pas ce qu'il fallait faire, terrible coup dure *)
 
-let deux_plus_petit_i l = 
+let deux_plus_petit_t l = 
 	let l = Array.to_list l in
 	let rec deux_plus_petit l = match l with
 	|m1::m2::[] -> (m1, m2)
@@ -140,8 +140,17 @@ let deux_plus_petit_i l =
 	let i2 = find_i l j in
 	(i1, i2);;
 
+let deux_plus_petit_i table = let m1 = ref max_int and m2 = ref max_int and 
+									i1 = ref 0 and i2 = ref 0 in 
+		for i = 0 to (Array.length table - 1) do
+			if table.(i) <= !m1 
+				then (m2 := !m1; m1 := table.(i); i2 := !i1; i1 := i)
+				else ( if table.(i) <= !m2 
+							then (m2 := table.(i); i2 := i)
+							else ())
+		done; (!i1,!i2);;
 
-deux_plus_petit_i [|9;7;5;5;6;9;7;8;1;5;7;26;35;45;1;2;3;4|];;
+deux_plus_petit_t [|3;3;1;2|];;
 
 type arbre_huffman = Feuille of char | Noeud of arbre_huffman * arbre_huffman ;;
 
@@ -174,17 +183,83 @@ affiche (construit_arbre "elle a mal a la main");;
 
 type 'a arbre = End of 'a | Cons of 'a arbre * 'a * 'a arbre;;
 
-let table_code abr = 
-	let rec tr abr = match abr with
-		|Feuille(c) -> End(c)		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+let rec list abr = match abr with
+	|Feuille(c) -> [c]
+	|Noeud(g,d) -> ['('] @ (list g) @ ['.'] @ (list d) @ [')'];;
+
+let paths sentences = 
+	let rec aux1 sentence c acc l = match sentence with
+		|[] -> l
+		|ch::sentence' -> match ch with
+			|'(' -> aux1 sentence' (c + 1) (acc ^ "0") l
+			|')' -> aux1 sentence' (c - 1) (String.sub acc 0 c) l
+			|'.' -> aux1 sentence' c ((String.sub acc 0 (c - 2)) ^ "1" ) l 
+			|_ -> (l.(indice ch) <- acc; aux1 sentence' c acc l)
+	in aux1 (list sentences) 0 "" (Array.make 27 "");;
+
+let paths tree = 
+	let rec aux1 s c acc l = match s with
+		|[] -> l
+		|ch::s' -> match ch with
+			|'(' -> aux1 s' (c + 1) (Bytes.cat acc (Bytes.of_string "0")) l
+			|')' -> aux1 s' (c - 1) (Bytes.sub acc 0 c) l
+			|'.' -> aux1 s' c (Bytes.cat (Bytes.sub acc 0 (c - 2)) (Bytes.of_string"1") ) l 
+			|_ -> (l.(indice ch) <- Bytes.to_string acc; aux1 s' c acc l)
+	in aux1 (list tree) 0 (Bytes.of_string "") (Array.make 27 "");;
+
+type bin = Z | A of bin | B of bin;;
+
+let time2 b = A(b);; 
+
+let divid2 b = match b with
+	|A(Z) -> b
+	|A(b') -> b'
+	|B(b') -> b'
+	|_ -> Z;;
+
+let plus1 b = match b with
+	|A(b') -> B(b')
+	| _ -> Z;;
+
+let rec bin_to_string b = match b with
+	|Z-> ""
+	|A(b') -> (bin_to_string b') ^ "0"
+	|B(b') -> (bin_to_string b') ^ "1";;
+
+
+let paths tree = let l = (Array.make 27 "") in
+	let rec aux1 s acc  = match s with
+		|[] -> l
+		|ch::s' -> match ch with
+			|'(' -> aux1 s' (time2 acc)
+			|')' -> aux1 s' (divid2 acc)
+			|'.' -> aux1 s' (plus1 acc)			
+			|_ -> (l.(indice ch) <- (bin_to_string acc) ; aux1 s' acc)
+	in aux1 (list tree) Z;;
+
+paths (construit_arbre "elle a mal a la main");;
+
+
+let compression s = let table = paths (construit_arbre s) in
+	let rec aux1 s table = match s with
+		|"" -> "Z"
+		|_-> table.(indice s.[0]) ^ ( aux1 (String.sub s 1 (String.length s -1)) table)
+	in aux1 s table;;
+
+
+let decompression sc a = 
+	let rec aux s t tt = match s, t with
+	|"Z", _ -> ""
+	|_, Feuille(k) ->  (Char.escaped k) ^ (aux (String.sub s 1 (String.length s -1)) tt tt)
+	|_, Noeud(g,d)-> match s.[0] with
+		|'0' -> aux (String.sub s 1 (String.length s - 1)) g tt
+		|'1' -> aux (String.sub s 1 (String.length s - 1)) d tt
+		| _ -> "a"
+	in aux sc a a;;
+
+
+
+
+
+
 

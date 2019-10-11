@@ -197,8 +197,50 @@ def testpar(e):
         print(s,c)
     return s == ""
 
-#print(testpar("((1+2)*3+(4*((5-6)+7)-8*9))"))
+# print(testpar("((1+2)*3+(4*((5-6)+7)-8*9))"))
+
+"""exercice 11"""
+
+# Deja effectue dans le TD3 en utilisant des piles
+
+"""exercice 12"""
 
 
+def creerFile():
+    return []
 
+
+def enfiler(elt, f):
+    return f.append(elt)
+
+
+def defiler(f):
+    x = f[-1]
+    f = f[:-1]
+    return x
+
+def estFileVide(f):
+    return f == []
+
+def longueur(f):
+    return len(f)
+
+def affiche(f):
+    print(f)
+    return
+
+
+# f = creerFile()
+# f = enfiler(1, f)
+# affiche(f)
+# f = enfiler(2, f)
+# f = enfiler(3, f)
+# f = enfiler(4, f)
+# affiche(f)
+# longueur(f)
+# print(defile(f))
+# affiche(f)
+
+
+"""exercice 13 partition d'entree"""
 

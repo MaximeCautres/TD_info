@@ -105,10 +105,9 @@ def evalue(e):
     operateur = "+-*/"
     for i in e:
         if i in operateur:
-            x = [0, 0, 0, 0, 0, 0, 0, 1]
-            x[2 * operateur.index(i) + 1] = p.pop()
-            x[2 * operateur.index(i)] = p.pop()
-            p.push(x[0] + x[1] + x[2] - x[3] + x[4] * x[5] + x[6] / x[7])
+            x = [0, 0, 1, 1]
+            x[operateur.index(i)] = p.pop()
+            p.push(((((p.pop()+x[0])-x[1])*x[2])/x[3]))
         else:
             p.push(int(i))
     return p.pop(), p.is_empty()
@@ -133,5 +132,5 @@ p.push(4)
 
 #print(bienpar("(([()[]()]))"))
 
-#print(evalue("1 2 * 3 4 * + 2 /"))
+print(evalue("1 2 * 3 4 * + 2 *"))
 

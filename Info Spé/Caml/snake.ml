@@ -12,7 +12,7 @@ let nw x_ y_ = {x = x_; y = y_};;
 let (++) v w = {x = v.x + w.x; y = v.y + w.y};;
 
 let snake () = 
-	let p = nw (size / 2) (size / 2) 
+	let p = nw (size / 2) (size / 2)
 	and map = Array.make (format*format) p
 	and head = ref 0 and tail = ref 0 and d = (nw 0 0) 
 	and tm = 0.1 in
@@ -35,7 +35,8 @@ let snake () =
 	graph () in 
 	let beg = time () and fruit = newfruit () and togrow = ref 0 in
 	while inmap () and not collision p do
-		if Key_pressed () then begin
+		if key_pressed () then begin
+		let key = read_key () in
 			d.x <- (eval (key = 'd')) - (eval (key = 'q'));
 			d.y <- (eval (key = 'z')) - (eval (key = 's')) end
 		if (time () -. beg) > !t then begin
@@ -56,5 +57,7 @@ let snake () =
 				tail := (!tail + 1) mod (format*format);
 				end; end;
 	done;;
+
+let rec l = 1 :: 2 :: 3 :: l;;
 
 

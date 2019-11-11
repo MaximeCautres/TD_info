@@ -197,7 +197,7 @@ def testpar(e):
         print(s,c)
     return s == ""
 
-# print(testpar("((1+2)*3+(4*((5-6)+7)-8*9))"))
+print(testpar("((1+2)*3+(4*((5-6)+7)-8*9))"))
 
 """exercice 11"""
 

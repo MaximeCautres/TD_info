@@ -85,10 +85,60 @@ def fusioniter(l1, l2):
 
 #print(fusion([1,2,3,4], [2,3,4,5,6]))
 
-"""def mediane(l):
-    l = {}
-    for i in l:
-"""
+""" la mediane en O(n) est ici codé à l'aide d'un algorithme de quicksearch et d'un algorithme de mediane des medianes"""
+
+def aux(l, k, fonction_pivot):
+    if len(l) == 1:
+        return l[0]
+
+    pivot = fonction_pivot(l)
+
+    l_inf = [i for i in l if i < pivot]
+    l_sup = [i for i in l if i > pivot]
+    l_pivot = [i for i in l if i == pivot]
+
+    if len(l_inf) >= k:
+        return aux(l_inf, k, fonction_pivot)
+    elif len(l_inf) + len(l_pivot) >= k:
+        return pivot
+    else:
+        return aux(l_sup, k - len(l_inf) + len(l_pivot), fonction_pivot)
+
+
+def mediane_logn(l):
+    l.sort()
+    if len(l)%2 == 1:
+        return l[len(l) // 2]
+    else:
+        return (l[len(l) // 2] + l[len(l) // 2 - 1])/2
+
+def partitions(l, k):
+    return [l[i: i + k] for i in range(0, len(l) - k, k)]
+
+
+def fonction_pivot_deterministe(l):
+    if len(l) <= 5:
+        return mediane_logn(l)
+    else:
+        decoupages = partitions(l, 5)
+        decoupage_trie = [i.sort() for i in decoupages]
+        medianes = [i[2] for i in decoupage_trie]
+        return mediane(medianes, fonction_pivot_deterministe)
+
+
+
+def fonction_pivot_stochastique(l):
+    return random.choice(l)
+
+
+def mediane(l, fonction_pivot):
+    if len(l)%2 == 1:
+        return aux(l, len(l) // 2, fonction_pivot)
+    else:
+        return (aux(l, len(l) // 2, fonction_pivot) + aux(l, len(l) // 2 - 1, fonction_pivot))/2
+
+print(mediane_logn([1,2,3,4,5,6,7,8,9,10,11]))
+print(mediane([1,2,3,4,5,6,7,8,9,10,11], fonction_pivot_stochastique))
 
 
 def unique(l):

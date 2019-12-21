@@ -46,4 +46,22 @@ let accessible automa =
 
 accessible test2;;
 
-
+let accessible_2 automa = 
+	let s = Array.make automa.taille -1 and new_transitions = Array.make automa.taille [] and 
+	new_final = Array.make automa.taille false and new_initial = 0 and k = ref 1 in
+	let rec aux1 voisins pred = match voisins with
+		|[] -> ()
+		|(mouv, voisin) :: voisins' -> if s.(voisin) = -1 then 
+		(if automa.final.(voisin) then new_final.(k) <- true; s.(voisin) <- !k; 
+		new_transitions.(pred) <- (mouv, k)::new_transitions.(pred); 
+		k := !k + 1 ; aux1 (automa.transitions.(voisin)) voisin; aux1 voisins' pred)
+		else (new_transitions.(pred) <- (mouv, s.(voisin))::new_transitions.(pred)) in
+	s.(automa.initial) <- 0;
+	aux1 (automa.transitions.(automa.initial)) new_initial;
+	let true_taille = k in let true_final = Array.make true_taille false 
+	and true_transitions = Array.make true_taille [] in
+	for i = 0 to true_taille - 1 do
+		true_transitions.(i) <- new_transitions.(i);
+		true_final.(i) <- new_final.(i) done;
+	let true_automa = {taille = true.taille; initial = new_initial; final = true_final; transitions = true_transitions} in
+	true_automa;;

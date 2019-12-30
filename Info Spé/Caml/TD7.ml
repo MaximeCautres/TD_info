@@ -97,7 +97,7 @@ let glushkov rat =
 	let nb_etat = Array.length table + 1 and finaux = suffixes lin in
 	let transi = Array.make nb_etat ('a', 1) in
 	for i  = 0 to 
-	
+	q
 
 
 

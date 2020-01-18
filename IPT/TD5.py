@@ -124,7 +124,7 @@ from math import *
 
 image1 = plt.imread("blaise.png")
 image2 = plt.imread('lena.png')
-for i in range(0, 360, 10):
+for i in range(0, 360,45):
     plt.imshow(rot(image2, i * pi/180))
     plt.pause(0.1)
 plt.show()

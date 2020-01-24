@@ -1,6 +1,8 @@
+
 let rec appartient e l = match l with
 	|[] -> false
 	|x :: l' -> if e = x then true else appartient e l';;
+
 
 let rec supprime e l = match l with
 	|[] -> []

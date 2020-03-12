@@ -71,10 +71,10 @@ let print_array t =
 ;;
 
 let tarjan (graph : graphe) =
-  let (component : int list list ref) = ref [[]] in
+  let (component : int list list ref) = ref [] in
   let n = Array.length graph in
   let state = Array.make (n) (-1) in
-  let time = Array.make (n) (-1) in
+  let low_link = Array.make (n) (-1) in
   let stack = ref [] in
   let k = ref 0 in
   let rec isin e l = match l with
@@ -84,33 +84,23 @@ let tarjan (graph : graphe) =
     |[] -> stock, []
     |ele::l' -> if ele = e then (stock, l) else pop e l' (stock @ [ele])  in
   let rec dfs_mod s' =
-    print_string "000000000000000000000000000000000000000000000000000000"; print_newline ();
-    print_string "s = "; print_int s'; print_newline ();
-    print_string "state = "; print_array state; print_newline ();
-    print_string "time = "; print_array time; print_newline ();
-    print_string "stack = "; print_list !stack; print_newline ();
     if state.(s') = -1 then begin
         state.(s') <- !k;
         k := !k + 1;
         stack := !stack @ [s'];
-        let etat = ref true in
+        low_link.(s') <- state.(s');
         for i = 0 to Array.length graph.(s') - 1 do
           let value = dfs_mod graph.(s').(i) in
-          if value <> -1 then ( time.(s') <- (min state.(s') value); etat := false)
+          if value <> -1 then low_link.(s') <- (min low_link.(s') value)
         done;
-        print_string "1111111111111111111111111111111111111111111111111111111"; print_newline ();
-        print_string "s = "; print_int s'; print_newline ();
-        print_string "state = "; print_array state; print_newline ();
-        print_string "time = "; print_array time; print_newline ();
-        print_string "stack = "; print_list !stack; print_newline ();
-        if time.(s') = state.(s') || !etat 
+        if low_link.(s') = state.(s')
         then begin
-            let (newstack, (compo : int list)) = pop s' !stack [] in
+            let newstack, compo = pop s' !stack [] in
             component := compo :: !component;
             stack := newstack;
             -1;
           end
-        else time.(s')
+        else low_link.(s')
       end
     else begin
         if isin s' !stack
@@ -135,4 +125,95 @@ tarjan graph;;
 
 let graph2 = [|[|1|];[|2|];[|3;4|];[|0;9|];[|5|];[|6;8|];[|0;7|];[|4|];[||];[|10|];[|9|]|];;
 
-etarjan graph2;;
+tarjan graph2;;
+
+
+type graphe_l = int list array;;
+
+let tarjanl (graph : graphe_l) =
+  
+  let composante = ref [] in
+  let n = Array.length graph in
+  let state = Array.make (n) (-1) in
+  let low_link = Array.make (n) (-1) in
+  let stack = ref [] in
+  let k = ref 0 in
+  
+  let rec inlist s l = match l with
+    |[] -> false
+    |e::l' -> if e = s then true else inlist s l' in
+  
+  let rec extract s l comp = match l with
+    |[] -> l, comp
+    |e::l' -> let n_comp = e :: comp in if e = s then (l', n_comp) else extract s l' n_comp in
+  
+  let rec dfs_aux s =
+    if state.(s) = -1 then
+      begin
+        let rec reccur_dfs l s = match l with
+          |[] -> ()
+          |s' :: l' -> begin
+              let value = (dfs_aux s') in 
+        if value <> -1 then low_link.(s) <- min (low_link.(s)) (value);
+        reccur_dfs l' s  end in
+        state.(s) <- !k;
+        low_link.(s) <- !k;
+        k := !k + 1;
+        stack := s :: !stack ;
+        reccur_dfs (graph.(s)) s;
+        if state.(s) = low_link.(s)
+        then
+          begin
+            let n_stack, n_compo = extract s !stack [] in
+            stack := n_stack;
+            composante := n_compo :: !composante;
+            -1 ;
+          end
+        else low_link.(s) ;
+      end 
+    else
+      begin
+        if inlist s !stack then state.(s) else -1 ;
+      end in
+
+  let trash = ref 0 in
+  for s = 0 to n - 1 do
+    if state.(s) = -1 then trash := dfs_aux s ;
+  done;
+  !composante;;
+
+
+let graphl2 = [|[1];[2];[3;4];[0;9];[5];[6;8];[0;7];[4];[];[10];[9]|];;
+
+tarjanl graphl2;;
+
+type poids = P of int | Infini ;;
+
+type matrice_pond = int array array;;
+
+let plusp a b = match a, b with
+  |P a', P b' -> P (a' + b')
+  |_, _ -> Infini;;
+
+let minp a b = match a, b with
+  |P a', P b' -> P (min a' b')
+  |P a', Infini -> P a'
+  |Infini, P b' -> P b'
+  |_, _ -> Infini ;;
+
+let convert (graph : (int*int) list array) =
+  let n = Array.length graph in
+  let ngraph = Array.make n [||] in
+
+  for s = 0 to n - 1 do ngraph.(s) <- Array.make n Infini done;
+
+  let rec aux l s = match l with
+    |[] -> ()
+    |(s',p)::l' -> ( ngraph.(s).(s') <- P p; aux l' s) in
+
+  for s = 0 to n-1 do aux graph.(s) s done;
+  ngraph;;
+    
+let vgraph = [|[(1,4);(3,1)];[(3, 10)];[(1, 5); (1, 15)];[(2, 19)]|];;
+
+convert vgraph ;;

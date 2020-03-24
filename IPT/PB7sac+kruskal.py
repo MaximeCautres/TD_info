@@ -1,0 +1,131 @@
+import sys
+import os.path
+
+sys.setrecursionlimit(100000)
+
+def printf(x):
+    if os.path.isfile('print.txt'):
+        print(x)
+
+def radars_imperiaux(n, m, routes, c, contrats):
+    """
+    :param n: le nombre de planètes à relier
+    :type n: int
+    :param m: le nombre de routes possibles
+    :type m: int
+    :param routes: la liste des routes possibles
+    :type routes: list[dict["a": int, "b": int, "l": int]]
+    :param c: le nombre de contrats
+    :type c: int
+    :param contrats: la liste des contrats possibles
+    :type contrats: list[dict["d": int, "r": int]]
+    """
+    # TODO Affichez la longueur  minimale de route à construire pour relier
+    # toutes les planètes, puis sur la ligne suivant le nombre maximal de
+    # radars pouvant être installé sur ces routes.
+
+    def fusion(l1, l2):
+        if l1 == [] :
+            return l2
+        elif l2 == [] :
+            return l1
+        elif l1[0]["l"] < l2[0]["l"]:
+            return [l1[0]] + fusion(l1[1:], l2)
+        else:
+            return [l2[0]] + fusion(l1, l2[1:])
+
+    def tri_fusion(l):
+        if len(l) <= 1:
+            return l
+        else:
+            return fusion(tri_fusion(l[:len(l)//2]), tri_fusion(l[len(l)//2:]))
+        
+    def creer_classe(l):
+        for i in range(len(l)):
+            l[i]["u"]=i
+        return ()
+
+    def find(l, x):
+        if l[x]["u"] != x:
+            l[x]["u"] = find(l, l[x]["u"])
+        return l[x]["u"]
+
+    def union(l, x, y):
+        rx, ry = find(l, x), find(l, y)
+        if rx < ry:
+            l[y]["u"] = rx
+        elif ry < rx:
+            l[x]["u"] = ry
+        return ()
+
+    def kruskal(routes):
+        arretes = []
+        sommets = [dict() for _ in range(n)]
+        sorted_arrete = tri_fusion(routes)
+        creer_classe(sommets)
+        printf(("sommet:", sommets))
+        printf(("arretes triees:", sorted_arrete))
+        for arrete in sorted_arrete:
+            if find(sommets, arrete["a"]-1) != find(sommets, arrete["b"]-1):
+                arretes.append(arrete)
+                union(sommets, arrete["a"]-1, arrete["b"]-1)
+        return arretes
+
+    
+    graphe_final = kruskal(routes)
+    printf(("graphe final:", graphe_final))
+
+    longueur = 0
+
+    for arrete in graphe_final:
+        longueur += arrete["l"]
+
+    print(longueur, end = " ")
+
+    def sac_a_dos(poids_max, liste_objet):
+        global tableaux
+        tableaux = [[None for _ in range(poids_max + 1)] for _ in range(len(liste_objet))]
+
+        #initialisation du tableau
+        
+        for i in range(poids_max + 1):
+            if i < liste_objet[0]["d"]:
+                tableaux[0][i] = 0
+            else:
+                tableaux[0][i] = liste_objet[0]["r"]
+
+        printf(tableaux)
+
+        # calcul du résultat par memoisation
+
+        def aux(objet, poid, liste_objet):
+            global tableaux
+            if tableaux[objet][poid] == None:
+                if poid >= liste_objet[objet]["d"]:
+                    aux(objet-1, poid, liste_objet)
+                    aux(objet-1, poid - liste_objet[objet]["d"], liste_objet)
+                    tableaux[objet][poid] = max(tableaux[objet-1][poid], tableaux[objet-1][poid - liste_objet[objet]["d"]] + liste_objet[objet]["r"])
+                    printf(tableaux)
+                    return ()
+                else:
+                    aux(objet-1, poid, liste_objet)
+                    tableaux[objet][poid] = tableaux[objet - 1][poid]
+                    printf(tableaux)
+                    return ()
+            else:
+                return ()
+
+        aux(len(liste_objet) - 1, poids_max, liste_objet)
+
+        return tableaux[len(liste_objet) - 1][poids_max]
+
+    nbr_radar = sac_a_dos(longueur, contrats)
+    print(nbr_radar)
+    
+if __name__ == '__main__':
+    n = int(input())
+    m = int(input())
+    routes = [dict(zip(("a", "b", "l"), map(int, input().split()))) for _ in range(m)]
+    c = int(input())
+    contrats = [dict(zip(("d", "r"), map(int, input().split()))) for _ in range(c)]
+    radars_imperiaux(n, m, routes, c, contrats)

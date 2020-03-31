@@ -1,0 +1,8 @@
+from turtle import *
+from math import sqrt
+
+forward(100)
+left(45)
+forward(100*sqrt(2))
+right(135)
+forward(100)

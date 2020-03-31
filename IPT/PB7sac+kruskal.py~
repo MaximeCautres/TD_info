@@ -25,18 +25,14 @@ def radars_imperiaux(n, m, routes, c, contrats):
     # radars pouvant être installé sur ces routes.
 
     def fusion(l1, l2):
-        l = []
-        for _ in range(len(l1) + len(l2)):
-            if l1 == []:
-                return l + l2
-            elif l2 == []:
-                return l + l1
-            elif l1[0]["l"] < l2[0]["l"]:
-                l += [l1[0]]
-                l1 = l1[1:]
-            else:
-                l += [l2[0]]
-                l2 = l2[1:]
+        if l1 == [] :
+            return l2
+        elif l2 == [] :
+            return l1
+        elif l1[0]["l"] < l2[0]["l"]:
+            return [l1[0]] + fusion(l1[1:], l2)
+        else:
+            return [l2[0]] + fusion(l1, l2[1:])
 
     def tri_fusion(l):
         if len(l) <= 1:
@@ -50,16 +46,19 @@ def radars_imperiaux(n, m, routes, c, contrats):
         return ()
 
     def find(l, x):
-        if l[x]["u"] != x:
-            l[x]["u"] = find(l, l[x]["u"])
-        return l[x]["u"]
+        if l[x]["u"] == x:
+            return x
+        else:
+            r = find(l, l[x]["u"])
+            l[x]["u"] = r
+            return r
 
     def union(l, x, y):
         rx, ry = find(l, x), find(l, y)
         if rx < ry:
-            l[ry]["u"] = rx
+            l[y]["u"] = rx
         elif ry < rx:
-            l[rx]["u"] = ry
+            l[x]["u"] = ry
         return ()
 
     def kruskal(routes):
@@ -67,9 +66,9 @@ def radars_imperiaux(n, m, routes, c, contrats):
         sommets = [dict() for _ in range(n)]
         sorted_arrete = tri_fusion(routes)
         creer_classe(sommets)
+        printf(("sommet:", sommets))
         printf(("arretes triees:", sorted_arrete))
         for arrete in sorted_arrete:
-            printf(("sommet:", sommets))
             if find(sommets, arrete["a"]-1) != find(sommets, arrete["b"]-1):
                 arretes.append(arrete)
                 union(sommets, arrete["a"]-1, arrete["b"]-1)
@@ -88,7 +87,15 @@ def radars_imperiaux(n, m, routes, c, contrats):
 
     def sac_a_dos(poids_max, liste_objet):
         global tableaux
-        tableaux = dict()
+        tableaux = [[None for _ in range(poids_max + 1)] for _ in range(len(liste_objet))]
+
+        #initialisation du tableau
+        
+        for i in range(poids_max + 1):
+            if i < liste_objet[0]["d"]:
+                tableaux[0][i] = 0
+            else:
+                tableaux[0][i] = liste_objet[0]["r"]
 
         printf(tableaux)
 
@@ -96,19 +103,16 @@ def radars_imperiaux(n, m, routes, c, contrats):
 
         def aux(objet, poid, liste_objet):
             global tableaux
-            if not str(objet) + ";" + str(poid) in tableaux:
-                if objet == 0:
-                    tableaux[str(objet) + ";" + str(poid)] = liste_objet[objet]["r"] * (poid >= liste_objet[objet]["d"])
-                    return ()
-                elif poid >= liste_objet[objet]["d"]:
+            if tableaux[objet][poid] == None:
+                if poid >= liste_objet[objet]["d"]:
                     aux(objet-1, poid, liste_objet)
                     aux(objet-1, poid - liste_objet[objet]["d"], liste_objet)
-                    tableaux[str(objet) + ";" + str(poid)] = max(tableaux[str(objet-1) + ";" + str(poid)], tableaux[str(objet-1) + ";" + str(poid - liste_objet[objet]["d"])] + liste_objet[objet]["r"])
+                    tableaux[objet][poid] = max(tableaux[objet-1][poid], tableaux[objet-1][poid - liste_objet[objet]["d"]] + liste_objet[objet]["r"])
                     printf(tableaux)
                     return ()
                 else:
                     aux(objet-1, poid, liste_objet)
-                    tableaux[str(objet) + ";" + str(poid)] = tableaux[str(objet-1) + ";" + str(poid)]
+                    tableaux[objet][poid] = tableaux[objet - 1][poid]
                     printf(tableaux)
                     return ()
             else:
@@ -116,7 +120,7 @@ def radars_imperiaux(n, m, routes, c, contrats):
 
         aux(len(liste_objet) - 1, poids_max, liste_objet)
 
-        return tableaux[str(len(liste_objet) - 1) + ";" + str(poids_max)]
+        return tableaux[len(liste_objet) - 1][poids_max]
 
     nbr_radar = sac_a_dos(longueur, contrats)
     print(nbr_radar)

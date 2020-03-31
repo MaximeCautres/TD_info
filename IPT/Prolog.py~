@@ -1,0 +1,86 @@
+
+def bataille_par_elimination(n, s, m, chemins):
+    """
+    :param n: le nombre de troupes de soldats de l'empire
+    :type n: int
+    :param s: le nombre de soldats par troupes
+    :type s: list[int]
+    :param m: le nombre de chemins (dirigés) possibles d'une troupe à une autre
+    :type m: int
+    :param chemins: la liste des chemins possibles
+    :type chemins: list[dict["a": int, "b": int]]
+    """
+    # TODO Affichez le nombre minimal de rebelles pour vaincre toutes les
+    # batailles.
+
+    global composantes
+    
+    adj = [[] for _ in range(n)]
+    composantes = []
+    
+    # On cree la carte
+
+    for c in chemins:
+        adj[c[0]-1].append(c[1]-1)
+
+    # definir tarjan
+
+    def tarjan(graphe):
+        global state, low_link, k, pile, composantes
+        state = [-1 for _ in range(n)]
+        low_link = [-1 for _ in range(n)]
+        k = 0
+        pile = []
+        
+        def aux(s_p):
+            global state, low_link, k, pile, composantes
+            if state[s_p] == -1:
+                pile.append(s_p)
+                state[s_p] = k
+                low_link[s_p] = k
+                k += 1
+                for voisin in graphe[s_p]:
+                    it_low_link = aux(voisin)
+                    if it_low_link != -1:
+                        low_link[s_p] = min(it_low_link, low_link[s_p])
+                # maintenant que l'on à la low_link, il faut voir si on est sur le début d'une composante
+                if low_link[s_p] == state[s_p]:
+                    ind = list(map(lambda x : state[x], pile)).index(state[s_p])
+                    pile, compo = pile[:ind], pile[ind:]
+                    composantes.append(compo)
+                    for i in compo:
+                        state[i] = -2
+                    return -1
+                else:
+                    return low_link[s_p]
+            else:
+                if state[s_p] == -2:
+                    return -1
+                else:
+                    return state[s_p]
+
+        for i in range(n):
+            if state[i] == -1:
+                _ = aux(i)
+        return ()
+
+    tarjan(adj)
+    
+    maximum_soldat = 0
+    for compo in composantes:
+        summ = 0
+        for i in compo:
+            summ += s[i]
+        if summ > maximum_soldat:
+            maximum_soldat = summ
+
+    print(maximum_soldat + 1)
+    return ()
+
+
+if __name__ == '__main__':
+    n = int(input())
+    s = list(map(int, input().split()))
+    m = int(input())
+    chemins = [list(map(int, input().split())) for _ in range(m)]
+    bataille_par_elimination(n, s, m, chemins)

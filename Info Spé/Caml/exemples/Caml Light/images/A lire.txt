@@ -1,1 +1,0 @@
-Utiliser 'cree-image.ml' pour crer le fichier image 'image' avant d'utiliser 'affiche-image.ml'!

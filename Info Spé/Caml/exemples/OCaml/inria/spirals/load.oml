@@ -1,8 +1,0 @@
-#load "graphics.cma";;
-#load "unix.cma";;
-open Unix;;
-chdir "exemples/OCaml/inria/spirals";;
-#directory ".";;
-#use "spir.ml";;
-print_string "To run: spir();;"; print_newline();;
-spir();;

@@ -1,1 +1,0 @@
-#open "big_vect";;

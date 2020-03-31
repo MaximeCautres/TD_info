@@ -1,9 +1,0 @@
-#load "graphics.cma";;
-#load "unix.cma";;
-open Unix;;
-chdir "exemples/OCaml/inria/colwheel";;
-#directory ".";;
-#use "colwheel.ml";;
-print_string "To run: main();;"; print_newline();;
-
-main();;

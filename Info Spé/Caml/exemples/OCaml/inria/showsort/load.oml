@@ -1,8 +1,0 @@
-#load "graphics.cma";;
-#load "unix.cma";;
-open Unix;;
-chdir "exemples/OCaml/inria/showsort";;
-#directory ".";;
-#use "showsort.ml";;
-print_string "To run: animate();;"; print_newline();;
-animate();;

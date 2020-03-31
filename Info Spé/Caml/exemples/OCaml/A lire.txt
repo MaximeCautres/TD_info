@@ -1,1 +1,0 @@
-Noter que, lorsque la fenêtre graphique apparaît au premier plan, il peut être nécessaire de l'activer par un premier clic avant qu'elle réagisse.

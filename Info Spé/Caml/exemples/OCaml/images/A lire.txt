@@ -1,1 +1,0 @@
-Utiliser 'cree-image.oml' pour crer le fichier image 'image' avant d'utiliser 'affiche-image.oml'!

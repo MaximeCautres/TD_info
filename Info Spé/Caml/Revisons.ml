@@ -16,7 +16,6 @@ let tri_insertion l =
     |e :: atrier' -> aux atrier' (insere e trier) in
   aux l [];;
 
-
 let insertion_dic v = 
         let n = Array.length v in
         for i=1 to (n-1) do
@@ -86,3 +85,9 @@ let addition n x y =
   in
   sub(x, y) ;;
 
+let rec factorial n = match n with
+  |0 -> 1
+  |_ -> n * (factorial (n-1));;
+
+factorial 25;;
+a

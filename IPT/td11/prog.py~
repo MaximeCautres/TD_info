@@ -1,0 +1,5 @@
+def decal(lettre, p):
+    a = ord(lettre)
+    return chr(ord('a') + (a-ord('a')+p)%26)
+
+print(decal('a', 4))

@@ -1,0 +1,15 @@
+"""def partie(l, n):
+    if n == []:
+        return []
+    else:
+        pred = partie(l, n-1)
+        return pred + [p + [l[n-1]] for p in pred if somme_poids(p+[p + [l[n-1]]) <= poids_max]"""
+
+def partie(l):
+    if l == []:
+        return []
+    else:
+        pred = partie(l[:-1])
+        return pred + [p + [l[-1]] for p in pred]
+
+partie([1,2,3,4,5])
